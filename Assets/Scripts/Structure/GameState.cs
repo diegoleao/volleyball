@@ -1,29 +1,32 @@
 using Fusion;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-    [SerializeField] MatchInfo MatchInfoPrefab;
 
-    [SerializeField] Canvas Menu;
+    [SerializeField] Menu Menu;
 
-    private MatchInfo matchInfo;
+    [SerializeField] HudView HudView;
 
     private State state;
 
     public void Initialize()
     {
         SetState(State.Menu);
-
     }
 
     public void StartMatch(GameMode mode)
     {
-        Provider.Instance.BasicSpawner.StartNetwork(mode);
-
+        Provider.Instance.BasicSpawner.StartNetwork(mode, () =>
+        {
+            SetState(State.StartMatch);
+        });
+        
     }
 
     public void SetState(State state)
@@ -83,16 +86,21 @@ public class GameState : MonoBehaviour
 
     }
 
+    [Button]
     public void AddPointTo(int playerId)
     {
-        this.matchInfo.AddScore(playerId);
-        SetState(State.AwardingPoints);
+        if (Provider.Instance.HasStateAuthority)
+        {
+            Provider.Instance.BasicSpawner.MatchInfo.AddScore(playerId);
+        }
+        //SetState(State.AwardingPoints);
 
     }
 
     private void ResetMatch()
     {
-        this.matchInfo = Instantiate(MatchInfoPrefab, this.transform);
+        //HudView?.Close();
+        Instantiate(HudView);
         SetState(State.ResetCourtState);
     }
 

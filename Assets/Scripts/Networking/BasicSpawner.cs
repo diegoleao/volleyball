@@ -4,12 +4,14 @@ using Fusion.Sockets;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
 
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] NetworkPrefabRef MatchInfoPrefab;
 
     //Private
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
@@ -22,7 +24,27 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private bool _mouseButton1;
 
-    public async void StartNetwork(GameMode mode)
+    UnityAction readyPlayer1;
+
+    NetworkObject info;
+
+    public MatchInfo MatchInfo
+    {
+        get
+        {
+            return info?.GetComponent<MatchInfo>();
+        }
+    }
+
+    public bool HasStateAuthority
+    {
+        get
+        {
+            return _runner.IsServer;
+        }
+    }
+
+    public async void StartNetwork(GameMode mode, UnityAction finished = null)
     {
         // Create the Fusion runner and let it know that we will be providing user input
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -48,6 +70,13 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
 
+        if (HasStateAuthority)
+        {
+            this.info = _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity);
+        }
+
+        finished.Invoke();
+
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
@@ -56,9 +85,12 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             // Create a unique position for the player
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
+
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
+
         }
 
     }
@@ -108,7 +140,9 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
+
     public void OnConnectedToServer(NetworkRunner runner) { }
+
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }

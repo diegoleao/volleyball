@@ -1,4 +1,5 @@
 using Fusion;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,11 @@ using UnityEngine.Events;
 public class MatchInfo : NetworkBehaviour
 {
 
+    [ShowInInspector]
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedScore => default;
 
+    [ShowInInspector]
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedPlayers => default;
 
@@ -27,7 +30,7 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
-    public override void FixedUpdateNetwork() 
+    public void Update() 
     {
         foreach (var change in _changeDetector.DetectChanges(this))
         {
@@ -53,7 +56,7 @@ public class MatchInfo : NetworkBehaviour
 
     public void AddScore(int playerId)
     {
-        if (Object.HasStateAuthority) // Only update on the authoritative side
+        if (HasStateAuthority) // Only update on the authoritative side
         {
             var playerIndex = FindPlayerIndex(playerId);
             if (playerIndex >= 0)

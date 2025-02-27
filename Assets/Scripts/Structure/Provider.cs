@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using static GameState;
 
 public class Provider : MonoBehaviour
 {
@@ -22,6 +23,14 @@ public class Provider : MonoBehaviour
             }
             return instance;
             
+        }
+    }
+
+    public bool HasStateAuthority
+    {
+        get
+        {
+            return basicSpawner.HasStateAuthority;
         }
     }
 
