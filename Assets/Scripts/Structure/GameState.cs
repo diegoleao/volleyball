@@ -1,14 +1,30 @@
+using Fusion;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-
-    public MatchInfo MatchInfo;
+    [SerializeField] MatchInfo MatchInfoPrefab;
 
     [SerializeField] Canvas Menu;
-    State state;
+
+    private MatchInfo matchInfo;
+
+    private State state;
+
+    public void Initialize()
+    {
+        SetState(State.Menu);
+
+    }
+
+    public void StartMatch(GameMode mode)
+    {
+        Provider.Instance.BasicSpawner.StartNetwork(mode);
+
+    }
 
     public void SetState(State state)
     {
@@ -20,8 +36,7 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.StartMatch:
-                FindAnyObjectByType<Menu>().Close();
-                this.MatchInfo = new MatchInfo();
+                ResetMatch();
                 SetState(State.ResetCourtState);
                 break;
 
@@ -33,7 +48,7 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.SpawnBall:
-                Provider.Instance.BallSpawner.Spawn();
+                //Provider.Instance.BallSpawner.Spawn();
                 break;
 
             case State.AwardingPoints:
@@ -70,11 +85,18 @@ public class GameState : MonoBehaviour
 
     public void AddPointTo(int playerId)
     {
-        this.MatchInfo.AddPointTo(playerId);
+        this.matchInfo.AddScore(playerId);
         SetState(State.AwardingPoints);
 
     }
 
+    private void ResetMatch()
+    {
+        this.matchInfo = Instantiate(MatchInfoPrefab, this.transform);
+        SetState(State.ResetCourtState);
+    }
+
+    [Serializable]
     public enum State
     {
         Menu,
@@ -86,6 +108,13 @@ public class GameState : MonoBehaviour
         FinalResultCheck,
         MatchEnded,
         Exit
+    }
+
+    [Serializable]
+    public enum Mode
+    {
+        Host,
+        Client
     }
 
 }

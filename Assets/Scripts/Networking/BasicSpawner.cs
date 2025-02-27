@@ -22,7 +22,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private bool _mouseButton1;
 
-    async void StartGame(GameMode mode)
+    public async void StartNetwork(GameMode mode)
     {
         // Create the Fusion runner and let it know that we will be providing user input
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -48,21 +48,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
 
-    }
-
-    private void OnGUI()
-    {
-        if (_runner == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
