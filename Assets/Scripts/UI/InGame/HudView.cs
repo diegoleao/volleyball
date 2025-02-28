@@ -7,16 +7,16 @@ using UnityEngine;
 public class HudView : BaseView
 {
 
-    public TextMeshProUGUI ScorePlayer0;
+    public TextMeshProUGUI ScoreTeamA;
 
-    public TextMeshProUGUI ScorePlayer1;
+    public TextMeshProUGUI ScoreTeamB;
 
     private MatchInfo matchInfo;
 
     private void Start()
     {
-        ScorePlayer0.text = "P1: 0";
-        ScorePlayer1.text = "P2: 0";
+        ScoreTeamA.text = "00";
+        ScoreTeamB.text = "00";
 
         IDisposable disposable = null;
         disposable = Observable.EveryUpdate().Subscribe(_ =>
@@ -28,9 +28,10 @@ public class HudView : BaseView
 
             matchInfo.ScoreChanged.AddListener(newScore =>
             {
-                ScorePlayer0.text = $"P1: {newScore[0].score}";
-                ScorePlayer1.text = $"P2: {newScore[1].score}";
+                ScoreTeamA.text = newScore[0].score.ToString("D2");
+                ScoreTeamB.text = newScore[1].score.ToString("D2");
             });
+
             disposable.Dispose();
 
         });

@@ -18,6 +18,15 @@ public class Provider : MonoBehaviour
     [SerializeField] GameNetworking gameNetworking;
     public GameNetworking GameNetworking => this.gameNetworking;
 
+    [Header("Scene Components")]
+    [SerializeField] CharacterSpawner characterSpawner;
+    public CharacterSpawner CharacterSpawner => this.characterSpawner;
+
+    [Header("Position References")]
+
+    [SerializeField] Transform courtCenter;
+    public Transform CourtCenter => this.courtCenter;
+
 
 
     [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();

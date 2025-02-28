@@ -26,7 +26,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.0065467, y: 0.82670563, z: -1.9486805}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5245625787214001420}
@@ -107,6 +107,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9112052132681924432}
     m_Modifications:
+    - target: {fileID: 932698929055993352, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_text
+      value: Team B
+      objectReference: {fileID: 0}
     - target: {fileID: 1753504110515657173, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.0065467
@@ -147,17 +151,113 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2330249622670011769, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_text
+      value: Team A
+      objectReference: {fileID: 0}
+    - target: {fileID: 2731000066404231758, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_text
+      value: 00
+      objectReference: {fileID: 0}
+    - target: {fileID: 3795194632336597794, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_text
+      value: 00
+      objectReference: {fileID: 0}
+    - target: {fileID: 5308596477682470867, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.629106
+      objectReference: {fileID: 0}
+    - target: {fileID: 5308596477682470867, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 5631733304410472435, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_Name
+      value: TeamAText
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461935601091613295, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_Name
+      value: TeamBText
+      objectReference: {fileID: 0}
     - target: {fileID: 6964605300025771915, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
       propertyPath: m_Name
       value: VolleyCourt
       objectReference: {fileID: 0}
+    - target: {fileID: 7433373660058418680, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.629106
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433373660058418680, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.77
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2202926965159561001, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5151960445307602445}
+    - targetCorrespondingSourceObject: {fileID: 2202926965159561001, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8915847042741516464}
   m_SourcePrefab: {fileID: 100100000, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
 --- !u!4 &5245625787214001420 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1753504110515657173, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
   m_PrefabInstance: {fileID: 5807821005048900825}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5623826096837028848 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2202926965159561001, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+  m_PrefabInstance: {fileID: 5807821005048900825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5151960445307602445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5623826096837028848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fed0a63577e66f4d9eee6bcd27fe307, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanvasGroup: {fileID: 8915847042741516464}
+  ScoreTeamA: {fileID: 7220038795076931579}
+  ScoreTeamB: {fileID: 8466750229434746519}
+--- !u!225 &8915847042741516464
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5623826096837028848}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &7220038795076931579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3795194632336597794, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+  m_PrefabInstance: {fileID: 5807821005048900825}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8466750229434746519 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2731000066404231758, guid: b78f90852d3af3a4eafa3c1d94cac119, type: 3}
+  m_PrefabInstance: {fileID: 5807821005048900825}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

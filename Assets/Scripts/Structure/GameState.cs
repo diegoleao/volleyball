@@ -11,8 +11,6 @@ public class GameState : MonoBehaviour
 
     [SerializeField] MainMenuScreen MainMenu;
 
-    [SerializeField] HudView HudView;
-
     private State state;
 
     public void Initialize()
@@ -93,11 +91,11 @@ public class GameState : MonoBehaviour
     }
 
     [Button]
-    public void AddPointTo(int playerId)
+    public void IncreaseScoreFor(Team team)
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            Provider.Instance.GameNetworking.MatchInfo.AddScore(playerId);
+            Provider.Instance.GameNetworking.MatchInfo.AddScore((team == Team.A) ? 0 : 1);
         }
         //SetState(State.AwardingPoints);
 
@@ -106,7 +104,6 @@ public class GameState : MonoBehaviour
     private void ResetMatch()
     {
         //HudView?.Close();
-        Instantiate(HudView);
         SetState(State.ResetCourtState);
     }
 
@@ -122,6 +119,13 @@ public class GameState : MonoBehaviour
         FinalResultCheck,
         MatchEnded,
         Exit
+    }
+
+    [Serializable]
+    public enum Team
+    {
+        A,
+        B
     }
 
     [Serializable]
