@@ -1,8 +1,11 @@
 using Fusion;
 using Fusion.Addons.Physics;
 using Fusion.Sockets;
+using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -51,6 +54,25 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
+    private async Task StartOrJoinGameSession(GameMode mode, SceneRef scene, string sessionName)
+    {
+        await _runner.StartGame(new StartGameArgs()
+        {
+            GameMode = mode,
+            SessionName = sessionName,
+            Scene = scene,
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
+        });
+
+    }
+
+    public void RestartMatch()
+    {
+        ResetPlayerPositions();
+        MatchInfo.RestartMatch();
+
+    }
+
     private void CreateMatchInformationComponent()
     {
         if (HasStateAuthority)
@@ -65,14 +87,11 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            // Create a unique position for the player
-            Vector3 spawnPosition = Provider.Instance.CharacterSpawner.GetTeamSpawnPos(player == runner.LocalPlayer);
 
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            NetworkObject networkPlayerObject 
+                = runner.Spawn(_playerPrefab, GetTeamSpawnPosition(player), Quaternion.identity, player);
 
-            Vector3 targetRotation = Provider.Instance.CourtCenter.position;
-            targetRotation.y = networkPlayerObject.transform.position.y;
-            networkPlayerObject.transform.LookAt(targetRotation, Vector3.up);
+            networkPlayerObject.transform.rotation = GetInitialRotation(networkPlayerObject.transform.position);
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
@@ -91,15 +110,44 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private async System.Threading.Tasks.Task StartOrJoinGameSession(GameMode mode, SceneRef scene, string sessionName)
+    [Button]
+    public void ResetPlayerPositions()
     {
-        await _runner.StartGame(new StartGameArgs()
+        if (HasStateAuthority)
         {
-            GameMode = mode,
-            SessionName = sessionName,
-            Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
+            _spawnedCharacters.ForEach(character =>
+            {
+                ResetPlayerToInitialPosition(character.Key, character.Value);
+            });
+        }
+
+    }
+
+    private void ResetPlayerToInitialPosition(PlayerRef player, NetworkObject networkPlayerObject)
+    {
+        Vector3 initialSpawnPosition = GetTeamSpawnPosition(player);
+        networkPlayerObject.GetComponent<NetworkCharacterController>()
+                           .Teleport(initialSpawnPosition, 
+                                     GetInitialRotation(initialSpawnPosition));
+
+    }
+
+    private Vector3 GetTeamSpawnPosition(PlayerRef player)
+    {
+        //TODO: FIX THIS CALCULATION, THE TEAM A IS NOT ALWAYS THE CURRENT PLAYER
+        return Provider.Instance
+                       .CharacterSpawner
+                       .GetTeamSpawnPosition(player == _runner.LocalPlayer);
+
+    }
+
+    public Quaternion GetInitialRotation(Vector3 currentPosition)
+    {
+        Vector3 targetPositionToLookAt = Provider.Instance.CourtCenter.position;
+        targetPositionToLookAt.y = currentPosition.y; // Prevent character from bending up or down
+
+        return Quaternion.LookRotation(targetPositionToLookAt - currentPosition, Vector3.up);
+
     }
 
     private NetworkRunner CreateNetworkRunner()
@@ -181,5 +229,4 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-
 }

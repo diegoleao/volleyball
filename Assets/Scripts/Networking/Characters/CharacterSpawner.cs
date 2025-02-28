@@ -6,7 +6,7 @@ public class CharacterSpawner : MonoBehaviour
     [SerializeField] BoxCollider teamA;
     [SerializeField] BoxCollider teamB;
 
-    public Vector3 GetTeamSpawnPos(bool isPlayerMyself)
+    public Vector3 GetTeamSpawnPosition(bool isPlayerMyself)
     {
         if (isPlayerMyself)
         {

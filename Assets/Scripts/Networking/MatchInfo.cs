@@ -107,6 +107,12 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
+    public void RestartMatch()
+    {
+        NetworkedScore.Set(0, 0);
+        NetworkedScore.Set(1, 0);
+    }
+
     [Serializable]
     public class ScoreData
     {

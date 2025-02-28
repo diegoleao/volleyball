@@ -33,6 +33,12 @@ public class GameState : MonoBehaviour
 
     }
 
+    public void RestartMatch()
+    {
+        Provider.Instance.GameNetworking.RestartMatch();
+
+    }
+
     public void SetState(State state)
     {
         this.state = state;
@@ -93,11 +99,18 @@ public class GameState : MonoBehaviour
     [Button]
     public void IncreaseScoreFor(Team team)
     {
+        GameState.IncreaseScoreFor((team == Team.A) ? 0 : 1);
+        //SetState(State.AwardingPoints);
+
+    }
+
+    [Button]
+    public static void IncreaseScoreFor(int playerId)
+    {
         if (Provider.Instance.HasStateAuthority)
         {
-            Provider.Instance.GameNetworking.MatchInfo.AddScore((team == Team.A) ? 0 : 1);
+            Provider.Instance.GameNetworking.MatchInfo.AddScore(playerId);
         }
-        //SetState(State.AwardingPoints);
 
     }
 
