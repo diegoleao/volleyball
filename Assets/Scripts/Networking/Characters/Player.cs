@@ -14,36 +14,36 @@ public class Player : NetworkBehaviour
     [Networked]
     public bool spawnedProjectile { get; set; }
 
-    public Material _material;
+    //public Material _material;
 
-    private ChangeDetector _changeDetector;
+    //private ChangeDetector _changeDetector;
 
-    public override void Spawned()
-    {
-        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
-    }
+    //public override void Spawned()
+    //{
+    //    _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+    //}
 
     private void Awake()
     {
         netCharController = GetComponent<NetworkCharacterController>();
         _forward = Vector3.forward;
-        _material = GetComponentInChildren<MeshRenderer>().material;
+        //_material = GetComponentInChildren<MeshRenderer>().material;
     }
 
-    public override void Render()
-    {
-        foreach (var change in _changeDetector.DetectChanges(this))
-        {
-            switch (change)
-            {
-                case nameof(spawnedProjectile):
-                    _material.color = Color.white;
-                    break;
-            }
-        }
-        _material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
+    //public override void Render()
+    //{
+    //    foreach (var change in _changeDetector.DetectChanges(this))
+    //    {
+    //        switch (change)
+    //        {
+    //            case nameof(spawnedProjectile):
+    //                _material.color = Color.white;
+    //                break;
+    //        }
+    //    }
+    //    _material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
 
-    }
+    //}
 
     public override void FixedUpdateNetwork()
     {

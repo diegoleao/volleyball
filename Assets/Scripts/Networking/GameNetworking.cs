@@ -14,6 +14,16 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] NetworkPrefabRef MatchInfoPrefab;
 
+    public MatchInfo MatchInfo { get; private set; }
+
+    public bool HasStateAuthority
+    {
+        get
+        {
+            return _runner.IsServer;
+        }
+    }
+
     //Private
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -24,16 +34,6 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     private bool _mouseButton0;
 
     private bool _mouseButton1;
-
-    public MatchInfo MatchInfo { get; private set; }
-
-    public bool HasStateAuthority
-    {
-        get
-        {
-            return _runner.IsServer;
-        }
-    }
 
     public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
     {

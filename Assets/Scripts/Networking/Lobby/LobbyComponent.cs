@@ -18,7 +18,7 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void Initialize()
     {
-        runner = CreateNetworkRunner();
+        runner = gameObject.AddComponent<NetworkRunner>();
         Provider.Register<LobbyComponent>(this);
         await JoinLobby(runner);
 
@@ -26,7 +26,6 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     public async Task JoinLobby(NetworkRunner runner)
     {
-
         var result = await runner.JoinSessionLobby(SessionLobby.ClientServer);
 
         if (result.Ok)
@@ -40,12 +39,31 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private NetworkRunner CreateNetworkRunner()
+    public void JoinSession(string sessionName)
     {
-        return gameObject.AddComponent<NetworkRunner>();
-
+        Provider.Instance.GameState.StartMultiplayerMatch(sessionName, GameMode.Client);
 
     }
+
+    public bool QuickJoinFirstSession(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+        if (sessionList.Count == 0)
+        {
+            return false;
+
+        }
+
+        var session = sessionList[0];
+        
+        Debug.Log($"Joining {session.Name}");
+
+        JoinSession(session.Name);
+
+        return true;
+
+    }
+
+    //Interface implementation ==========================================
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
@@ -55,33 +73,8 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private bool QuickJoingFirstSession(NetworkRunner runner, List<SessionInfo> sessionList)
-    {
 
-        if (sessionList.Count == 0)
-        {
-            return false;
-
-        }
-
-        var session = sessionList[0];
-
-        JoinSession(session.Name);
-
-        return true;
-
-    }
-
-    public void JoinSession(string sessionName)
-    {
-        Debug.Log($"Joining {sessionName}");
-
-        Provider.Instance.GameState.StartMultiplayerMatch(sessionName, GameMode.Client);
-
-    }
-
-
-    //Not used ==========================================
+    //Not used ===========================================================
 
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
