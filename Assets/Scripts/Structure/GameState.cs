@@ -9,7 +9,7 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
 
-    [SerializeField] Menu Menu;
+    [SerializeField] MainMenuScreen MainMenu;
 
     [SerializeField] HudView HudView;
 
@@ -41,7 +41,7 @@ public class GameState : MonoBehaviour
         switch (state)
         {
             case State.Menu:
-                Instantiate(Menu);
+                Instantiate(MainMenu);
                 break;
 
             case State.StartMatch:

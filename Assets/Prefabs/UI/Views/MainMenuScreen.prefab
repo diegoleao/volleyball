@@ -121,8 +121,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3407716920490779792}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+      - m_Target: {fileID: 947122929107061733}
+        m_TargetAssemblyTypeName: MainMenuScreen, Assembly-CSharp
         m_MethodName: StartMatch
         m_Mode: 6
         m_Arguments:
@@ -388,8 +388,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3407716920490779792}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+      - m_Target: {fileID: 947122929107061733}
+        m_TargetAssemblyTypeName: MainMenuScreen, Assembly-CSharp
         m_MethodName: StartSinglePlayer
         m_Mode: 1
         m_Arguments:
@@ -521,8 +521,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3407716920490779792}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+      - m_Target: {fileID: 947122929107061733}
+        m_TargetAssemblyTypeName: MainMenuScreen, Assembly-CSharp
         m_MethodName: EnterLobby
         m_Mode: 1
         m_Arguments:
@@ -894,9 +894,9 @@ GameObject:
   - component: {fileID: 8856723910038652744}
   - component: {fileID: 1892811942873207157}
   - component: {fileID: 5219807864846651289}
-  - component: {fileID: 3407716920490779792}
+  - component: {fileID: 947122929107061733}
   m_Layer: 5
-  m_Name: MainMenu
+  m_Name: MainMenuScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
---- !u!114 &3407716920490779792
+--- !u!114 &947122929107061733
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -994,7 +994,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8376233792127229858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1817c533c76d0b4bb343c4edbbbe1b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c39cf27104505b47830d7dd3ef7ef92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LobbyPrefab: {fileID: -8092589119131161144, guid: 4352cf2a6106f1547ae73c0256953ef6, type: 3}
@@ -1253,8 +1253,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3407716920490779792}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
+      - m_Target: {fileID: 947122929107061733}
+        m_TargetAssemblyTypeName: MainMenuScreen, Assembly-CSharp
         m_MethodName: StartMatch
         m_Mode: 6
         m_Arguments:

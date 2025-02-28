@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2682870679226612569}
   - component: {fileID: -7895233717178997293}
   m_Layer: 5
-  m_Name: ScoreMenu
+  m_Name: HUDView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

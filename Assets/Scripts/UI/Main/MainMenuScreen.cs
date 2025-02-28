@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public class Menu : MonoBehaviour
+public class MainMenuScreen : MonoBehaviour
 {
     [SerializeField] LobbyScreen LobbyPrefab;
 

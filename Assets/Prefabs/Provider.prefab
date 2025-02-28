@@ -79,7 +79,6 @@ MonoBehaviour:
     RawGuidValue: eb1913f1af9352d4a93db9a469e8e754
   MatchInfoPrefab:
     RawGuidValue: 65eea36cb352cf04d9ee4b0a93639348
-  MatchInfo: {fileID: 0}
 --- !u!1 &8827645930992769453
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,5 +172,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98508052a9ec384d8145930611e40f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Menu: {fileID: 3407716920490779792, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
+  MainMenu: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
   HudView: {fileID: -7895233717178997293, guid: 1213989798060c94e8a199af4a0fc986, type: 3}

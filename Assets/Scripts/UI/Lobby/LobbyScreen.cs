@@ -8,7 +8,7 @@ using UnityEngine;
 public class LobbyScreen : MonoBehaviour
 {
     [Header("Prefabs")]
-    [SerializeField] Menu MenuPrefab;
+    [SerializeField] MainMenuScreen MenuPrefab;
     [SerializeField] SessionButton SessionButtonPrefab;
 
     [Header("References")]
@@ -21,11 +21,42 @@ public class LobbyScreen : MonoBehaviour
     {
         CreateSessionButtons(LobbyComponent.SessionList);
 
-        StartListeningToChanges();
+        ListenToSessionChanges();
 
     }
 
-    private void StartListeningToChanges()
+    public void BackToMenu()
+    {
+        this.Close();
+        Instantiate(MenuPrefab);
+
+    }
+
+    public void Close()
+    {
+        Destroy(gameObject);
+
+    }
+
+    private void CreateSessionButtons(List<SessionInfo> newSessionList)
+    {
+        DestroyAllCurrentButtons();
+        SessionButton currentSessionButton;
+        newSessionList.ForEach(sessionInfo =>
+        {
+            currentSessionButton = Instantiate(SessionButtonPrefab, this.SessionsParent);
+            currentSessionButton.SetData(sessionInfo, (chosenSession) =>
+            {
+                this.LobbyComponent.JoinSession(sessionInfo.Name);
+                this.Close();
+
+            });
+
+        });
+
+    }
+
+    private void ListenToSessionChanges()
     {
         LobbyComponent.SessionListUpdatedEvent.AddListener(MarkSessionListAsOutdated);
 
@@ -46,37 +77,11 @@ public class LobbyScreen : MonoBehaviour
 
     }
 
-    private void CreateSessionButtons(List<SessionInfo> newSessionList)
-    {
-        DestroyAllCurrentButtons();
-        SessionButton currentSessionButton;
-        newSessionList.ForEach(sessionInfo =>
-        {
-            currentSessionButton = Instantiate(SessionButtonPrefab, this.SessionsParent);
-            currentSessionButton.SetData(sessionInfo, (chosenSession) =>
-            {
-                this.LobbyComponent.JoinSession(sessionInfo.Name);
-            });
-
-        });
-
-    }
-
     private void DestroyAllCurrentButtons()
     {
         var allButtons = SessionsParent.GetComponentsInChildren<SessionButton>();
         foreach (var button in allButtons) { Destroy(button.gameObject); }
-    }
 
-    public void BackToMenu()
-    {
-        this.Close();
-        Instantiate(MenuPrefab);
-    }
-
-    public void Close()
-    {
-        Destroy(gameObject);
     }
 
 }
