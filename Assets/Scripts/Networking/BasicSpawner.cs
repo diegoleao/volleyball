@@ -36,7 +36,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public async void StartNetwork(GameMode gameMode, UnityAction finished = null)
+    public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
     {
         _runner = CreateNetworkRunner();
 
@@ -44,7 +44,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
         SceneRef sceneRef = CreateNetworkedScene();
 
-        await StartOrJoinGameSession(gameMode, sceneRef, sessionName: "TestRoom");
+        await StartOrJoinGameSession(gameMode, sceneRef, sessionName: roomName);
 
         CreateMatchInformationComponent();
 

@@ -7,9 +7,14 @@ public class Menu : MonoBehaviour
 
     public void StartMatch(bool isHost)
     {
-        Provider.Instance.GameState.StartMultiplayerMatch(isHost ? GameMode.Host : GameMode.Client);
-        Close();
+        StartMatch("TestRoom", isHost);
 
+    }
+
+    public void StartMatch(string roomName, bool isHost)
+    {
+        Provider.Instance.GameState.StartMultiplayerMatch(roomName, isHost ? GameMode.Host : GameMode.Client);
+        Close();
     }
 
     public void StartSinglePlayer()
