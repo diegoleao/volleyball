@@ -22,7 +22,7 @@ public class GameState : MonoBehaviour
 
     public void StartMultiplayerMatch(string roomName, GameMode mode)
     {
-        Provider.Instance.BasicSpawner.StartNetwork(roomName, mode, () =>
+        Provider.Instance.GameNetworking.StartNetwork(roomName, mode, () =>
         {
             SetState(State.StartMatch);
         });
@@ -97,7 +97,7 @@ public class GameState : MonoBehaviour
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            Provider.Instance.BasicSpawner.MatchInfo.AddScore(playerId);
+            Provider.Instance.GameNetworking.MatchInfo.AddScore(playerId);
         }
         //SetState(State.AwardingPoints);
 

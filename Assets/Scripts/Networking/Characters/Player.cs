@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] private Ball _prefabBall; 
+
     [SerializeField] private PhysxBall _prefabPhysxBall;
     [Networked] private TickTimer delay { get; set; }
 
@@ -63,20 +63,6 @@ public class Player : NetworkBehaviour
                 if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
                 {
                     delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabBall, 
-                                 transform.position + _forward,
-                                 Quaternion.LookRotation(_forward),
-                                 Object.InputAuthority, 
-                                 (runner, o) =>
-                                 {
-                                     // Initialize the Ball before synchronizing it
-                                     o.GetComponent<Ball>().Init();
-                                 });
-                    spawnedProjectile = !spawnedProjectile;
-                }
-                else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
-                {
-                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
                     Runner.Spawn(_prefabPhysxBall,
                                   transform.position + _forward,
                                   Quaternion.LookRotation(_forward),
@@ -86,6 +72,10 @@ public class Player : NetworkBehaviour
                                       o.GetComponent<PhysxBall>().Init(10 * _forward);
                                   });
                     spawnedProjectile = !spawnedProjectile;
+                }
+                else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+                {
+                    //?
                 }
 
             }

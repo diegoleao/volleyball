@@ -15,8 +15,8 @@ public class Provider : MonoBehaviour
     public GameState GameState => this.gameState;
 
 
-    [SerializeField] BasicSpawner basicSpawner;
-    public BasicSpawner BasicSpawner => this.basicSpawner;
+    [SerializeField] GameNetworking gameNetworking;
+    public GameNetworking GameNetworking => this.gameNetworking;
 
 
 
@@ -50,7 +50,7 @@ public class Provider : MonoBehaviour
     {
         get
         {
-            return basicSpawner.HasStateAuthority;
+            return gameNetworking.HasStateAuthority;
         }
     }
 

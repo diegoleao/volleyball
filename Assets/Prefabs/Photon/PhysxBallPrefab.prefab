@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 8371222019359541061}
   - component: {fileID: 8932351701932162806}
   m_Layer: 0
-  m_Name: PhysxBall
+  m_Name: PhysxBallPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

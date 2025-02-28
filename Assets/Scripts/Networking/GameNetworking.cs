@@ -7,10 +7,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
+public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 {
 
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] NetworkPrefabRef _playerPrefab;
+
     [SerializeField] NetworkPrefabRef MatchInfoPrefab;
 
     //Private
@@ -23,8 +24,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     private bool _mouseButton0;
 
     private bool _mouseButton1;
-
-    UnityAction readyPlayer1;
 
     public MatchInfo MatchInfo { get; private set; }
 
@@ -164,9 +163,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
-
     public void OnConnectedToServer(NetworkRunner runner) { }
-
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
