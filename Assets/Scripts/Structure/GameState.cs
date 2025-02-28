@@ -20,13 +20,19 @@ public class GameState : MonoBehaviour
         SetState(State.Menu);
     }
 
-    public void StartMatch(GameMode mode)
+    public void StartMultiplayerMatch(GameMode mode)
     {
         Provider.Instance.BasicSpawner.StartNetwork(mode, () =>
         {
             SetState(State.StartMatch);
         });
         
+    }
+
+    public void StartSingleplayerMatch()
+    {
+        SetState(State.StartMatch);
+
     }
 
     public void SetState(State state)

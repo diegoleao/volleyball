@@ -26,15 +26,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     UnityAction readyPlayer1;
 
-    NetworkObject info;
-
-    public MatchInfo MatchInfo
-    {
-        get
-        {
-            return info?.GetComponent<MatchInfo>();
-        }
-    }
+    public MatchInfo MatchInfo { get; private set; }
 
     public bool HasStateAuthority
     {
@@ -44,16 +36,63 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public async void StartNetwork(GameMode mode, UnityAction finished = null)
+    public async void StartNetwork(GameMode gameMode, UnityAction finished = null)
     {
-        // Create the Fusion runner and let it know that we will be providing user input
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
+        _runner = CreateNetworkRunner();
 
+        CreateRunnerPhysics();
+
+        SceneRef sceneRef = CreateNetworkedScene();
+
+        await StartOrJoinGameSession(gameMode, sceneRef, sessionName: "TestRoom");
+
+        CreateMatchInformationComponent();
+
+        finished.Invoke();
+
+    }
+
+    private void CreateMatchInformationComponent()
+    {
+        if (HasStateAuthority)
+        {
+            this.MatchInfo = _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
+
+        }
+
+    }
+
+    private async System.Threading.Tasks.Task StartOrJoinGameSession(GameMode mode, SceneRef scene, string sessionName)
+    {
+        await _runner.StartGame(new StartGameArgs()
+        {
+            GameMode = mode,
+            SessionName = sessionName,
+            Scene = scene,
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
+        });
+    }
+
+    private NetworkRunner CreateNetworkRunner()
+    {
+        var runner = gameObject.AddComponent<NetworkRunner>();
+
+        //Let it know that we will be providing user input
+        runner.ProvideInput = true;
+
+        return runner;
+
+    }
+
+    private void CreateRunnerPhysics()
+    {
         var runnerSimulatePhysics3D = gameObject.AddComponent<RunnerSimulatePhysics3D>();
         runnerSimulatePhysics3D.ClientPhysicsSimulation = ClientPhysicsSimulation.SimulateAlways;
 
-        // Create the NetworkSceneInfo from the current scene
+    }
+
+    private static SceneRef CreateNetworkedScene()
+    {
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
         if (scene.IsValid)
@@ -61,22 +100,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
-        // Start or join (depends on gamemode) a session with a specific name
-        await _runner.StartGame(new StartGameArgs()
-        {
-            GameMode = mode,
-            SessionName = "TestRoom",
-            Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
-
-        if (HasStateAuthority)
-        {
-            this.info = _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity);
-        }
-
-        finished.Invoke();
-
+        return scene;
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)

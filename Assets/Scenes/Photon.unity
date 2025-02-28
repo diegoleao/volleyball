@@ -804,12 +804,12 @@ GameObject:
   - component: {fileID: 1544217164}
   - component: {fileID: 1544217163}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: TestScoreCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1544217163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1544217164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,9 +942,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6820508160601160950, guid: b4a999ccd433dd248b98433350ca37d2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8827645930992769453, guid: b4a999ccd433dd248b98433350ca37d2, type: 3}
       propertyPath: m_Name
       value: Provider
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827645930992769453, guid: b4a999ccd433dd248b98433350ca37d2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
