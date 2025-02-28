@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
-public class LobbyScreen : MonoBehaviour
+public class LobbyScreen : BaseView
 {
     [Header("Prefabs")]
     [SerializeField] MainMenuScreen MenuPrefab;
@@ -16,25 +16,41 @@ public class LobbyScreen : MonoBehaviour
     [SerializeField] Transform SessionsParent;
 
     private bool isSessionListOutdated;
+    private MainMenuScreen menuInstance;
 
-    void Start()
+    private bool isClosed;
+
+    public void Initialize(MainMenuScreen menuInstance)
     {
+        this.Hide();
+
+        this.menuInstance = menuInstance;
+
         CreateSessionButtons(LobbyComponent.SessionList);
 
         ListenToSessionChanges();
+
+        LobbyComponent.Initialize();
 
     }
 
     public void BackToMenu()
     {
-        this.Close();
-        Instantiate(MenuPrefab);
+        this.Hide();
+        menuInstance.Show();
+
 
     }
 
     public void Close()
     {
+        if (isClosed)
+            return;
+
+        isClosed = true;
+
         Destroy(gameObject);
+        menuInstance.Close();
 
     }
 
@@ -79,6 +95,9 @@ public class LobbyScreen : MonoBehaviour
 
     private void DestroyAllCurrentButtons()
     {
+        if (this == null)
+            return;
+
         var allButtons = SessionsParent.GetComponentsInChildren<SessionButton>();
         foreach (var button in allButtons) { Destroy(button.gameObject); }
 

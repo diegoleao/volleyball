@@ -1,9 +1,20 @@
 using Fusion;
 using UnityEngine;
 
-public class MainMenuScreen : MonoBehaviour
+public class MainMenuScreen : BaseView
 {
     [SerializeField] LobbyScreen LobbyPrefab;
+
+    private LobbyScreen lobbyInstance;
+
+    private bool isClosed;
+
+
+    private void Start()
+    {
+        CreateHiddenLobby();
+
+    }
 
     public void StartMatch(bool isHost)
     {
@@ -26,13 +37,30 @@ public class MainMenuScreen : MonoBehaviour
 
     public void EnterLobby()
     {
-        Instantiate(LobbyPrefab);
-        this.Close();
+        this.lobbyInstance.Show();
+        this.Hide();
+    }
+
+    private void CreateHiddenLobby()
+    {
+        if (this.lobbyInstance == null)
+        {
+            this.lobbyInstance = Instantiate(LobbyPrefab);
+            this.lobbyInstance.Initialize(this);
+        }
+
     }
 
     public void Close()
     {
+        if (isClosed)
+            return;
+
+        isClosed = true;
+
         Destroy(gameObject);
+        this.lobbyInstance.Close();
+
     }
 
 }

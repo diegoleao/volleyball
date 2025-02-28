@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6294708272839428720}
   - component: {fileID: 2682870679226612569}
   - component: {fileID: -7895233717178997293}
+  - component: {fileID: -5650055987170263927}
   m_Layer: 5
   m_Name: HUDView
   m_TagString: Untagged
@@ -115,8 +116,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fed0a63577e66f4d9eee6bcd27fe307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CanvasGroup: {fileID: -5650055987170263927}
   ScorePlayer0: {fileID: 2939608421229563320}
   ScorePlayer1: {fileID: 2595659175872616102}
+--- !u!225 &-5650055987170263927
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510830781099382554}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1192484192020068913
 GameObject:
   m_ObjectHideFlags: 0

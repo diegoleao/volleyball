@@ -531,6 +531,7 @@ GameObject:
   - component: {fileID: 7107625732841037428}
   - component: {fileID: -8092589119131161144}
   - component: {fileID: 5518227364989462805}
+  - component: {fileID: 7411205334538432857}
   m_Layer: 5
   m_Name: LobbyScreen
   m_TagString: Untagged
@@ -635,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MenuPrefab: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
   SessionButtonPrefab: {fileID: 4249036566014150959, guid: 7a253a0842e8b0a4e82abbed37b7ea52, type: 3}
+  CanvasGroup: {fileID: 7411205334538432857}
   LobbyComponent: {fileID: 5518227364989462805}
   SessionsParent: {fileID: 3446611790272508995}
 --- !u!114 &5518227364989462805
@@ -652,6 +654,18 @@ MonoBehaviour:
   SessionListUpdatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!225 &7411205334538432857
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5967781131025631697}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6034491493749607815
 GameObject:
   m_ObjectHideFlags: 0

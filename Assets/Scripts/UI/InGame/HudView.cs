@@ -4,7 +4,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class HudView : MonoBehaviour
+public class HudView : BaseView
 {
 
     public TextMeshProUGUI ScorePlayer0;

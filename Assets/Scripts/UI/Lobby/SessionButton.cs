@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SessionButton : MonoBehaviour
+public class SessionButton : BaseView
 {
     [SerializeField] TextMeshProUGUI Text;
 

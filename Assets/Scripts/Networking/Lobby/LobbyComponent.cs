@@ -16,7 +16,7 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner runner;
 
-    async void Start()
+    public async void Initialize()
     {
         runner = CreateNetworkRunner();
         Provider.Register<LobbyComponent>(this);
