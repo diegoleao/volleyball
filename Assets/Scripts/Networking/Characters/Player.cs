@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float speed = 6;
 
     [Header("Prefabs")]
-    [SerializeField] private PhysxBall _prefabPhysxBall;
+    [SerializeField] private Volleyball _prefabPhysxBall;
 
 
     //Networked
@@ -69,7 +69,7 @@ public class Player : NetworkBehaviour
                               Object.InputAuthority,
                               (runner, obj) =>
                               {
-                                  obj.GetComponent<PhysxBall>().Init(10 * forward);
+                                  obj.GetComponent<Volleyball>().Init(10 * forward);
                               });
 
                 spawnedProjectile = !spawnedProjectile;

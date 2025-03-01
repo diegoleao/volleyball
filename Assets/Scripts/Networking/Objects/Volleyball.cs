@@ -2,8 +2,9 @@ using UnityEngine;
 using Fusion;
 using System;
 
-public class PhysxBall : NetworkBehaviour
+public class Volleyball : NetworkBehaviour
 {
+
     [SerializeField] float UpImpulse = 2;
 
     [Networked] private TickTimer life { get; set; }
