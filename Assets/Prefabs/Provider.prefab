@@ -1,53 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6820508160601160950
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7104169005599309712}
-  - component: {fileID: 2932056037754181071}
-  m_Layer: 0
-  m_Name: GameNetworking
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7104169005599309712
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6820508160601160950}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -546.6458, y: -453.12494, z: 133.8232}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5928356851790042352}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2932056037754181071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6820508160601160950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bd6095565daaa54b8533a2be875102c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerPrefab:
-    RawGuidValue: eb1913f1af9352d4a93db9a469e8e754
-  MatchInfoPrefab:
-    RawGuidValue: 65eea36cb352cf04d9ee4b0a93639348
 --- !u!1 &8827645930992769453
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,7 +31,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1795278643732930066}
-  - {fileID: 7104169005599309712}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8508203406640691445
@@ -95,7 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameState: {fileID: 7029205177472448252}
-  gameNetworking: {fileID: 2932056037754181071}
+  GameNetworkingPrefab: {fileID: 3259636619782289260, guid: 26a0b21e2360b7540a5271af8f6a633f, type: 3}
+  characterSpawner: {fileID: 0}
+  courtCenter: {fileID: 0}
 --- !u!1 &9054079183415268123
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,4 +94,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MainMenu: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
-  HudView: {fileID: -7895233717178997293, guid: 1213989798060c94e8a199af4a0fc986, type: 3}
+  WinScreen: {fileID: 6763790122878942547, guid: 6eca5d07069efc645ae6277265bc3ad0, type: 3}

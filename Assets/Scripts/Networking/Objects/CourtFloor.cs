@@ -12,8 +12,8 @@ public class CourtFloor : MonoBehaviour
         if (physxBall != null)
         {
             Provider.Instance.GameState.IncreaseScoreFor(TargetOfWichTeam);
+            physxBall.StopMoving();
         }
-        physxBall.StopMoving();
 
     }
 

@@ -58,8 +58,8 @@ public class MainMenuScreen : BaseView
 
         isClosed = true;
 
-        Destroy(gameObject);
         this.lobbyInstance.Close();
+        Destroy(gameObject);
 
     }
 

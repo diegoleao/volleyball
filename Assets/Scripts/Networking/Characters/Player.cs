@@ -3,85 +3,86 @@ using UnityEngine;
 
 public class Player : NetworkBehaviour
 {
+    //Inspector
+    [Header("Player Attributes")]
+    [SerializeField] private float speed = 6;
 
+    [Header("Prefabs")]
     [SerializeField] private PhysxBall _prefabPhysxBall;
+
+
+    //Networked
     [Networked] private TickTimer delay { get; set; }
 
+    [Networked] public bool spawnedProjectile { get; set; }
+
+
+    //Private
     private NetworkCharacterController netCharController;
 
-    private Vector3 _forward; 
-    
-    [Networked]
-    public bool spawnedProjectile { get; set; }
+    private Vector3 forward;
 
-    //public Material _material;
 
-    //private ChangeDetector _changeDetector;
-
-    //public override void Spawned()
-    //{
-    //    _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
-    //}
-
-    private void Awake()
+    void Awake()
     {
         netCharController = GetComponent<NetworkCharacterController>();
-        _forward = Vector3.forward;
-        //_material = GetComponentInChildren<MeshRenderer>().material;
+        forward = Vector3.forward;
+
     }
 
-    //public override void Render()
-    //{
-    //    foreach (var change in _changeDetector.DetectChanges(this))
-    //    {
-    //        switch (change)
-    //        {
-    //            case nameof(spawnedProjectile):
-    //                _material.color = Color.white;
-    //                break;
-    //        }
-    //    }
-    //    _material.color = Color.Lerp(_material.color, Color.blue, Time.deltaTime);
-
-    //}
 
     public override void FixedUpdateNetwork()
     {
         if (GetInput(out NetworkInputData data))
         {
+            MoveCharacter(data);
 
-            //Move character
-            data.direction.Normalize();
-            netCharController.Move(5 * data.direction * Runner.DeltaTime);
+            SpawnPrefabOnButtonPress(data);
 
-            //check if the button is pressed and spawn a prefab
-            if (data.direction.sqrMagnitude > 0)
-                _forward = data.direction;
+        }
 
-            if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
+    }
+
+    private void MoveCharacter(NetworkInputData data)
+    {
+        data.direction.Normalize();
+
+        netCharController.Move(data.direction * Runner.DeltaTime);
+
+    }
+
+    private void SpawnPrefabOnButtonPress(NetworkInputData data)
+    {
+
+        if (data.direction.sqrMagnitude > 0)
+            forward = data.direction;
+
+        if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
+        {
+            if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
             {
-                if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
-                {
-                    delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabPhysxBall,
-                                  transform.position + _forward,
-                                  Quaternion.LookRotation(_forward),
-                                  Object.InputAuthority,
-                                  (runner, o) =>
-                                  {
-                                      o.GetComponent<PhysxBall>().Init(10 * _forward);
-                                  });
-                    spawnedProjectile = !spawnedProjectile;
-                }
-                else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
-                {
-                    //?
-                }
+                delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
+
+                Runner.Spawn(_prefabPhysxBall,
+                              transform.position + forward,
+                              Quaternion.LookRotation(forward),
+                              Object.InputAuthority,
+                              (runner, obj) =>
+                              {
+                                  obj.GetComponent<PhysxBall>().Init(10 * forward);
+                              });
+
+                spawnedProjectile = !spawnedProjectile;
+
+            }
+            else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+            {
+                //?
 
             }
 
         }
 
     }
-   
+
 }

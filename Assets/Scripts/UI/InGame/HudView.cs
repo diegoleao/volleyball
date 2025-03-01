@@ -13,34 +13,23 @@ public class HudView : BaseView
 
     private MatchInfo matchInfo;
 
-    private void Start()
+    public void Initialize(MatchInfo matchInfo)
     {
         ScoreTeamA.text = "00";
         ScoreTeamB.text = "00";
-
-        IDisposable disposable = null;
-        disposable = Observable.EveryUpdate().Subscribe(_ =>
+        this.matchInfo = matchInfo;
+        matchInfo.ScoreChangedEvent.AddListener(newScore =>
         {
-            matchInfo = FindAnyObjectByType<MatchInfo>();
-
-            if (matchInfo == null)
-                return;
-
-            matchInfo.ScoreChanged.AddListener(newScore =>
-            {
-                ScoreTeamA.text = newScore[0].score.ToString("D2");
-                ScoreTeamB.text = newScore[1].score.ToString("D2");
-            });
-
-            disposable.Dispose();
-
+            ScoreTeamA.text = newScore[0].score.ToString("D2");
+            ScoreTeamB.text = newScore[1].score.ToString("D2");
         });
 
     }
 
-    public void Close()
+    public void ResetScore()
     {
-        Destroy(this.gameObject);
+        ScoreTeamA.text = "00";
+        ScoreTeamB.text = "00";
 
     }
 

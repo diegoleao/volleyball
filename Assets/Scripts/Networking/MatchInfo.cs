@@ -8,7 +8,24 @@ using UnityEngine.Events;
 
 public class MatchInfo : NetworkBehaviour
 {
+    [ShowInInspector][Sirenix.OdinInspector.ReadOnly]
+    public bool IsMatchFinished
+    {
+        get
+        {
+            return this.Score.Any(scoreInfo => scoreInfo.score >= 7);
+        }
 
+    }
+
+    [Sirenix.OdinInspector.ReadOnly]
+    public List<ScoreData> Score = new List<ScoreData>();
+
+    public UnityEvent<List<ScoreData>> ScoreChangedEvent;
+
+    public UnityEvent<ScoreData> PlayerWonEvent;
+
+    //Networked
     [ShowInInspector]
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedScore => default;
@@ -17,16 +34,14 @@ public class MatchInfo : NetworkBehaviour
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedPlayers => default;
 
-    public List<ScoreData> ScoreList = new List<ScoreData>();
-
-    public UnityEvent<List<ScoreData>> ScoreChanged;
-
+    //Private
     private ChangeDetector _changeDetector;
 
     public override void Spawned()
     {
         _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
-        Initialize(player1: 0, player2: 1);//TODO: change it to real ids
+        InitScores(player1: 0, player2: 1);//TODO: change it to real ids
+        Provider.Register<MatchInfo>(this);
 
     }
 
@@ -37,20 +52,45 @@ public class MatchInfo : NetworkBehaviour
             switch (change)
             {
                 case nameof(NetworkedScore):
-                    ScoreChanged?.Invoke(GetScoresAsList());
+                    HandleScoreUpdates();
                     break;
             }
         }
     }
 
-    public void Initialize(int player1, int player2)
+    private void HandleScoreUpdates()
+    {
+        var newScores = GetScoresAsList();
+
+        if (!IsMatchFinished)
+        {
+            CheckWinningPlayer(newScores);
+        }
+
+        this.Score = newScores;
+        ScoreChangedEvent?.Invoke(this.Score);
+
+    }
+
+    private void CheckWinningPlayer(List<ScoreData> newScores)
+    {
+        var winningPlayer = newScores.Find(t => t.score >= 7);
+        if (winningPlayer != null)
+        {
+            Debug.Log($"WINNER! Player: {winningPlayer.playerId}");
+            PlayerWonEvent?.Invoke(winningPlayer);
+        }
+
+    }
+
+    private void InitScores(int player1, int player2)
     {
         NetworkedPlayers.Set(0, player1);
         NetworkedPlayers.Set(1, player2);
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
-        ScoreList = GetScoresAsList();
-        ScoreChanged.Invoke(ScoreList);
+        Score = GetScoresAsList();
+        ScoreChangedEvent.Invoke(Score);
 
     }
 
@@ -58,6 +98,12 @@ public class MatchInfo : NetworkBehaviour
     {
         if (HasStateAuthority) // Only update on the authoritative side
         {
+            if (IsMatchFinished)
+            {
+                Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId}");
+                return;
+            }
+
             var playerIndex = FindPlayerIndex(playerId);
             if (playerIndex >= 0)
             {
@@ -83,6 +129,12 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
+    public void ResetScore()
+    {
+        NetworkedScore.Set(0, 0);
+        NetworkedScore.Set(1, 0);
+    }
+
     private int FindPlayerIndex(int playerId)
     {
         return this.NetworkedPlayers.ToList().FindIndex(t => t == playerId);
@@ -105,12 +157,6 @@ public class MatchInfo : NetworkBehaviour
             }
         };
 
-    }
-
-    public void RestartMatch()
-    {
-        NetworkedScore.Set(0, 0);
-        NetworkedScore.Set(1, 0);
     }
 
     [Serializable]

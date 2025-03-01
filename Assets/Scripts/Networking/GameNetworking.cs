@@ -17,8 +17,6 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] NetworkPrefabRef MatchInfoPrefab;
 
-    public MatchInfo MatchInfo { get; private set; }
-
     public bool HasStateAuthority
     {
         get
@@ -33,6 +31,8 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     private NetworkRunner _runner;
 
     private NetworkInputData auxInput;
+
+    private MatchInfo matchInfo;
 
     private bool _mouseButton0;
 
@@ -66,10 +66,30 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public void RestartMatch()
+    [Button]
+    public async void ShutdownNetworkMatch()
+    {
+        if (_runner.IsServer)
+        {
+            Debug.Log("Ending match...");
+
+            foreach (var player in _runner.ActivePlayers)
+            {
+                _runner.Disconnect(player);
+            }
+
+        }
+
+        await _runner.Shutdown();
+        Debug.Log("Match ended.");
+
+    }
+
+    [Button]
+    public void ResetMatch()
     {
         ResetPlayerPositions();
-        MatchInfo.RestartMatch();
+        matchInfo?.ResetScore();
 
     }
 
@@ -77,8 +97,8 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (HasStateAuthority)
         {
-            this.MatchInfo = _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
-
+            _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
+            
         }
 
     }
@@ -189,19 +209,15 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        if (matchInfo == null || matchInfo.IsMatchFinished)
+        {
+            //Debug.Log($"MATCH FINISHED - IGNORING Input.");
+            return;
+        }
+
         var data = new NetworkInputData();
 
-        if (Input.GetKey(KeyCode.W))
-            data.direction += Vector3.forward;
-
-        if (Input.GetKey(KeyCode.S))
-            data.direction += Vector3.back;
-
-        if (Input.GetKey(KeyCode.A))
-            data.direction += Vector3.left;
-
-        if (Input.GetKey(KeyCode.D))
-            data.direction += Vector3.right;
+        data.direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
         _mouseButton0 = false;
@@ -210,6 +226,21 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
         _mouseButton1 = false;
 
         input.Set(data);
+
+    }
+
+    public void InjectMatchInfo(MatchInfo matchInfo)
+    {
+        this.matchInfo = matchInfo;
+
+    }
+
+    void OnApplicationQuit()
+    {
+        if(_runner != null)
+        {
+            ShutdownNetworkMatch();
+        }
 
     }
 

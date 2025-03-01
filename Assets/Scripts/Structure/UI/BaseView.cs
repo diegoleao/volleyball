@@ -1,27 +1,42 @@
 
 using UnityEngine;
 
+[RequireComponent (typeof(CanvasGroup))]
 public class BaseView : MonoBehaviour
 {
 
-    [Header("References")]
-    [SerializeField] CanvasGroup CanvasGroup;
+    CanvasGroup canvasGroup;
+
+    void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();
+
+    }
 
     public void Show()
     {
-        CanvasGroup.interactable = true;
-        CanvasGroup.blocksRaycasts = true;
-        CanvasGroup.alpha = 1;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.alpha = 1;
         this.gameObject.name = this.gameObject.name.Replace("** ", "").Replace(" (Hidden) **", "");
 
     }
 
     public void Hide()
     {
-        CanvasGroup.interactable = false;
-        CanvasGroup.blocksRaycasts = false;
-        CanvasGroup.alpha = 0;
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.alpha = 0;
         this.gameObject.name = $"** {this.gameObject.name} (Hidden) **";
+
+    }
+
+    public void Close()
+    {
+        if(this != null && this.gameObject != null)
+        {
+            Destroy(this.gameObject);
+        }
 
     }
 

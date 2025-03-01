@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UniRx;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
@@ -11,11 +12,22 @@ public class GameState : MonoBehaviour
 
     [SerializeField] MainMenuScreen MainMenu;
 
+    [SerializeField] WinScreen WinScreen;
+
+    public MatchInfo.ScoreData winningScore { get; internal set; }
+
+
+    private WinScreen winScreenInstance;
+
     private State state;
+
+    private MatchInfo matchInfo;
+
 
     public void Initialize()
     {
         SetState(State.Menu);
+
     }
 
     public void StartMultiplayerMatch(string roomName, GameMode mode)
@@ -33,9 +45,10 @@ public class GameState : MonoBehaviour
 
     }
 
+    //Used by UI
     public void RestartMatch()
     {
-        Provider.Instance.GameNetworking.RestartMatch();
+        SetState(State.RestartMatch);
 
     }
 
@@ -45,22 +58,26 @@ public class GameState : MonoBehaviour
         switch (state)
         {
             case State.Menu:
+                FindAnyObjectByType<OptionsScreen>().Hide();
                 Instantiate(MainMenu);
+                winScreenInstance?.Close();
+                FindAnyObjectByType<HudView>().ResetScore();
                 break;
 
             case State.StartMatch:
+                FindAnyObjectByType<OptionsScreen>().Show();
+                SetState(State.RallyStart);
+                winScreenInstance?.Close();
+                break;
+
+            case State.RestartMatch:
+                FindAnyObjectByType<OptionsScreen>().Show();
                 ResetMatch();
-                SetState(State.ResetCourtState);
+                SetState(State.RallyStart);
+                winScreenInstance?.Close();
                 break;
 
-            case State.ResetCourtState:
-                //  - return players to their reset positions
-                //  - remove ball, etc
-                //  - let characters move and main game loop play out
-                SetState(State.SpawnBall);
-                break;
-
-            case State.SpawnBall:
+            case State.RallyStart:
                 //Provider.Instance.BallSpawner.Spawn();
                 break;
 
@@ -68,10 +85,9 @@ public class GameState : MonoBehaviour
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
-                SetState(State.ResetCourtState);
                 break;
 
-            case State.GameEnded:
+            case State.SetFinished:
                 //if 3 games already ended:
                 //  SetState(GameStates.MatchEnded);
                 //else
@@ -79,45 +95,103 @@ public class GameState : MonoBehaviour
                 //***4 seconds later
                 break;
 
-            case State.MatchEnded:
+            case State.WinResultsCheck:
                 //Show end screen with results
-                //Move players to winning positions
-                //Move camera there
-                //Player winning and losing animations
+                winScreenInstance = Instantiate(WinScreen);
+                winScreenInstance.SetData(winningScore);
                 //***Wait for a few seconds
-                SetState(State.FinalResultCheck);
+                SetCourtToWinState();
+                FindAnyObjectByType<OptionsScreen>().Hide();
                 break;
 
-            case State.FinalResultCheck:
-                //Show prompt to return to main menu
+            case State.MatchEnded:
+            case State.AbortMatch:
+                ReturnToMainScreen();
+                Provider.Instance.GameNetworking.ShutdownNetworkMatch();
+                FindAnyObjectByType<OptionsScreen>().Hide();
                 break;
 
         }
+
+    }
+
+    public void ResetMatch()
+    {
+        Provider.Instance.GameNetworking.ResetMatch();
+
+    }
+
+    private void ShowWiningAnimations()
+    {
+        //Player winning and losing animations
+        //Focus camera on winning players field to show them animating
 
     }
 
     [Button]
     public void IncreaseScoreFor(Team team)
     {
-        GameState.IncreaseScoreFor((team == Team.A) ? 0 : 1);
+        IncreaseScoreFor((team == Team.A) ? 0 : 1);
         //SetState(State.AwardingPoints);
 
     }
 
     [Button]
-    public static void IncreaseScoreFor(int playerId)
+    public void IncreaseScoreFor(int playerId)
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            Provider.Instance.GameNetworking.MatchInfo.AddScore(playerId);
+            this.matchInfo.AddScore(playerId);
+
         }
 
     }
 
-    private void ResetMatch()
+    private void ResetCourtState()
     {
-        //HudView?.Close();
-        SetState(State.ResetCourtState);
+        Provider.Instance.GameNetworking.ResetPlayerPositions();
+
+    }
+
+    private void SetCourtToWinState()
+    {
+        //Provider.Instance.GameNetworking.ResetPlayerPositions();
+        ShowWiningAnimations();
+
+    }
+
+    public void ExitMatch()
+    {
+        ReturnToMainScreen();
+
+    }
+
+    private void ReturnToMainScreen()
+    {
+        SetState(State.Menu);
+    }
+
+
+    //Used by UI
+    public void AbortMatch()
+    {
+        SetState(State.AbortMatch);
+        
+    }
+
+    internal void NotifyPlayerWon(MatchInfo.ScoreData scoreData)
+    {
+        this.winningScore = scoreData;
+        Provider.Instance.GameState.SetState(GameState.State.WinResultsCheck);
+
+    }
+
+    public void SetMatchInfo(MatchInfo matchInfo)
+    {
+        this.matchInfo = matchInfo;
+
+        matchInfo.PlayerWonEvent.AddListener(NotifyPlayerWon);
+
     }
 
     [Serializable]
@@ -125,13 +199,14 @@ public class GameState : MonoBehaviour
     {
         Menu,
         StartMatch,
-        SpawnBall,
-        ResetCourtState,
+        RestartMatch,
+        SetStart,
+        RallyStart,
         AwardingPoints,
-        GameEnded,
-        FinalResultCheck,
+        SetFinished,
+        WinResultsCheck,
         MatchEnded,
-        Exit
+        AbortMatch
     }
 
     [Serializable]

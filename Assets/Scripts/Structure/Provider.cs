@@ -15,8 +15,20 @@ public class Provider : MonoBehaviour
     public GameState GameState => this.gameState;
 
 
-    [SerializeField] GameNetworking gameNetworking;
-    public GameNetworking GameNetworking => this.gameNetworking;
+    [SerializeField] GameNetworking GameNetworkingPrefab;
+
+    private GameNetworking _gameNetworkingInstance;
+    public GameNetworking GameNetworking
+    {
+        get
+        {
+            if(_gameNetworkingInstance == null)
+            {
+                _gameNetworkingInstance = Instantiate(GameNetworkingPrefab, this.transform);
+            }
+            return _gameNetworkingInstance;
+        }
+    }
 
     [Header("Scene Components")]
     [SerializeField] CharacterSpawner characterSpawner;
@@ -49,6 +61,7 @@ public class Provider : MonoBehaviour
         if (_instance == null || _instance.gameObject == null)
         {
             _instance = FindObjectOfType<Provider>();
+            registeredObjects = new List<MonoBehaviour>();
         }
 
         return _instance;
@@ -59,7 +72,7 @@ public class Provider : MonoBehaviour
     {
         get
         {
-            return gameNetworking.HasStateAuthority;
+            return GameNetworking.HasStateAuthority;
         }
     }
 
@@ -81,14 +94,34 @@ public class Provider : MonoBehaviour
     {
         try
         {
+            //Removes deleted objects before accessing their properties next
+            registeredObjects.RemoveAll(t => t == null);
+
             if (registeredObjects.Any(t => t.GetType() == typeof(T))) return;
 
             registeredObjects.Add(objectToRegister);
+
+            InjectObjectsWhenNecessary(objectToRegister);
+
         }
         catch (Exception exc)
         {
             Debug.LogError($"Failed to register object {typeof(T).Name}");
             Debug.LogException(exc);
+        }
+
+    }
+
+    private static void InjectObjectsWhenNecessary(MonoBehaviour objectToRegister)
+    {
+        if (objectToRegister is MatchInfo)
+        {
+            Instance.GameState.SetMatchInfo(objectToRegister as MatchInfo);
+
+            FindAnyObjectByType<HudView>().Initialize(objectToRegister as MatchInfo);
+
+            Instance.GameNetworking.InjectMatchInfo(objectToRegister as MatchInfo);
+
         }
 
     }
