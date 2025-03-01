@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterSpawner : MonoBehaviour
+public class CourtTriggers : MonoBehaviour
 {
 
     [SerializeField] BoxCollider teamA;

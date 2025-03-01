@@ -15,7 +15,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     [SerializeField] NetworkPrefabRef _playerPrefab;
 
-    [SerializeField] NetworkPrefabRef MatchInfoPrefab;
+    [SerializeField] NetworkPrefabRef _matchInfoPrefab;
 
     public bool HasStateAuthority
     {
@@ -25,18 +25,20 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
+
     //Private
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _runner;
 
-    private NetworkInputData auxInput;
+    private NetworkInputData inputData;
 
     private MatchInfo matchInfo;
 
     private bool _mouseButton0;
 
     private bool _mouseButton1;
+
 
     public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
     {
@@ -97,7 +99,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (HasStateAuthority)
         {
-            _runner.Spawn(MatchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
+            _runner.Spawn(_matchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
             
         }
 
@@ -127,6 +129,35 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             runner.Despawn(networkObject);
             _spawnedCharacters.Remove(player);
         }
+
+    }
+
+    private void Update()
+    {
+        _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
+        _mouseButton1 = _mouseButton1 | Input.GetMouseButton(1);
+
+    }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        if (matchInfo == null || matchInfo.IsMatchFinished)
+        {
+            //Debug.Log($"MATCH FINISHED - IGNORING Input.");
+            return;
+        }
+
+        inputData = new NetworkInputData();
+
+        inputData.direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+
+        inputData.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
+        _mouseButton0 = false;
+
+        inputData.buttons.Set(NetworkInputData.MOUSEBUTTON1, _mouseButton1);
+        _mouseButton1 = false;
+
+        input.Set(inputData);
 
     }
 
@@ -198,35 +229,6 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         return scene;
-    }
-
-    private void Update()
-    {
-        _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
-        _mouseButton1 = _mouseButton1 | Input.GetMouseButton(1);
-
-    }
-
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        if (matchInfo == null || matchInfo.IsMatchFinished)
-        {
-            //Debug.Log($"MATCH FINISHED - IGNORING Input.");
-            return;
-        }
-
-        var data = new NetworkInputData();
-
-        data.direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-
-        data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
-        _mouseButton0 = false;
-
-        data.buttons.Set(NetworkInputData.MOUSEBUTTON1, _mouseButton1);
-        _mouseButton1 = false;
-
-        input.Set(data);
-
     }
 
     public void InjectMatchInfo(MatchInfo matchInfo)

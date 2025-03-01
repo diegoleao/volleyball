@@ -46,5 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPrefab:
     RawGuidValue: eb1913f1af9352d4a93db9a469e8e754
-  MatchInfoPrefab:
+  _matchInfoPrefab:
     RawGuidValue: 65eea36cb352cf04d9ee4b0a93639348
