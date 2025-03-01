@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9274033}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Triggers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 20802279}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ScoreTriggers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 31549226}
   - component: {fileID: 31549225}
   - component: {fileID: 31549224}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TriggerEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +378,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 45172602}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Players
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -927,7 +927,7 @@ GameObject:
   - component: {fileID: 614405916}
   - component: {fileID: 614405915}
   - component: {fileID: 614405914}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TriggerPlayer (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1558,7 +1558,7 @@ GameObject:
   - component: {fileID: 1092474915}
   - component: {fileID: 1092474914}
   - component: {fileID: 1092474917}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TeamBCourt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2550,7 +2550,7 @@ GameObject:
   - component: {fileID: 1702513658}
   - component: {fileID: 1702513657}
   - component: {fileID: 1702513656}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TriggerEnemy (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2876,9 +2876,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2147317381}
     - target: {fileID: 8508203406640691445, guid: b4a999ccd433dd248b98433350ca37d2, type: 3}
-      propertyPath: characterSpawner
+      propertyPath: courtTriggers
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 643296852}
     - target: {fileID: 8827645930992769453, guid: b4a999ccd433dd248b98433350ca37d2, type: 3}
       propertyPath: m_Name
       value: Provider
@@ -3420,7 +3420,7 @@ GameObject:
   - component: {fileID: 2110379333}
   - component: {fileID: 2110379332}
   - component: {fileID: 2110379335}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TeamACourt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3538,7 +3538,7 @@ GameObject:
   - component: {fileID: 2144031515}
   - component: {fileID: 2144031514}
   - component: {fileID: 2144031513}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TriggerPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3659,7 +3659,7 @@ Transform:
   m_GameObject: {fileID: 2147317380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.16358864, y: -8.433201, z: 17.005865}
+  m_LocalPosition: {x: 0.16358864, y: -6.68, z: 17.005865}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

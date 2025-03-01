@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float speed = 6;
 
     [Header("Prefabs")]
-    [SerializeField] private Volleyball _prefabPhysxBall;
+    [SerializeField] private Volleyball _volleyBall;
 
 
     //Networked
@@ -59,11 +59,11 @@ public class Player : NetworkBehaviour
 
         if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
         {
-            if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
+            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))
             {
                 delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
 
-                Runner.Spawn(_prefabPhysxBall,
+                Runner.Spawn(_volleyBall,
                               transform.position + forward,
                               Quaternion.LookRotation(forward),
                               Object.InputAuthority,
@@ -75,8 +75,9 @@ public class Player : NetworkBehaviour
                 spawnedProjectile = !spawnedProjectile;
 
             }
-            else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+            else if (data.buttons.IsSet(NetworkInputData.BUTTON_1_JUMP))
             {
+                Debug.Log("Jump pressed");
                 //?
 
             }

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameState: {fileID: 7029205177472448252}
   GameNetworkingPrefab: {fileID: 3259636619782289260, guid: 26a0b21e2360b7540a5271af8f6a633f, type: 3}
-  characterSpawner: {fileID: 0}
+  courtTriggers: {fileID: 0}
   courtCenter: {fileID: 0}
 --- !u!1 &9054079183415268123
 GameObject:

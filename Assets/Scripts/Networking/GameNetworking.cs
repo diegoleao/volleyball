@@ -35,9 +35,9 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private MatchInfo matchInfo;
 
-    private bool _mouseButton0;
+    private bool fireButton;
 
-    private bool _mouseButton1;
+    private bool jumpButton;
 
 
     public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
@@ -134,8 +134,8 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
-        _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
-        _mouseButton1 = _mouseButton1 | Input.GetMouseButton(1);
+        fireButton = fireButton | Input.GetMouseButton(0) | Input.GetButtonDown("Fire1");
+        jumpButton = jumpButton | Input.GetMouseButton(1) | Input.GetButtonDown("Jump");
 
     }
 
@@ -151,11 +151,11 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         inputData.direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-        inputData.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
-        _mouseButton0 = false;
+        inputData.buttons.Set(NetworkInputData.BUTTON_0_FIRE, fireButton);
+        fireButton = false;
 
-        inputData.buttons.Set(NetworkInputData.MOUSEBUTTON1, _mouseButton1);
-        _mouseButton1 = false;
+        inputData.buttons.Set(NetworkInputData.BUTTON_1_JUMP, jumpButton);
+        jumpButton = false;
 
         input.Set(inputData);
 
@@ -187,7 +187,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         //TODO: FIX THIS CALCULATION, THE TEAM A IS NOT ALWAYS THE CURRENT PLAYER
         return Provider.Instance
-                       .CharacterSpawner
+                       .CourtTriggers
                        .GetTeamSpawnPosition(player == _runner.LocalPlayer);
 
     }

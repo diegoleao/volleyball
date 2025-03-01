@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4806060831508473928}
   - component: {fileID: 8736455547786544508}
   - component: {fileID: 7069551806041455091}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: PlayerPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefabPhysxBall: {fileID: 8932351701932162806, guid: 2007c9f538e5a8f4e80c136e0d3a8ee4, type: 3}
+  speed: 6
+  _volleyBall: {fileID: 1123110131972554759, guid: 2007c9f538e5a8f4e80c136e0d3a8ee4, type: 3}
   _spawnedProjectile: 0
 --- !u!1 &2836249579507856444
 GameObject:

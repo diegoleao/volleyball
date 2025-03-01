@@ -31,8 +31,8 @@ public class Provider : MonoBehaviour
     }
 
     [Header("Scene Components")]
-    [SerializeField] CourtTriggers characterSpawner;
-    public CourtTriggers CharacterSpawner => this.characterSpawner;
+    [SerializeField] CourtTriggers courtTriggers;
+    public CourtTriggers CourtTriggers => this.courtTriggers;
 
     [Header("Position References")]
 

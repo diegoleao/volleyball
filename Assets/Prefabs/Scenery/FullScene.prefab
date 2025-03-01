@@ -45,6 +45,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Volleyball Net
       objectReference: {fileID: 0}
+    - target: {fileID: 3988263668458685965, guid: 0aed4634a328fdf4dade9486b538d0f3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 4328794872478948535, guid: 0aed4634a328fdf4dade9486b538d0f3, type: 3}
       propertyPath: m_RootOrder
       value: 111
