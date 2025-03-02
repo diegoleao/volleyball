@@ -10,7 +10,7 @@ public class Player : NetworkBehaviour
     [SerializeField] float speed = 6;
     [SerializeField] float ballHittingDelay = 0.1f;
 
-    [Networked] private TickTimer delay { get; set; }
+    //[Networked] private TickTimer delay { get; set; }
 
     //Private
     private NetworkCharacterController netCharController;
@@ -53,10 +53,10 @@ public class Player : NetworkBehaviour
 
             }
             
-            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
+            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))// && delay.ExpiredOrNotRunning(Runner))
             {
                 Debug.Log("BUTTON_0_FIRE Pressed");
-                delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
+                //delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
 
                 this.transform.position = transform.position + (forward.normalized * 0.05f);
 

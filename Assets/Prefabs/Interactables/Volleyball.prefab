@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Impulse: 12
-  despawnDelay: 8
+  despawnDelay: 1.2
   proximityTrigger: {fileID: 8143697982595510806}
 --- !u!114 &8636642907600573593
 MonoBehaviour:
