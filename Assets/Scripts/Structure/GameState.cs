@@ -171,6 +171,7 @@ public class GameState : MonoBehaviour
     {
         if (Provider.Instance.HasStateAuthority)
         {
+            Debug.Log($"Increase Score for Team {team}");
             this.matchInfo.AddScore(team);
 
         }
