@@ -3,13 +3,13 @@ using UnityEngine;
 public class Shadow : MonoBehaviour
 {
 
-    [SerializeField] GameObject PulsingCircle;
+    [SerializeField] GameObject Circle;
     [SerializeField] LayerMask GroundLayerMask;
     GameObject circleInstance;
 
     void Start()
     {
-        this.circleInstance = Instantiate(PulsingCircle);
+        this.circleInstance = Instantiate(Circle);
     }
 
     void FixedUpdate()

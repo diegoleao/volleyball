@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ab1d91cb4853b408aaf21dfc5e2d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PulsingCircle: {fileID: 2654776454380230599, guid: 1c7a9639ba146a74fbc3f4f93b39ae24, type: 3}
+  Circle: {fileID: 2654776454380230599, guid: 1c7a9639ba146a74fbc3f4f93b39ae24, type: 3}
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
