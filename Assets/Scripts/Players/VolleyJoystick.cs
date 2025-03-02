@@ -7,8 +7,8 @@ public class VolleyJoystick : MonoBehaviour
     [SerializeField] Button ButtonFire;
     [SerializeField] Button ButtonJump;
 
-    bool fireButtonPressed;
-    bool jumpButtonPressed;
+    int fireButtonQueried;
+    int jumpButtonQueried;
 
     public float Horizontal => dynamicJoystick.Horizontal;
 
@@ -26,39 +26,26 @@ public class VolleyJoystick : MonoBehaviour
 
     public void HandleFireButtonPress()
     {
-        fireButtonPressed = true;
+        fireButtonQueried = 3;
+        
     }
 
     public void HandleJumpButtonPress()
     {
-        jumpButtonPressed = true;
+        jumpButtonQueried = 3;
     }
 
     public bool GetFireButton()
     {
-        if (fireButtonPressed)
-        {
-            fireButtonPressed = false;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        fireButtonQueried--;
+        return fireButtonQueried >= 0;
 
     }
 
     public bool GetJumpButton()
     {
-        if (jumpButtonPressed)
-        {
-            jumpButtonPressed = false;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        jumpButtonQueried--;
+        return jumpButtonQueried >= 0;
 
     }
 
