@@ -6,9 +6,9 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     //Inspector
-    [Header("Player Attributes")]
-    [SerializeField] float speed = 6;
-    [SerializeField] float ballHittingDelay = 0.1f;
+    //[Header("Player Attributes")]
+    //[SerializeField] float speed = 6;
+    //[SerializeField] float ballHittingDelay = 0.1f;
 
     //[Networked] private TickTimer delay { get; set; }
 

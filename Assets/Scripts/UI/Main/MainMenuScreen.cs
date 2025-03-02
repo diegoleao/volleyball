@@ -7,9 +7,6 @@ public class MainMenuScreen : BaseView
 
     private LobbyScreen lobbyInstance;
 
-    private bool isClosed;
-
-
     private void Start()
     {
         CreateHiddenLobby();
@@ -51,15 +48,13 @@ public class MainMenuScreen : BaseView
 
     }
 
-    public void Close()
+    public override void Close()
     {
         if (isClosed)
             return;
 
-        isClosed = true;
-
         this.lobbyInstance.Close();
-        Destroy(gameObject);
+        base.Close();
 
     }
 

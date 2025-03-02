@@ -2,21 +2,23 @@ using UnityEngine;
 
 public class CourtTriggers : MonoBehaviour
 {
+    [Header("Team A")]
+    [SerializeField] BoxCollider teamAPlayerSpawn;
+    [SerializeField] BoxCollider teamABallVolume;
 
-    [SerializeField] BoxCollider teamA;
-    [SerializeField] BoxCollider teamB;
-    [SerializeField] BoxCollider teamACourtSide;
-    [SerializeField] BoxCollider teamBCourtSide;
+    [Header("Team B")]
+    [SerializeField] BoxCollider teamBPlayerSpawn;
+    [SerializeField] BoxCollider teamBBallVolume;
 
     public Vector3 GetTeamSpawnPosition(Team team, float height)
     {
-        return GetRandomPositionInBox(teamA, teamB, height, team);
+        return GetRandomPositionInBox(teamAPlayerSpawn, teamBPlayerSpawn, height, team);
 
     }
 
     public Vector3 GetBallSpawnPosition(Team team, float height)
     {
-        return GetRandomPositionInBox(teamACourtSide, teamBCourtSide, height, team);
+        return GetRandomPositionInBox(teamABallVolume, teamBBallVolume, height, team);
 
     }
 

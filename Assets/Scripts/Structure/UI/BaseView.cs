@@ -7,13 +7,15 @@ public class BaseView : MonoBehaviour
 
     CanvasGroup canvasGroup;
 
+    protected bool isClosed;
+
     void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
 
     }
 
-    public void Show()
+    public virtual void Show()
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
@@ -22,7 +24,7 @@ public class BaseView : MonoBehaviour
 
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
@@ -31,9 +33,14 @@ public class BaseView : MonoBehaviour
 
     }
 
-    public void Close()
+    public virtual void Close()
     {
-        if(this != null && this.gameObject != null)
+        if (isClosed)
+            return;
+
+        isClosed = true;
+
+        if (this != null && this.gameObject != null)
         {
             Destroy(this.gameObject);
         }

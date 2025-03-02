@@ -18,8 +18,6 @@ public class LobbyScreen : BaseView
     private bool isSessionListOutdated;
     private MainMenuScreen menuInstance;
 
-    private bool isClosed;
-
     public void Initialize(MainMenuScreen menuInstance)
     {
         this.Hide();
@@ -42,14 +40,12 @@ public class LobbyScreen : BaseView
 
     }
 
-    public void Close()
+    public override void Close()
     {
         if (isClosed)
             return;
 
-        isClosed = true;
-
-        Destroy(gameObject);
+        base.Close();
         menuInstance.Close();
 
     }
