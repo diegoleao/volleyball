@@ -45,9 +45,12 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private GameState gameState;
 
+    private VolleyJoystick volleyJoystick;
+
     void Awake()
     {
         this.gameState = Provider.Instance.GameState;
+        this.volleyJoystick = Provider.Instance.VolleyJoystick;
 
     }
 
@@ -145,8 +148,13 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
+#if UNITY_STANDALONE_WIN
         fireButton = fireButton | Input.GetMouseButtonDown(0) | Input.GetButtonDown("Fire1");
         jumpButton = jumpButton | Input.GetMouseButtonDown(1) | Input.GetButtonDown("Jump");
+#else
+        fireButton = fireButton | this.volleyJoystick.GetFireButton();
+        jumpButton = jumpButton | this.volleyJoystick.GetJumpButton();
+#endif
 
     }
 
@@ -158,6 +166,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             return;
         }
 
+#if UNITY_STANDALONE_WIN
         inputData = new NetworkInputData();
 
         inputData.direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
@@ -167,6 +176,18 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         inputData.buttons.Set(NetworkInputData.BUTTON_1_JUMP, jumpButton);
         jumpButton = false;
+#else
+        inputData = new NetworkInputData();
+
+        inputData.direction = new Vector3(this.volleyJoystick.Horizontal, 0, this.volleyJoystick.Vertical);
+
+        inputData.buttons.Set(NetworkInputData.BUTTON_0_FIRE, fireButton);
+        fireButton = false;
+
+        inputData.buttons.Set(NetworkInputData.BUTTON_1_JUMP, jumpButton);
+        jumpButton = false;
+
+#endif
 
         input.Set(inputData);
 

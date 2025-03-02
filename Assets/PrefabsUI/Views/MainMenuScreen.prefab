@@ -569,9 +569,9 @@ RectTransform:
   - {fileID: 4510309882974679756}
   m_Father: {fileID: 8892428608165109995}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -255}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -564}
   m_SizeDelta: {x: -1132.8544, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &807383557868793635
@@ -998,7 +998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c39cf27104505b47830d7dd3ef7ef92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanvasGroup: {fileID: -6099751268921289432}
   LobbyPrefab: {fileID: -8092589119131161144, guid: 4352cf2a6106f1547ae73c0256953ef6, type: 3}
 --- !u!225 &-6099751268921289432
 CanvasGroup:
