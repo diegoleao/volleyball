@@ -12,15 +12,12 @@ using UnityEngine.SceneManagement;
 
 public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public bool HasGameStarted { get; private set; }
 
     [SerializeField] int requiredPlayers = 2;
 
     [SerializeField] NetworkPrefabRef _playerPrefab;
 
     [SerializeField] NetworkPrefabRef _matchInfoPrefab;
-
-    [SerializeField] private NetworkPrefabRef _ballSpawnerPrefab;
 
     public bool HasStateAuthority
     {
@@ -126,10 +123,9 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
 
-            if ((playersInGame >= requiredPlayers) && !HasGameStarted)
+            if ((playersInGame >= requiredPlayers) && !matchInfo.HasGameStarted)
             {
-                gameState.SetState(GameState.State.StartMatch);
-                HasGameStarted = true;
+                matchInfo.HasGameStarted = true;
 
             }
         }
@@ -156,7 +152,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if (matchInfo == null || matchInfo.IsMatchFinished || !HasGameStarted)
+        if (matchInfo == null || matchInfo.IsMatchFinished || !matchInfo.HasGameStarted)
         {
             //Debug.Log($"MATCH FINISHED - IGNORING Input.");
             return;
@@ -185,7 +181,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             _runner.Spawn(volleyBall,
                          Provider.Instance.CourtTriggers.GetBallSpawnPosition(team, height),//TODO: Instanciar do outro lado da quadra também,
                          Quaternion.identity,
-                         _runner.LocalPlayer,
+                         null,
                          (runner, obj) =>
                          {
 
@@ -239,7 +235,9 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
         var runner = gameObject.AddComponent<NetworkRunner>();
 
         //Let it know that we will be providing user input
-        runner.ProvideInput = true;
+        runner.ProvideInput = true; 
+        
+        Debug.Log($"ProvideInput set to: {runner.ProvideInput}");
 
         return runner;
 

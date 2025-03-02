@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Impulse: 12
-  impulseDelay: 0.1
   despawnDelay: 5
 --- !u!114 &8636642907600573593
 MonoBehaviour:

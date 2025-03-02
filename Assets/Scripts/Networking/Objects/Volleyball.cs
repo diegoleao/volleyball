@@ -1,58 +1,44 @@
 using UnityEngine;
 using Fusion;
 using System;
+using UniRx;
 
 public class Volleyball : NetworkBehaviour
 {
     [SerializeField] float Impulse = 6;
-    [SerializeField] float impulseDelay = 0.1f;
     [SerializeField] float despawnDelay = 5.0f;
 
-    [Networked] private TickTimer life { get; set; }
-
-    [Networked] private TickTimer delay { get; set; }
-
     //Private
-    private Transform CourtCenter;
+    private Vector3 CourtCenter;
+
     private Vector3 forward;
 
     private bool isGrounded;
 
+    private Rigidbody rb;
+
+    private static int idCounter;
 
     void Awake()
     {
-        CourtCenter = Provider.Instance.CourtCenter;
+        CourtCenter = Provider.Instance.CourtCenter.position;
+        rb = GetComponent<Rigidbody>();
+        Provider.Register<Volleyball>(this);
+        idCounter++;
+        this.gameObject.name += " "+idCounter;
 
     }
 
-    private void HandleImpulseOnPress(NetworkInputData data)
+    public void ApplyImpulse(Vector3 hitDirection, Vector3 playerDirection)
     {
         if (isGrounded)
             return;
 
-        if (data.direction.sqrMagnitude > 0)
-            forward = data.direction;
+        //forward = hitDirection.sqrMagnitude > 0 ? hitDirection : playerDirection;
+        forward = (CourtCenter - this.transform.position);
+        rb.velocity = forward.normalized * Impulse;
 
-        if (HasStateAuthority)
-        {
-            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
-            {
-                delay = TickTimer.CreateFromSeconds(Runner, impulseDelay);
-
-                this.transform.position = transform.position + (forward.normalized * 0.05f);
-                ApplyImpulse();
-            }
-
-        }
-
-    }
-
-    public void ApplyImpulse()
-    {
-        if (isGrounded)
-            return;
-
-        GetComponent<Rigidbody>().velocity = (CourtCenter.position - this.transform.position).normalized * Impulse;
+        Debug.Log($"Hitting ball {idCounter} forward ({forward.normalized}) with Velocity {rb.velocity}");
 
     }
 
@@ -75,24 +61,14 @@ public class Volleyball : NetworkBehaviour
 
     //}
 
-    public void StopMoving()
+    public async void StopMoving()
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        life = TickTimer.CreateFromSeconds(Runner, despawnDelay);
 
-    }
+        await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
-    public override void FixedUpdateNetwork()
-    {
-        if (GetInput(out NetworkInputData data))
-        {
-            HandleImpulseOnPress(data);
-
-        }
-
-        if (life.Expired(Runner))
-            Runner.Despawn(Object);
+        Destroy(this.gameObject);
 
     }
 

@@ -12,6 +12,8 @@ public class MatchInfo : NetworkBehaviour
     private const int TeamA_ID = 0;
     private const int TeamB_ID = 1;
 
+    [Networked] public bool HasGameStarted { get; set; }
+
     [ShowInInspector][Sirenix.OdinInspector.ReadOnly]
     public bool IsMatchFinished
     {
@@ -68,6 +70,10 @@ public class MatchInfo : NetworkBehaviour
 
                 case nameof(ScoringTeam):
                     HandleTeamScoreUpdate();
+                    break;
+
+                case nameof(HasGameStarted):
+                    Provider.Instance.GameState.StartGameplay();
                     break;
             }
         }

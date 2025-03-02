@@ -214,6 +214,12 @@ public class GameState : MonoBehaviour
 
     }
 
+    public void StartGameplay()
+    {
+        SetState(GameState.State.StartMatch);
+
+    }
+
     [Serializable]
     public enum State
     {

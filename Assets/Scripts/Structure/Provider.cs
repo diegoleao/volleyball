@@ -124,6 +124,16 @@ public class Provider : MonoBehaviour
 
         }
 
+        if(objectToRegister is Volleyball)
+        {
+            var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
+            foreach (var player in players)
+            {
+                player.InjectVolleyball(objectToRegister as Volleyball);
+            }
+            
+        }
+
     }
 
     public static T Get<T>(bool findDisabledObjects = false) where T : MonoBehaviour

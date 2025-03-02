@@ -1,4 +1,5 @@
 using Fusion;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpComponent))]
@@ -7,11 +8,15 @@ public class Player : NetworkBehaviour
     //Inspector
     [Header("Player Attributes")]
     [SerializeField] float speed = 6;
+    [SerializeField] float ballHittingDelay = 0.1f;
+
+    [Networked] private TickTimer delay { get; set; }
 
     //Private
     private NetworkCharacterController netCharController;
     private Vector3 forward;
     private JumpComponent jumpComponent;
+    private Volleyball volleyball;
 
     void Awake()
     {
@@ -34,11 +39,29 @@ public class Player : NetworkBehaviour
                 jumpComponent.Jump();
 
             }
+            else if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
+            {
+                Debug.Log("Hit volleyball - Player");
+                delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
+
+                this.transform.position = transform.position + (forward.normalized * 0.05f);
+
+                if(volleyball != null)
+                {
+                    volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
+                }
+                
+            }
 
         }
 
     }
 
+    public void InjectVolleyball(Volleyball volleyball)
+    {
+        this.volleyball = volleyball;
+
+    }
 
     public override void FixedUpdateNetwork()
     {
@@ -57,5 +80,4 @@ public class Player : NetworkBehaviour
         netCharController.Move(data.direction * Runner.DeltaTime);
 
     }
-
 }
