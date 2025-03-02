@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class VolleyballShadow : MonoBehaviour
+public class Shadow : MonoBehaviour
 {
 
     [SerializeField] GameObject PulsingCircle;

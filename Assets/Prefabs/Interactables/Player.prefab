@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8736455547786544508}
   - component: {fileID: 7069551806041455091}
   - component: {fileID: 8537830836841734961}
+  - component: {fileID: 1550713204865366733}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -131,6 +132,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 10
+--- !u!114 &1550713204865366733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228050481578901523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ab1d91cb4853b408aaf21dfc5e2d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PulsingCircle: {fileID: 2654776454380230599, guid: 1c7a9639ba146a74fbc3f4f93b39ae24, type: 3}
+  GroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!1 &2836249579507856444
 GameObject:
   m_ObjectHideFlags: 0

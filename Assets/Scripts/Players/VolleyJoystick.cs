@@ -14,6 +14,16 @@ public class VolleyJoystick : MonoBehaviour
 
     public float Vertical => dynamicJoystick.Vertical;
 
+    void Start()
+    {
+#if UNITY_STANDALONE_WIN
+        gameObject.SetActive(false);
+#else
+        gameObject.SetActive(true);
+#endif
+
+    }
+
     public void HandleFireButtonPress()
     {
         fireButtonPressed = true;
