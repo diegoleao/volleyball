@@ -7,13 +7,14 @@ public class Volleyball : NetworkBehaviour
 {
     [SerializeField] float Impulse = 6;
     [SerializeField] float despawnDelay = 5.0f;
+    [SerializeField] SphereCollider proximityTrigger;
+
+    public bool IsGrounded { get; private set; }
 
     //Private
     private Vector3 CourtCenter;
 
     private Vector3 forward;
-
-    private bool isGrounded;
 
     private Rigidbody rb;
 
@@ -31,8 +32,12 @@ public class Volleyball : NetworkBehaviour
 
     public void ApplyImpulse(Vector3 hitDirection, Vector3 playerDirection)
     {
-        if (isGrounded)
+        if (IsGrounded)
+        {
+            Debug.Log($"Ignoring hit on grounded Volleybal {this?.name}");
             return;
+        }
+            
 
         //forward = hitDirection.sqrMagnitude > 0 ? hitDirection : playerDirection;
         forward = (CourtCenter - this.transform.position);
@@ -68,15 +73,37 @@ public class Volleyball : NetworkBehaviour
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
-        Destroy(this.gameObject);
+        if(this != null && this.gameObject != null) Destroy(this.gameObject);
 
     }
 
     public void HandleGroundTouch(Team scoringTeam)
     {
-        isGrounded = true;
+        IsGrounded = true;
+        proximityTrigger.enabled = false;
         Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
         StopMoving();
 
     }
+
+    ////Assigned in Inspector through VolleyballHitTrigger component's event.
+    //public void HitTriggerEntered(Collider other)
+    //{
+    //    if (this.IsGrounded)
+    //        return;
+
+    //    other.GetComponent<Player>().SetVolleyballColliding(this, true);
+
+    //}
+
+    ////Assigned in Inspector through VolleyballHitTrigger component's event.
+    //public void HitTriggerLeft(Collider other)
+    //{
+    //    if (this.IsGrounded)
+    //        return;
+
+    //    other.GetComponent<Player>().SetVolleyballColliding(this, false);
+
+    //}
+
 }

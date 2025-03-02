@@ -11,6 +11,8 @@ using static GameState;
 public class Provider : MonoBehaviour
 {
 
+    public bool IsDebuggingVolleyball;
+
     [SerializeField] GameState gameState;
     public GameState GameState => this.gameState;
 
@@ -124,15 +126,20 @@ public class Provider : MonoBehaviour
 
         }
 
-        if(objectToRegister is Volleyball)
+        if(Instance.IsDebuggingVolleyball)
         {
-            var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
-            foreach (var player in players)
-            {
-                player.InjectVolleyball(objectToRegister as Volleyball);
-            }
-            
+            //if (objectToRegister is Volleyball)
+            //{
+            //    var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
+            //    foreach (var player in players)
+            //    {
+            //        player.SetVolleyballColliding(objectToRegister as Volleyball, true);
+            //    }
+
+            //}
+
         }
+
 
     }
 

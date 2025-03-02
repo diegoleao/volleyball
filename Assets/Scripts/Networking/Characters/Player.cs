@@ -17,12 +17,25 @@ public class Player : NetworkBehaviour
     private Vector3 forward;
     private JumpComponent jumpComponent;
     private Volleyball volleyball;
+    private bool isTouchingVolleyball;
+    private VolleyballHitTrigger possibleBallTrigger;
+
 
     void Awake()
     {
         netCharController = GetComponent<NetworkCharacterController>();
         jumpComponent = GetComponent<JumpComponent>();
         forward = Vector3.forward;
+
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (GetInput(out NetworkInputData data))
+        {
+            MoveCharacter(data);
+            HandleButtonPress(data);
+        }
 
     }
 
@@ -39,36 +52,27 @@ public class Player : NetworkBehaviour
                 jumpComponent.Jump();
 
             }
-            else if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
+            
+            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
             {
-                Debug.Log("Hit volleyball - Player");
+                Debug.Log("BUTTON_0_FIRE Pressed");
                 delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
 
                 this.transform.position = transform.position + (forward.normalized * 0.05f);
 
-                if(volleyball != null)
+                if(isTouchingVolleyball && volleyball != null)
                 {
+                    Debug.Log($"Applyed impulse to {volleyball.name}");
                     volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
                 }
-                
+
             }
 
-        }
+            if (isTouchingVolleyball)
+            {
+                isTouchingVolleyball = false;
+            }
 
-    }
-
-    public void InjectVolleyball(Volleyball volleyball)
-    {
-        this.volleyball = volleyball;
-
-    }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (GetInput(out NetworkInputData data))
-        {
-            MoveCharacter(data);
-            HandleButtonPress(data);
         }
 
     }
@@ -80,4 +84,40 @@ public class Player : NetworkBehaviour
         netCharController.Move(data.direction * Runner.DeltaTime);
 
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        possibleBallTrigger = other.GetComponent<VolleyballHitTrigger>();
+        if (possibleBallTrigger != null)
+        {
+            if (!possibleBallTrigger.Volleyball.IsGrounded)
+            {
+                isTouchingVolleyball = true;
+                volleyball = possibleBallTrigger.Volleyball;
+                Debug.Log($"Hit {other.name}");
+            }
+            else
+            {
+                isTouchingVolleyball = false;
+            }
+
+        }
+
+    }
+
+    //    public void SetVolleyballColliding(Volleyball volleyball, bool isTriggerColliding)
+    //    {
+    //        if (isTriggerColliding)
+    //        {
+    //            //Debug.Log($"Volleyball {volleyball.name} touched player.");
+    //s            this.volleyball = volleyball;
+    //        }
+    //        else
+    //        {
+    //            Debug.Log($"Volleyball {volleyball.name} not touching player anymore.");
+    //            this.volleyball = null;
+    //        }
+
+    //    }
+
 }

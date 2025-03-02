@@ -86,7 +86,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     [Button]
     public async void ShutdownNetworkMatch()
     {
-        if (_runner.IsServer)
+        if (_runner != null && _runner.IsServer)
         {
             Debug.Log("Ending match...");
 

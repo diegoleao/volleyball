@@ -100,9 +100,9 @@ MonoBehaviour:
   _stateAuthorityChangeErrorCorrectionDelta: 0
   gravity: -20
   jumpImpulse: 8
-  acceleration: 30
-  braking: 30
-  maxSpeed: 30
+  acceleration: 100
+  braking: 150
+  maxSpeed: 50
   rotationSpeed: 15
 --- !u!114 &7069551806041455091
 MonoBehaviour:
@@ -116,8 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6
-  jumpDelay: 0.05
+  speed: 1
+  ballHittingDelay: 0.1
 --- !u!114 &8537830836841734961
 MonoBehaviour:
   m_ObjectHideFlags: 0
