@@ -4,19 +4,19 @@ using System;
 
 public class Volleyball : NetworkBehaviour
 {
-
     [SerializeField] float Impulse = 6;
     [SerializeField] float impulseDelay = 0.1f;
+    [SerializeField] float despawnDelay = 5.0f;
 
     [Networked] private TickTimer life { get; set; }
-
-    [Networked] private int lastTouchedBy  { get; set; }
 
     [Networked] private TickTimer delay { get; set; }
 
     //Private
     private Transform CourtCenter;
     private Vector3 forward;
+
+    private bool isGrounded;
 
 
     void Awake()
@@ -27,6 +27,9 @@ public class Volleyball : NetworkBehaviour
 
     private void HandleImpulseOnPress(NetworkInputData data)
     {
+        if (isGrounded)
+            return;
+
         if (data.direction.sqrMagnitude > 0)
             forward = data.direction;
 
@@ -36,12 +39,20 @@ public class Volleyball : NetworkBehaviour
             {
                 delay = TickTimer.CreateFromSeconds(Runner, impulseDelay);
 
-                this.transform.position = transform.position + (forward.normalized * 0.1f);
-                this.transform.rotation.SetLookRotation(forward);
-
+                this.transform.position = transform.position + (forward.normalized * 0.05f);
+                ApplyImpulse();
             }
 
         }
+
+    }
+
+    public void ApplyImpulse()
+    {
+        if (isGrounded)
+            return;
+
+        GetComponent<Rigidbody>().velocity = (CourtCenter.position - this.transform.position).normalized * Impulse;
 
     }
 
@@ -64,17 +75,11 @@ public class Volleyball : NetworkBehaviour
 
     //}
 
-    public void ApplyImpulse()
-    {
-        GetComponent<Rigidbody>().velocity = (CourtCenter.position - this.transform.position).normalized * Impulse;
-
-    }
-
     public void StopMoving()
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        life = TickTimer.CreateFromSeconds(Runner, 3.0f);
+        life = TickTimer.CreateFromSeconds(Runner, despawnDelay);
 
     }
 
@@ -93,6 +98,7 @@ public class Volleyball : NetworkBehaviour
 
     public void HandleGroundTouch(Team scoringTeam)
     {
+        isGrounded = true;
         Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
         StopMoving();
 

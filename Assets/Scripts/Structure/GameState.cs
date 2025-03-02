@@ -147,6 +147,9 @@ public class GameState : MonoBehaviour
         if (matchInfo.IsMatchFinished)
             return;
 
+        if (scoringTeam == Team.None)
+            return;
+
         this.ServingTeam = scoringTeam;
         SetState(State.AwardingPoints);
 
@@ -240,5 +243,6 @@ public enum Mode
 public enum Team
 {
     A,
-    B
+    B,
+    None
 }

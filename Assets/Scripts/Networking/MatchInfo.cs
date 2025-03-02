@@ -46,6 +46,8 @@ public class MatchInfo : NetworkBehaviour
     //Private
     private ChangeDetector _changeDetector;
 
+    private Team tempScoringTeam;
+
     public override void Spawned()
     {
         _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
@@ -73,7 +75,23 @@ public class MatchInfo : NetworkBehaviour
 
     private void HandleTeamScoreUpdate()
     {
-        TeamScoreEvent?.Invoke((Team)ScoringTeam);
+        tempScoringTeam = (Team)ScoringTeam;
+
+        if (tempScoringTeam != Team.None)
+        {
+            TeamScoreEvent?.Invoke(tempScoringTeam);
+            if (HasStateAuthority)
+            {
+                ResetScoringTeam();
+            }
+
+        }
+
+    }
+
+    private void ResetScoringTeam()
+    {
+        ScoringTeam = (int)Team.None;
 
     }
 
@@ -109,6 +127,7 @@ public class MatchInfo : NetworkBehaviour
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
         Score = GetScoresAsList();
+        ResetScoringTeam();
         ScoreChangedEvent.Invoke(Score);
 
     }

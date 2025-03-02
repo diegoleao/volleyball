@@ -7,12 +7,12 @@ public class VolleyballShadow : MonoBehaviour
     [SerializeField] LayerMask GroundLayerMask;
     GameObject circleInstance;
 
-    private void Start()
+    void Start()
     {
-        this.circleInstance = Instantiate(PulsingCircle, this.transform);
+        this.circleInstance = Instantiate(PulsingCircle);
     }
 
-    private void Update()
+    void FixedUpdate()
     {
         if (Physics.Raycast(transform.position, -Vector3.up, out RaycastHit hit, 100, GroundLayerMask))
         {
@@ -20,6 +20,11 @@ public class VolleyballShadow : MonoBehaviour
 
         }
 
+    }
+
+    private void OnDestroy()
+    {
+        Destroy(this.circleInstance);
     }
 
 }
