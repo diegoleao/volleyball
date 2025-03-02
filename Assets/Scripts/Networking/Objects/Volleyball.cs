@@ -68,8 +68,8 @@ public class Volleyball : NetworkBehaviour
 
     public async void StopMoving()
     {
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
