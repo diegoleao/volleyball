@@ -1069,6 +1069,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamA: {fileID: 2144031513}
   teamB: {fileID: 31549224}
+  teamACourtSide: {fileID: 2110379332}
+  teamBCourtSide: {fileID: 1092474914}
 --- !u!1 &663894265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,8 +1576,8 @@ Transform:
   m_GameObject: {fileID: 1092474912}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.23, y: -11.02, z: 17.01}
-  m_LocalScale: {x: 9.926966, y: 0.08287183, z: 12.05}
+  m_LocalPosition: {x: 5.53, y: -11.02, z: 17.01}
+  m_LocalScale: {x: 9.305172, y: 0.08287183, z: 12.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 20802279}
@@ -3436,8 +3438,8 @@ Transform:
   m_GameObject: {fileID: 2110379330}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.87, y: -11.02, z: 17.01}
-  m_LocalScale: {x: 9.926966, y: 0.08287183, z: 12.05}
+  m_LocalPosition: {x: -5.15, y: -11.02, z: 17.01}
+  m_LocalScale: {x: 9.325193, y: 0.08287183, z: 12.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 20802279}

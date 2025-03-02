@@ -10,9 +10,13 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
 
+    [SerializeField] bool ResetPlayerPositionOnScore;
+
     [SerializeField] MainMenuScreen MainMenu;
 
     [SerializeField] WinScreen WinScreen;
+
+    public Team ServingTeam { get; private set; }
 
     public MatchInfo.ScoreData winningScore { get; internal set; }
 
@@ -34,7 +38,7 @@ public class GameState : MonoBehaviour
     {
         Provider.Instance.GameNetworking.StartNetwork(roomName, mode, () =>
         {
-            SetState(State.StartMatch);
+            SetState(State.WaitForPlayer2);
         });
         
     }
@@ -64,8 +68,15 @@ public class GameState : MonoBehaviour
                 FindAnyObjectByType<HudView>().ResetScore();
                 break;
 
-            case State.StartMatch:
+            case State.WaitForPlayer2:
+                Debug.Log("Waiting for Player 2...");
                 FindAnyObjectByType<OptionsScreen>().Show();
+                //Show screen communicating the wait for another player
+                //Show button to cancel the Match
+                break;
+
+            case State.StartMatch:
+                Debug.Log("Player 2 entered. Match Start! =========");
                 SetState(State.RallyStart);
                 winScreenInstance?.Close();
                 break;
@@ -78,13 +89,16 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.RallyStart:
-                //Provider.Instance.BallSpawner.Spawn();
+                Provider.Instance.BallSpawner.SpawnVolleyball(ServingTeam);
                 break;
 
             case State.AwardingPoints:
+                if(ResetPlayerPositionOnScore)
+                    Provider.Instance.GameNetworking.ResetPlayerPositions();
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
+                SetState(State.RallyStart);
                 break;
 
             case State.SetFinished:
@@ -95,7 +109,7 @@ public class GameState : MonoBehaviour
                 //***4 seconds later
                 break;
 
-            case State.WinResultsCheck:
+            case State.WinState:
                 //Show end screen with results
                 winScreenInstance = Instantiate(WinScreen);
                 winScreenInstance.SetData(winningScore);
@@ -104,7 +118,7 @@ public class GameState : MonoBehaviour
                 FindAnyObjectByType<OptionsScreen>().Hide();
                 break;
 
-            case State.MatchEnded:
+            case State.FinishMatch:
             case State.AbortMatch:
                 ReturnToMainScreen();
                 Provider.Instance.GameNetworking.ShutdownNetworkMatch();
@@ -128,20 +142,29 @@ public class GameState : MonoBehaviour
 
     }
 
-    [Button]
-    public void IncreaseScoreFor(Team team)
+    public void HandleTeamScoring(Team scoringTeam)
     {
-        IncreaseScoreFor((team == Team.A) ? 0 : 1);
-        //SetState(State.AwardingPoints);
+        if (matchInfo.IsMatchFinished)
+            return;
+
+        this.ServingTeam = scoringTeam;
+        SetState(State.AwardingPoints);
+
+    }
+
+    public void HandlePlayerWinning(MatchInfo.ScoreData scoreData)
+    {
+        this.winningScore = scoreData;
+        Provider.Instance.GameState.SetState(GameState.State.WinState);
 
     }
 
     [Button]
-    public void IncreaseScoreFor(int playerId)
+    public void IncreaseScoreFor(Team team)
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            this.matchInfo.AddScore(playerId);
+            this.matchInfo.AddScore(team);
 
         }
 
@@ -179,18 +202,12 @@ public class GameState : MonoBehaviour
         
     }
 
-    internal void NotifyPlayerWon(MatchInfo.ScoreData scoreData)
-    {
-        this.winningScore = scoreData;
-        Provider.Instance.GameState.SetState(GameState.State.WinResultsCheck);
-
-    }
-
     public void SetMatchInfo(MatchInfo matchInfo)
     {
         this.matchInfo = matchInfo;
 
-        matchInfo.PlayerWonEvent.AddListener(NotifyPlayerWon);
+        matchInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
+        matchInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
 
     }
 
@@ -204,23 +221,24 @@ public class GameState : MonoBehaviour
         RallyStart,
         AwardingPoints,
         SetFinished,
-        WinResultsCheck,
-        MatchEnded,
-        AbortMatch
+        WinState,
+        FinishMatch,
+        AbortMatch,
+        WaitForPlayer2
     }
 
-    [Serializable]
-    public enum Team
-    {
-        A,
-        B
-    }
+}
 
-    [Serializable]
-    public enum Mode
-    {
-        Host,
-        Client
-    }
+[Serializable]
+public enum Mode
+{
+    Host,
+    Client
+}
 
+[Serializable]
+public enum Team
+{
+    A,
+    B
 }

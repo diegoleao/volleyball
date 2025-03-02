@@ -3,16 +3,15 @@ using UnityEngine;
 
 public class CourtFloor : MonoBehaviour
 {
-    [SerializeField] private GameState.Team TargetOfWichTeam;
-    private Volleyball physxBall;
+    [SerializeField] private Team TargetOfWichTeam;
+    private Volleyball volleyball;
 
     public void OnTriggerEnter(Collider other)
     {
-        physxBall = other.GetComponent<Volleyball>();
-        if (physxBall != null)
+        volleyball = other.GetComponent<Volleyball>();
+        if (volleyball != null)
         {
-            Provider.Instance.GameState.IncreaseScoreFor(TargetOfWichTeam);
-            physxBall.StopMoving();
+            volleyball.HandleGroundTouch(TargetOfWichTeam);
         }
 
     }

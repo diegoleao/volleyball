@@ -8,6 +8,10 @@ using UnityEngine.Events;
 
 public class MatchInfo : NetworkBehaviour
 {
+
+    private const int TeamA_ID = 0;
+    private const int TeamB_ID = 1;
+
     [ShowInInspector][Sirenix.OdinInspector.ReadOnly]
     public bool IsMatchFinished
     {
@@ -23,6 +27,8 @@ public class MatchInfo : NetworkBehaviour
 
     public UnityEvent<List<ScoreData>> ScoreChangedEvent;
 
+    public UnityEvent<Team> TeamScoreEvent;
+
     public UnityEvent<ScoreData> PlayerWonEvent;
 
     //Networked
@@ -33,6 +39,9 @@ public class MatchInfo : NetworkBehaviour
     [ShowInInspector]
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedPlayers => default;
+
+    [Networked]
+    private int ScoringTeam { get; set; }
 
     //Private
     private ChangeDetector _changeDetector;
@@ -54,8 +63,18 @@ public class MatchInfo : NetworkBehaviour
                 case nameof(NetworkedScore):
                     HandleScoreUpdates();
                     break;
+
+                case nameof(ScoringTeam):
+                    HandleTeamScoreUpdate();
+                    break;
             }
         }
+    }
+
+    private void HandleTeamScoreUpdate()
+    {
+        TeamScoreEvent?.Invoke((Team)ScoringTeam);
+
     }
 
     private void HandleScoreUpdates()
@@ -94,8 +113,10 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
-    public void AddScore(int playerId)
+    public void AddScore(Team team)
     {
+        int playerId = GetPlayerId(team);
+
         if (HasStateAuthority) // Only update on the authoritative side
         {
             if (IsMatchFinished)
@@ -104,10 +125,12 @@ public class MatchInfo : NetworkBehaviour
                 return;
             }
 
+            ScoringTeam = (int)team;
+
             var playerIndex = FindPlayerIndex(playerId);
             if (playerIndex >= 0)
             {
-                NetworkedScore.Set(playerIndex, NetworkedScore[playerIndex]+1);
+                NetworkedScore.Set(playerIndex, NetworkedScore[playerIndex] + 1);
             }
             else
             {
@@ -157,6 +180,11 @@ public class MatchInfo : NetworkBehaviour
             }
         };
 
+    }
+
+    private static int GetPlayerId(Team team)
+    {
+        return (team == Team.A) ? TeamA_ID : TeamB_ID;
     }
 
     [Serializable]

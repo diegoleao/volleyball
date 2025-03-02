@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7429632340949523763}
   - component: {fileID: 3259636619782289260}
   m_Layer: 0
-  m_Name: GameNetworkingPrefab
+  m_Name: GameNetworking
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,3 +48,5 @@ MonoBehaviour:
     RawGuidValue: eb1913f1af9352d4a93db9a469e8e754
   _matchInfoPrefab:
     RawGuidValue: 65eea36cb352cf04d9ee4b0a93639348
+  _ballSpawnerPrefab:
+    RawGuidValue: 03ebaade822d1384b8e6f48ee173ce79

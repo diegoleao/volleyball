@@ -12,10 +12,15 @@ using UnityEngine.SceneManagement;
 
 public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public bool HasGameStarted { get; private set; }
+
+    [SerializeField] int requiredPlayers = 2;
 
     [SerializeField] NetworkPrefabRef _playerPrefab;
 
     [SerializeField] NetworkPrefabRef _matchInfoPrefab;
+
+    [SerializeField] private NetworkPrefabRef _ballSpawnerPrefab;
 
     public bool HasStateAuthority
     {
@@ -39,6 +44,15 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private bool jumpButton;
 
+    private int playersInGame = 0;
+
+    private GameState gameState;
+
+    void Awake()
+    {
+        this.gameState = Provider.Instance.GameState;
+
+    }
 
     public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
     {
@@ -50,7 +64,11 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         await StartOrJoinGameSession(gameMode, sceneRef, sessionName: roomName);
 
-        CreateMatchInformationComponent();
+        if (HasStateAuthority)
+        {
+            _runner.Spawn(_matchInfoPrefab, Vector3.zero, Quaternion.identity);
+
+        }
 
         finished.Invoke();
 
@@ -95,21 +113,11 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private void CreateMatchInformationComponent()
-    {
-        if (HasStateAuthority)
-        {
-            _runner.Spawn(_matchInfoPrefab, Vector3.zero, Quaternion.identity).GetComponent<MatchInfo>();
-            
-        }
-
-    }
-
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
+        playersInGame++;
         if (runner.IsServer)
         {
-
             NetworkObject networkPlayerObject 
                 = runner.Spawn(_playerPrefab, GetTeamSpawnPosition(player), Quaternion.identity, player);
 
@@ -118,12 +126,19 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
 
+            if ((playersInGame >= requiredPlayers) && !HasGameStarted)
+            {
+                gameState.SetState(GameState.State.StartMatch);
+                HasGameStarted = true;
+
+            }
         }
 
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
+        playersInGame--;
         if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
         {
             runner.Despawn(networkObject);
@@ -134,14 +149,14 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Update()
     {
-        fireButton = fireButton | Input.GetMouseButton(0) | Input.GetButtonDown("Fire1");
-        jumpButton = jumpButton | Input.GetMouseButton(1) | Input.GetButtonDown("Jump");
+        fireButton = fireButton | Input.GetMouseButtonDown(0) | Input.GetButtonDown("Fire1");
+        jumpButton = jumpButton | Input.GetMouseButtonDown(1) | Input.GetButtonDown("Jump");
 
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if (matchInfo == null || matchInfo.IsMatchFinished)
+        if (matchInfo == null || matchInfo.IsMatchFinished || !HasGameStarted)
         {
             //Debug.Log($"MATCH FINISHED - IGNORING Input.");
             return;
@@ -159,6 +174,24 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         input.Set(inputData);
 
+    }
+
+    public void SpawnBall(Volleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
+    {
+        Debug.Log("Spawn Volleyball");
+
+        if (HasStateAuthority)
+        {
+            _runner.Spawn(volleyBall,
+                         Provider.Instance.CourtTriggers.GetBallSpawnPosition(team, height),//TODO: Instanciar do outro lado da quadra também,
+                         Quaternion.identity,
+                         _runner.LocalPlayer,
+                         (runner, obj) =>
+                         {
+
+                         });
+
+        }
     }
 
     [Button]
@@ -183,12 +216,12 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private Vector3 GetTeamSpawnPosition(PlayerRef player)
+    private Vector3 GetTeamSpawnPosition(PlayerRef player, float spawnHeight = 1)
     {
         //TODO: FIX THIS CALCULATION, THE TEAM A IS NOT ALWAYS THE CURRENT PLAYER
         return Provider.Instance
                        .CourtTriggers
-                       .GetTeamSpawnPosition(player == _runner.LocalPlayer);
+                       .GetTeamSpawnPosition(((player == _runner.LocalPlayer) ? Team.A : Team.B), spawnHeight);
 
     }
 

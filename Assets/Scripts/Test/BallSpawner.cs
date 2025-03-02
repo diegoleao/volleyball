@@ -1,15 +1,30 @@
+using Fusion;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
-//using UnityEngine;
+public class BallSpawner : MonoBehaviour
+{
+    [SerializeField] float height;
 
-//public class BallSpawner : MonoBehaviour
-//{
-//    [SerializeField] private VolleyBall ball;
+    [Header("Prefabs")]
+    [SerializeField] Volleyball volleyBall;
 
-//    public void Spawn()
-//    {
-//        var instance = Instantiate(ball);
-//        instance.transform.position = new Vector3(Random.Range(-2, 2), 5, Random.Range(-2, 2));
+    private CourtTriggers courtTriggers;
 
-//    }
+    private Vector3 forward;
 
-//}
+
+    void Awake()
+    {
+        courtTriggers = FindAnyObjectByType<CourtTriggers>();
+
+    }
+
+    [Button]
+    public void SpawnVolleyball(Team team)
+    {
+        Provider.Instance.GameNetworking.SpawnBall(this.volleyBall, this.courtTriggers, team, height);
+
+    }
+
+}

@@ -5,30 +5,96 @@ using System;
 public class Volleyball : NetworkBehaviour
 {
 
-    [SerializeField] float UpImpulse = 2;
+    [SerializeField] float Impulse = 6;
+    [SerializeField] float impulseDelay = 0.1f;
 
     [Networked] private TickTimer life { get; set; }
 
     [Networked] private int lastTouchedBy  { get; set; }
 
-    public void Init(Vector3 forward)
+    [Networked] private TickTimer delay { get; set; }
+
+    //Private
+    private Transform CourtCenter;
+    private Vector3 forward;
+
+
+    void Awake()
     {
-        life = TickTimer.CreateFromSeconds(Runner, 5.0f);
-        GetComponent<Rigidbody>().velocity = forward + (Vector3.up * UpImpulse);
+        CourtCenter = Provider.Instance.CourtCenter;
+
+    }
+
+    private void HandleImpulseOnPress(NetworkInputData data)
+    {
+        if (data.direction.sqrMagnitude > 0)
+            forward = data.direction;
+
+        if (HasStateAuthority)
+        {
+            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE) && delay.ExpiredOrNotRunning(Runner))
+            {
+                delay = TickTimer.CreateFromSeconds(Runner, impulseDelay);
+
+                this.transform.position = transform.position + (forward.normalized * 0.1f);
+                this.transform.rotation.SetLookRotation(forward);
+
+            }
+
+        }
+
+    }
+
+    //private Vector3 PredictPosition(Vector3 initialPosition, Vector3 initialVelocity, Vector3 impulse, float mass, float time)
+    //{
+    //    if (mass <= 0)
+    //    {
+    //        Debug.LogError("Mass must be greater than zero.");
+    //        return initialPosition;
+    //    }
+
+    //    // Compute final velocity after impulse
+    //    Vector3 finalVelocity = initialVelocity + (impulse / mass);
+
+    //    // Predict future position using kinematic equation: x = x0 + v*t + 0.5*a*t^2
+    //    Vector3 acceleration = impulse / mass; // Assuming impulse is the only force
+    //    Vector3 futurePosition = initialPosition + finalVelocity * time + 0.5f * acceleration * time * time;
+
+    //    return futurePosition;
+
+    //}
+
+    public void ApplyImpulse()
+    {
+        GetComponent<Rigidbody>().velocity = (CourtCenter.position - this.transform.position).normalized * Impulse;
+
+    }
+
+    public void StopMoving()
+    {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        life = TickTimer.CreateFromSeconds(Runner, 3.0f);
 
     }
 
     public override void FixedUpdateNetwork()
     {
+        if (GetInput(out NetworkInputData data))
+        {
+            HandleImpulseOnPress(data);
+
+        }
+
         if (life.Expired(Runner))
             Runner.Despawn(Object);
 
     }
 
-    internal void StopMoving()
+    public void HandleGroundTouch(Team scoringTeam)
     {
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
+        StopMoving();
 
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 913512534729449442}
   - component: {fileID: 8090347704916014936}
   m_Layer: 0
-  m_Name: MatchInfoPrefab
+  m_Name: MatchInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

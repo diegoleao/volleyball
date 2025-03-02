@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1123110131972554759}
   - component: {fileID: 8636642907600573593}
   m_Layer: 8
-  m_Name: VolleyballPrefab
+  m_Name: Volleyball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

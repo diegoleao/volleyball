@@ -14,10 +14,12 @@ public class Provider : MonoBehaviour
     [SerializeField] GameState gameState;
     public GameState GameState => this.gameState;
 
-
     [SerializeField] GameNetworking GameNetworkingPrefab;
-
     private GameNetworking _gameNetworkingInstance;
+
+    [SerializeField] BallSpawner ballSpawner;
+    public BallSpawner BallSpawner => this.ballSpawner;
+    
     public GameNetworking GameNetworking
     {
         get
@@ -38,8 +40,6 @@ public class Provider : MonoBehaviour
 
     [SerializeField] Transform courtCenter;
     public Transform CourtCenter => this.courtCenter;
-
-
 
     [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();
 
@@ -150,6 +150,12 @@ public class Provider : MonoBehaviour
     public T FindReference<T>() where T : MonoBehaviour
     {
         return FindObjectOfType<T>();
+
+    }
+
+    void OnApplicationQuit()
+    {
+        registeredObjects.Clear();
 
     }
 
