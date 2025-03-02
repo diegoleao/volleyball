@@ -46,23 +46,22 @@ public class Player : NetworkBehaviour
 
         if (HasStateAuthority)
         {
+
             if (data.buttons.IsSet(NetworkInputData.BUTTON_1_JUMP))
             {
                 Debug.Log("Jump pressed - Player");
                 jumpComponent.Jump();
 
             }
-            
+
             if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))// && delay.ExpiredOrNotRunning(Runner))
             {
-                Debug.Log("BUTTON_0_FIRE Pressed");
+                Debug.Log("[Ball-P] BUTTON_0_FIRE Pressed");
                 //delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
 
-                this.transform.position = transform.position + (forward.normalized * 0.05f);
-
-                if(isTouchingVolleyball && volleyball != null)
+                if (isTouchingVolleyball && volleyball != null)
                 {
-                    Debug.Log($"Applyed impulse to {volleyball.name}");
+                    Debug.Log($"[Ball-P] Applied impulse to {volleyball.name}");
                     volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
                 }
 
