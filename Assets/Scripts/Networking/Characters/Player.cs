@@ -94,7 +94,7 @@ public class Player : NetworkBehaviour
             {
                 isTouchingVolleyball = true;
                 volleyball = possibleBallTrigger.Volleyball;
-                Debug.Log($"Hit {other.name}");
+                //Debug.Log($"Hit {other.name}");
             }
             else
             {

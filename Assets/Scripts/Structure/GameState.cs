@@ -58,7 +58,6 @@ public class GameState : MonoBehaviour
 
     public void SetState(State state)
     {
-        this.state = state;
         switch (state)
         {
             case State.Menu:
@@ -89,7 +88,11 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.RallyStart:
-                Provider.Instance.BallSpawner.SpawnVolleyball(ServingTeam);
+                if(this.state != State.RallyStart)
+                {
+                    Provider.Instance.BallSpawner.SpawnVolleyball(ServingTeam);
+                }
+                SetState(State.DuringRally);
                 break;
 
             case State.AwardingPoints:
@@ -126,6 +129,7 @@ public class GameState : MonoBehaviour
                 break;
 
         }
+        this.state = state;
 
     }
 
@@ -228,6 +232,7 @@ public class GameState : MonoBehaviour
         RestartMatch,
         SetStart,
         RallyStart,
+        DuringRally,
         AwardingPoints,
         SetFinished,
         WinState,
