@@ -20,7 +20,8 @@ public class BaseView : MonoBehaviour
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
         canvasGroup.alpha = 1;
-        this.gameObject.name = this.gameObject.name.Replace("** ", "").Replace(" (Hidden) **", "");
+        this.gameObject.name = this.gameObject.name.Replace("** ", "");
+        this.gameObject.name = this.gameObject.name.Replace(" (Hidden) **", "");
 
     }
 

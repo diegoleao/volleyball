@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class LobbyScreen : BaseView
 {
+    [Header("Config")]
+    [SerializeField] int UpdateDelay = 2;
+
     [Header("Prefabs")]
     [SerializeField] MainMenuScreen MenuPrefab;
     [SerializeField] SessionButton SessionButtonPrefab;
@@ -72,7 +75,7 @@ public class LobbyScreen : BaseView
     {
         LobbyComponent.SessionListUpdatedEvent.AddListener(MarkSessionListAsOutdated);
 
-        Observable.Interval(TimeSpan.FromSeconds(5)).Subscribe(_ =>
+        Observable.Interval(TimeSpan.FromSeconds(UpdateDelay)).Subscribe(_ =>
         {
             if (isSessionListOutdated)
             {

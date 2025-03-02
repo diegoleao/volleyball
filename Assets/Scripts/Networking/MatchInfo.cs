@@ -85,6 +85,7 @@ public class MatchInfo : NetworkBehaviour
 
         if (tempScoringTeam != Team.None)
         {
+            Debug.Log($"Scoring Event for {tempScoringTeam}");
             TeamScoreEvent?.Invoke(tempScoringTeam);
             if (HasStateAuthority)
             {

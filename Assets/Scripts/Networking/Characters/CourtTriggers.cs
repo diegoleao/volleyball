@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public class CourtTriggers : MonoBehaviour
@@ -9,6 +11,19 @@ public class CourtTriggers : MonoBehaviour
     [Header("Team B")]
     [SerializeField] BoxCollider teamBPlayerSpawn;
     [SerializeField] BoxCollider teamBBallVolume;
+
+    private bool isDebugVisible = false;
+
+    [Button]
+    public void ToggleDebugVolumes()
+    {
+        isDebugVisible = !isDebugVisible;
+        GetComponentsInChildren<MeshRenderer>().ForEach(t =>
+        { 
+            t.enabled = isDebugVisible;
+        });
+
+    }
 
     public Vector3 GetTeamSpawnPosition(Team team, float height)
     {
@@ -22,6 +37,16 @@ public class CourtTriggers : MonoBehaviour
 
     }
 
+    public Vector3 GetRandomPosition(BoxCollider area, float height)
+    {
+        return new Vector3(
+            Random.Range(area.bounds.min.x, area.bounds.max.x),
+            height,
+            Random.Range(area.bounds.min.z, area.bounds.max.z)
+        );
+
+    }
+
     private Vector3 GetRandomPositionInBox(BoxCollider boxA, BoxCollider boxB, float height, Team team)
     {
         if (team == Team.A)
@@ -32,16 +57,6 @@ public class CourtTriggers : MonoBehaviour
         {
             return GetRandomPosition(boxB, height);
         }
-
-    }
-
-    public Vector3 GetRandomPosition(BoxCollider area, float height)
-    {
-        return new Vector3(
-            Random.Range(area.bounds.min.x, area.bounds.max.x),
-            height,
-            Random.Range(area.bounds.min.z, area.bounds.max.z)
-        );
 
     }
 

@@ -54,7 +54,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null)
+    public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null, UnityAction error = null)
     {
         _runner = CreateNetworkRunner();
 
@@ -70,7 +70,12 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         }
 
-        finished.Invoke();
+        if(_runner == null)
+        {
+            error?.Invoke();
+        }
+
+        finished?.Invoke();
 
     }
 
@@ -109,7 +114,15 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     public void ResetMatch()
     {
         ResetPlayerPositions();
+        DestroyAllBalls();
         matchInfo?.ResetScore();
+
+    }
+
+    private void DestroyAllBalls()
+    {
+        var allVolleyballs = FindObjectsByType<Volleyball>(sortMode: FindObjectsSortMode.None);
+        allVolleyballs.ForEach(t => { _runner.Despawn(t.GetComponent<NetworkObject>()); });
 
     }
 

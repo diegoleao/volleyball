@@ -1,5 +1,6 @@
 using Fusion;
 using System;
+using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpComponent))]
@@ -12,6 +13,8 @@ public class Player : NetworkBehaviour
 
     //[Networked] private TickTimer delay { get; set; }
 
+    [SerializeField] float timeBetweenBufferAttempts;
+
     //Private
     private NetworkCharacterController netCharController;
     private Vector3 forward;
@@ -19,6 +22,8 @@ public class Player : NetworkBehaviour
     private Volleyball volleyball;
     private bool isTouchingVolleyball;
     private VolleyballHitTrigger possibleBallTrigger;
+    private int bufferedBallBounce = 0;
+    private float previousAttemptTime;
 
 
     void Awake()
@@ -57,12 +62,20 @@ public class Player : NetworkBehaviour
             if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))// && delay.ExpiredOrNotRunning(Runner))
             {
                 Debug.Log("[Ball-P] BUTTON_0_FIRE Pressed");
-                //delay = TickTimer.CreateFromSeconds(Runner, ballHittingDelay);
 
-                if (isTouchingVolleyball && volleyball != null)
+                if (!AttemptBallBounce())
                 {
-                    Debug.Log($"[Ball-P] Applied impulse to {volleyball.name}");
-                    volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
+                    BufferBallBounceAttempts();
+
+                }
+
+            }
+
+            if ((bufferedBallBounce > 0) && IsTimeForBufferedBounce())
+            {
+                if (!AttemptBallBounce())
+                {
+                    bufferedBallBounce--;
                 }
 
             }
@@ -72,6 +85,38 @@ public class Player : NetworkBehaviour
                 isTouchingVolleyball = false;
             }
 
+        }
+
+    }
+
+    private bool IsTimeForBufferedBounce()
+    {
+        return (Time.time - previousAttemptTime) >= timeBetweenBufferAttempts;
+
+    }
+
+    private void BufferBallBounceAttempts()
+    {
+        bufferedBallBounce = 3;
+
+    }
+
+    private bool AttemptBallBounce()
+    {
+        previousAttemptTime = Time.time;
+
+        Debug.Log($"[Ball-P] Attempting ball impulse...");
+        if (isTouchingVolleyball && volleyball != null)
+        {
+            Debug.Log($"[Ball-P] Applied impulse to {volleyball.name}");
+            volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
+            bufferedBallBounce = 0;
+            return true;
+        }
+        else
+        {
+            Debug.Log($"[Ball-P] Not able to apply ball impulse yet.");
+            return false;
         }
 
     }

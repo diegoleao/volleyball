@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7055381844030524113}
   - component: {fileID: 4806060831508473928}
   - component: {fileID: 8736455547786544508}
-  - component: {fileID: 7069551806041455091}
   - component: {fileID: 8537830836841734961}
   - component: {fileID: 1550713204865366733}
+  - component: {fileID: 7069551806041455091}
   m_Layer: 10
   m_Name: Player
   m_TagString: Untagged
@@ -57,8 +57,8 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 8736455547786544508}
-  - {fileID: 7069551806041455091}
   - {fileID: 8537830836841734961}
+  - {fileID: 7069551806041455091}
   ForceRemoteRenderTimeframe: 0
 --- !u!143 &4806060831508473928
 CharacterController:
@@ -105,20 +105,6 @@ MonoBehaviour:
   braking: 150
   maxSpeed: 50
   rotationSpeed: 15
---- !u!114 &7069551806041455091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228050481578901523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
-  ballHittingDelay: 0.1
 --- !u!114 &8537830836841734961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +134,19 @@ MonoBehaviour:
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
+--- !u!114 &7069551806041455091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228050481578901523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeBetweenBufferAttempts: 0.3
 --- !u!1 &2836249579507856444
 GameObject:
   m_ObjectHideFlags: 0

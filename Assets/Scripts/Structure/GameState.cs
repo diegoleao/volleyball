@@ -39,6 +39,10 @@ public class GameState : MonoBehaviour
         Provider.Instance.GameNetworking.StartNetwork(roomName, mode, () =>
         {
             SetState(State.WaitForPlayer2);
+        },
+        () =>
+        {
+            //Handle error
         });
         
     }
@@ -92,7 +96,6 @@ public class GameState : MonoBehaviour
                 {
                     Provider.Instance.BallSpawner.SpawnVolleyball(ServingTeam);
                 }
-                SetState(State.DuringRally);
                 break;
 
             case State.AwardingPoints:
@@ -123,9 +126,12 @@ public class GameState : MonoBehaviour
 
             case State.FinishMatch:
             case State.AbortMatch:
-                ReturnToMainScreen();
                 Provider.Instance.GameNetworking.ShutdownNetworkMatch();
+                ReturnToMainScreen();
                 FindAnyObjectByType<OptionsScreen>().Hide();
+                break;
+
+            default:
                 break;
 
         }
