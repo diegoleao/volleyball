@@ -27,8 +27,15 @@ public class MainMenuScreen : BaseView
 
     public void StartSinglePlayer()
     {
-        Provider.Instance.GameState.StartSingleplayerMatch();
-        Close();
+        //Provider.Instance.GameState.StartSingleplayerMatch();
+        //Close();
+
+    }
+
+    public void StartLocalMultiplayer()
+    {
+        //Start
+        //Close();
 
     }
 
