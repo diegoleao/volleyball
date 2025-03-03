@@ -21,7 +21,6 @@ public class LobbyScreen : BaseView
 
     private bool isSessionListOutdated;
     private MainMenuScreen menuInstance;
-    private List<SessionInfo> cachedSessions;
 
     public void Initialize(MainMenuScreen menuInstance)
     {
@@ -45,10 +44,10 @@ public class LobbyScreen : BaseView
 
     public bool QuickJoinFirstSession()
     {
-        if (cachedSessions == null || cachedSessions.Count == 0)
+        if (this.LobbyComponent.SessionList.Count == 0)
             return false;
 
-        JoinSessionByName(cachedSessions[0].Name);
+        JoinSessionByName(this.LobbyComponent.SessionList[0].Name);
 
         return true;
     }
@@ -92,7 +91,6 @@ public class LobbyScreen : BaseView
 
     private void CreateSessionButtons(List<SessionInfo> newSessionList)
     {
-        cachedSessions = newSessionList;
         DestroyAllCurrentButtons();
         SessionButton currentSessionButton;
         newSessionList.ForEach(sessionInfo =>

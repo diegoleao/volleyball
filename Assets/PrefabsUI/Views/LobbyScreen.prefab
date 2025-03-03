@@ -634,9 +634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c37ed1e36c7c545a3f1846c9f01853, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UpdateDelay: 0
   MenuPrefab: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
   SessionButtonPrefab: {fileID: 4249036566014150959, guid: 7a253a0842e8b0a4e82abbed37b7ea52, type: 3}
-  CanvasGroup: {fileID: 7411205334538432857}
   LobbyComponent: {fileID: 5518227364989462805}
   SessionsParent: {fileID: 3446611790272508995}
 --- !u!114 &5518227364989462805
