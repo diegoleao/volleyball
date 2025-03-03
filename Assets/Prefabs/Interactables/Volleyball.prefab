@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundTouchDelay: 0.3
-  Impulse: 12
+  Impulse: 10
   despawnDelay: 1.2
   proximityTrigger: {fileID: 8143697982595510806}
 --- !u!1001 &7354536712489698658

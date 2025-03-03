@@ -34,6 +34,8 @@ public class Volleyball : NetworkBehaviour
 
     private bool bufferedGrounded;
 
+    private Vector3 centerDirection;
+
 
     void Awake()
     {
@@ -55,8 +57,14 @@ public class Volleyball : NetworkBehaviour
 
         bufferedGrounded = false;
 
-        //forward = hitDirection.sqrMagnitude > 0 ? hitDirection : playerDirection;
-        forward = (CourtCenter - this.transform.position);
+        centerDirection = (CourtCenter - this.transform.position).normalized;
+
+        playerDirection = playerDirection.normalized;
+
+        playerDirection.y = centerDirection.y;
+
+        forward = centerDirection + playerDirection;
+
         rb.velocity = forward.normalized * Impulse;
 
         Debug.Log($"Hitting ball {idCounter} forward ({forward.normalized}) with Velocity {rb.velocity}");
