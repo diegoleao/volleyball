@@ -12,7 +12,7 @@ public class Shadow : MonoBehaviour
         this.circleInstance = Instantiate(Circle);
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         if (Physics.Raycast(transform.position, -Vector3.up, out RaycastHit hit, 100, GroundLayerMask))
         {

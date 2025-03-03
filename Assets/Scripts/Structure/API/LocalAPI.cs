@@ -10,8 +10,6 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     [SerializeField] Volleyball _volleyBallPrefab;
 
-    [SerializeField] MatchInfo _matchInfoPrefab;
-
     public bool HasStateAuthority => true;
 
     private GameState gameState;

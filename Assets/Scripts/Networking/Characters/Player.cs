@@ -1,4 +1,5 @@
 using Fusion;
+using Sirenix.OdinInspector;
 using System;
 using UniRx;
 using UnityEngine;
@@ -6,9 +7,15 @@ using UnityEngine;
 [RequireComponent(typeof(JumpComponent))]
 public class Player : NetworkBehaviour
 {
+    public bool IsLocalPlayer;
+    private CharacterController charController;
+    [ShowIf("IsLocalPlayer")]
+    [SerializeField] float speed = 10;
+
     [Header("Player Attributes")]
     [SerializeField] float maxImpulseDistance = 3;
     [SerializeField] float timeBetweenBufferAttempts;
+    [SerializeField] JoystickSingleplayer joystickSingleplayer;
 
     public Team Team { get; private set; }
 
@@ -22,21 +29,33 @@ public class Player : NetworkBehaviour
     private int bufferedBallBounce = 0;
     private float previousAttemptTime;
     private float currentDistanceFromBall;
-
     private bool isAI;
 
     void Awake()
     {
         netCharController = GetComponent<NetworkCharacterController>();
+        charController = GetComponent<CharacterController>();
         jumpComponent = GetComponent<JumpComponent>();
         forward = Vector3.forward;
-
     }
 
     public void Initialize(Team team, bool isAI)
     {
         this.Team = team;
         this.isAI = isAI;
+        joystickSingleplayer.Initialize(this.Team);
+
+    }
+
+    void Update()
+    {
+        if (!IsLocalPlayer)
+            return;
+
+        forward = new Vector3(this.joystickSingleplayer.Horizontal, 0, this.joystickSingleplayer.Vertical);
+
+        MoveCharacter(forward);
+        HandleButtonPresses(forward, joystickSingleplayer.GetFireButtonDown(), joystickSingleplayer.GetJumpButtonDown());
 
     }
 
@@ -44,52 +63,59 @@ public class Player : NetworkBehaviour
     {
         if (GetInput(out NetworkInputData data))
         {
-            MoveCharacter(data);
-            HandleButtonPress(data);
+            MoveNetworkCharacter(data.direction);
+            HandleNetworkButtonPress(data);
+
         }
 
     }
 
-    private void HandleButtonPress(NetworkInputData data)
+    private void HandleNetworkButtonPress(NetworkInputData data)
     {
-        if (data.direction.sqrMagnitude > 0)
-            forward = data.direction;
-
         if (HasStateAuthority)
         {
-            if (data.buttons.IsSet(NetworkInputData.BUTTON_1_JUMP))
+            HandleButtonPresses(data.direction, data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE), data.buttons.IsSet(NetworkInputData.BUTTON_1_JUMP));
+
+        }
+
+    }
+
+    private void HandleButtonPresses(Vector3 direction, bool fireButton, bool jumpButton)
+    {
+        if (direction.sqrMagnitude > 0)
+            this.forward = direction;
+
+        if (jumpButton)
+        {
+            jumpComponent.Jump();
+
+        }
+
+        if (fireButton)
+        {
+            Debug.Log("[Ball-Player] BUTTON_0_FIRE Pressed");
+            if (!AttemptBallBounce())
             {
-                jumpComponent.Jump();
+                BufferBallBounceAttempts();
 
             }
 
-            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))
+        }
+
+        if ((bufferedBallBounce > 0) && IsTimeForBufferedBounce())
+        {
+            Debug.Log($"[Ball-Player] Executing buffered ball bounce {bufferedBallBounce}");
+            if (!AttemptBallBounce())
             {
-                Debug.Log("[Ball-Player] BUTTON_0_FIRE Pressed");
-                if (!AttemptBallBounce())
-                {
-                    BufferBallBounceAttempts();
-
-                }
-
+                bufferedBallBounce--;
             }
 
-            if ((bufferedBallBounce > 0) && IsTimeForBufferedBounce())
-            {
-                Debug.Log($"[Ball-Player] Executing buffered ball bounce {bufferedBallBounce}");
-                if (!AttemptBallBounce())
-                {
-                    bufferedBallBounce--;
-                }
+        }
 
-            }
-
-            if (isTouchingVolleyball && (volleyball == null || !IsVolleyballWithinReach()))
-            {
-                Debug.Log("[Ball-Player] Player NOT TOUCHING BALL ANYMORE ===========================");
-                isTouchingVolleyball = false;
-            }
-
+        if (isTouchingVolleyball && (volleyball == null || !IsVolleyballWithinReach()))
+        {
+            Debug.Log("[Ball-Player] Player NOT TOUCHING BALL ANYMORE ===========================");
+            isTouchingVolleyball = false;
         }
 
     }
@@ -159,14 +185,21 @@ public class Player : NetworkBehaviour
         //Debug.LogWarning($"Distance {distanceFromBall} smaller than {maxImpulseDistance}? {distanceFromBall <= maxImpulseDistance}");
 
         return currentDistanceFromBall <= maxImpulseDistance;
-        
+
     }
 
-    private void MoveCharacter(NetworkInputData data)
+    private void MoveNetworkCharacter(Vector3 direction)
     {
-        data.direction.Normalize();
+        direction.Normalize();
+        netCharController.Move(direction * Runner.DeltaTime);
 
-        netCharController.Move(data.direction * Runner.DeltaTime);
+    }
+
+    private void MoveCharacter(Vector3 direction)
+    {
+        direction.Normalize();
+        //CharacterController.Move is NOT physics-based, therefore it is changed in Update.
+        charController.Move(direction * speed * Time.deltaTime);
 
     }
 

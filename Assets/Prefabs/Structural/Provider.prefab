@@ -44,9 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314d9337c7249cc4296960f0bb546ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 7069551806041455091, guid: eb1913f1af9352d4a93db9a469e8e754, type: 3}
-  _volleyBallPrefab: {fileID: 1123110131972554759, guid: 2007c9f538e5a8f4e80c136e0d3a8ee4, type: 3}
-  _matchInfoPrefab: {fileID: 913512534729449442, guid: 65eea36cb352cf04d9ee4b0a93639348, type: 3}
+  _playerPrefab: {fileID: 7069551806041455091, guid: 1b4bc34579660bd4ab55e0d29e72d593, type: 3}
+  _volleyBallPrefab: {fileID: 1123110131972554759, guid: b8632b452e35307418e9d8c7765bb85e, type: 3}
 --- !u!1 &8827645930992769453
 GameObject:
   m_ObjectHideFlags: 0
