@@ -65,7 +65,7 @@ public class JoystickSingleplayer : MonoBehaviour
         }
         else
         {
-            return Input.GetKeyDown(KeyCode.Comma) || Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.RightControl);
+            return Input.GetKeyDown(KeyCode.Comma) || Input.GetKeyDown(KeyCode.KeypadPeriod) || Input.GetKeyDown(KeyCode.Keypad0) || Input.GetKeyDown(KeyCode.RightControl);
         }
 
     }
