@@ -6,8 +6,8 @@ using UnityEngine;
 public class AIPlayer : MonoBehaviour
 {
 
-    [SerializeField]
-    CharacterModel characterModel;
+    //[SerializeField]
+    //CharacterModel characterModel;
 
     void Start()
     {

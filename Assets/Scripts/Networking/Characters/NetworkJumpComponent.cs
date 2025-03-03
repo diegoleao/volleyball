@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public class JumpComponent : NetworkBehaviour
+public class NetworkJumpComponent : NetworkBehaviour
 {
     public bool IsLocalPlayer;
     [SerializeField] private float jumpForce = 10f;

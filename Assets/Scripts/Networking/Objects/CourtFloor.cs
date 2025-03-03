@@ -4,11 +4,11 @@ using UnityEngine;
 public class CourtFloor : MonoBehaviour
 {
     [SerializeField] private Team TargetOfWichTeam;
-    private Volleyball volleyball;
+    private NetworkVolleyball volleyball;
 
     public void OnTriggerEnter(Collider other)
     {
-        volleyball = other.GetComponent<Volleyball>();
+        volleyball = other.GetComponent<NetworkVolleyball>();
         if (volleyball != null)
         {
             volleyball.HandleGroundTouch(TargetOfWichTeam);

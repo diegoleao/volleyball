@@ -7,7 +7,7 @@ public interface IVolleyballGameplay
 
     public void InjectMatchInfo(MatchInfo matchInfo);
 
-    public void SpawnBall(Volleyball volleyBall, CourtTriggers courtTriggers, Team team, float height);
+    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height);
 
     public void ResetPlayerPositions();
 

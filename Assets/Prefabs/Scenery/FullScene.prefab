@@ -41,6 +41,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9112052132681924432}
     m_Modifications:
+    - target: {fileID: 1808894819883164658, guid: 0aed4634a328fdf4dade9486b538d0f3, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 861b61b747a258e479be3806197f5938, type: 2}
     - target: {fileID: 3988263668458685965, guid: 0aed4634a328fdf4dade9486b538d0f3, type: 3}
       propertyPath: m_Name
       value: Volleyball Net

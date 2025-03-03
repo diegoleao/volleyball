@@ -125,12 +125,12 @@ public class Provider : MonoBehaviour
 
         if(Instance.IsDebuggingVolleyball)
         {
-            if (objectToRegister is Volleyball)
+            if (objectToRegister is NetworkVolleyball)
             {
                 var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
                 foreach (var player in players)
                 {
-                    player.InjectVolleyball(objectToRegister as Volleyball);
+                    player.InjectVolleyball(objectToRegister as NetworkVolleyball);
                 }
 
             }

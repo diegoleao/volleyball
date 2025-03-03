@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb47936ed86629f489d5eaf121073ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volleybal: {fileID: 1123110131972554759}
+  volleybal: {fileID: 0}
 --- !u!1 &8135431122864898509
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,9 +133,9 @@ GameObject:
   - component: {fileID: 8078477543612296481}
   - component: {fileID: 8371222019359541061}
   - component: {fileID: 684968155535346168}
-  - component: {fileID: 1123110131972554759}
+  - component: {fileID: 4259678699005099315}
   m_Layer: 8
-  m_Name: Volleyball
+  m_Name: NetworkVolleyball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5882729239902988984}
-  - {fileID: 1123110131972554759}
+  - {fileID: 4259678699005099315}
   ForceRemoteRenderTimeframe: 0
 --- !u!135 &8371222019359541061
 SphereCollider:
@@ -265,7 +265,7 @@ MonoBehaviour:
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
---- !u!114 &1123110131972554759
+--- !u!114 &4259678699005099315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,12 +274,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8135431122864898509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 327e85c7f93ed6449a90f4439c7534e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 126faa950cf14ba41bc5fb8d2c7728b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundTouchDelay: 0.3
-  Impulse: 10
-  despawnDelay: 1.2
+  Impulse: 6
+  despawnDelay: 5
   proximityTrigger: {fileID: 8143697982595510806}
 --- !u!1001 &7354536712489698658
 PrefabInstance:

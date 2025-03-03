@@ -1,9 +1,12 @@
 
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class JoystickSingleplayer : MonoBehaviour
 {
-    private Team team;
+    [ShowInInspector][ReadOnly]
+    private Team team = Team.None;
+
     private VolleyJoystick joystick;
 
     public void Initialize(Team team)

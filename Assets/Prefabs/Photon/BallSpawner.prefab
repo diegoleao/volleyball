@@ -63,4 +63,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6ca57ab922d01d41bd0c17abf9fe6ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volleyBall: {fileID: 0}
+  height: 7
+  volleyBall: {fileID: 4259678699005099315, guid: 2007c9f538e5a8f4e80c136e0d3a8ee4, type: 3}

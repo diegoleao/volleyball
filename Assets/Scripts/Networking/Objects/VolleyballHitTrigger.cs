@@ -3,7 +3,10 @@ using UnityEngine.Events;
 
 public class VolleyballHitTrigger : MonoBehaviour
 {
-    [SerializeField] Volleyball volleybal;
-    public Volleyball Volleyball => this.volleybal;
+    [SerializeField] NetworkVolleyball volleybal;
+    public NetworkVolleyball Volleyball => this.volleybal;
+
+    [SerializeField] Volleyball localVolleybal;
+    public Volleyball LocalVolleybal => this.localVolleybal;
 
 }

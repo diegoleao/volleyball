@@ -7,7 +7,7 @@ public class BallSpawner : MonoBehaviour
     [SerializeField] float height;
 
     [Header("Prefabs")]
-    [SerializeField] Volleyball volleyBall;
+    [SerializeField] NetworkVolleyball volleyBall;
 
     private CourtTriggers courtTriggers;
 

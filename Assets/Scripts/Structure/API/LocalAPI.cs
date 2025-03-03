@@ -6,7 +6,7 @@ using System;
 
 public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 {
-    [SerializeField] Player _playerPrefab;
+    [SerializeField] PlayerLocal _playerPrefab;
 
     [SerializeField] Volleyball _volleyBallPrefab;
 
@@ -62,7 +62,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
         DestroyMatch();
     }
 
-    public void SpawnBall(Volleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
+    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
     {
 
     }
@@ -100,7 +100,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void DestroyAllBalls()
     {
-        var allVolleyballs = FindObjectsOfType<Volleyball>();
+        var allVolleyballs = FindObjectsOfType<NetworkVolleyball>();
         allVolleyballs.Where(t => !t.IsGrounded).ForEach(nonGrounded => { Destroy(nonGrounded.gameObject); });
 
     }

@@ -127,7 +127,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     {
         if (HasStateAuthority)
         {
-            var allVolleyballs = FindObjectsByType<Volleyball>(sortMode: FindObjectsSortMode.None);
+            var allVolleyballs = FindObjectsByType<NetworkVolleyball>(sortMode: FindObjectsSortMode.None);
             allVolleyballs.Where(t => !t.IsGrounded).ForEach(t => { _runner.Despawn(t.GetComponent<NetworkObject>()); });
         }
 
@@ -213,11 +213,11 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     }
 
-    public void SpawnBall(Volleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
+    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
     {
         Debug.Log("Spawn Volleyball");
 
-        if (FindObjectsOfType<Volleyball>().Any(t => !t.IsGroundChecking))
+        if (FindObjectsOfType<NetworkVolleyball>().Any(t => !t.IsGroundChecking))
             return;
 
         if (HasStateAuthority)
