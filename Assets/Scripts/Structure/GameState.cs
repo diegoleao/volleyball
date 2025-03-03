@@ -251,13 +251,6 @@ public class GameState : MonoBehaviour
 }
 
 [Serializable]
-public enum Mode
-{
-    Host,
-    Client
-}
-
-[Serializable]
 public enum Team
 {
     A,
