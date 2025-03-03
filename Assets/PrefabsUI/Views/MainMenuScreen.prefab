@@ -1268,6 +1268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LobbyPrefab: {fileID: -8092589119131161144, guid: 4352cf2a6106f1547ae73c0256953ef6, type: 3}
   QuickJoinButton: {fileID: 1106918572092235065}
+  LocalMultiplayer: {fileID: 8737166922630673625}
 --- !u!225 &-6099751268921289432
 CanvasGroup:
   m_ObjectHideFlags: 0

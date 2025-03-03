@@ -9,6 +9,7 @@ public class MainMenuScreen : BaseView
 {
     [SerializeField] LobbyScreen LobbyPrefab;
     [SerializeField] Button QuickJoinButton;
+    [SerializeField] Button LocalMultiplayer;
 
     private LobbyScreen lobbyInstance;
 
@@ -17,6 +18,9 @@ public class MainMenuScreen : BaseView
         QuickJoinButton.interactable = false;
         CreateHiddenLobby();
         QuickJoingTextMesh().text = "JOIN (CHECKING FOR AVAILABLE SESSIONS...)";
+#if !UNITY_STANDALONE_WIN
+        LocalMultiplayer.gameObject.SetActive(false);
+#endif
     }
 
     public void StartMatch(bool isHost)
