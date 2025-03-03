@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LobbyScreen : BaseView
 {
@@ -20,6 +21,7 @@ public class LobbyScreen : BaseView
 
     private bool isSessionListOutdated;
     private MainMenuScreen menuInstance;
+    private List<SessionInfo> cachedSessions;
 
     public void Initialize(MainMenuScreen menuInstance)
     {
@@ -35,40 +37,26 @@ public class LobbyScreen : BaseView
 
     }
 
-    public void BackToMenu()
+    public void SubscribeToSessionChanges(UnityAction<List<SessionInfo>> SessionListUpdated)
     {
-        this.Hide();
-        menuInstance.Show();
-
+        this.LobbyComponent.SessionListUpdatedEvent.AddListener(SessionListUpdated);
 
     }
 
-    public override void Close()
+    public bool QuickJoinFirstSession()
     {
-        if (isClosed)
-            return;
+        if (cachedSessions == null || cachedSessions.Count == 0)
+            return false;
 
-        base.Close();
-        menuInstance.Close();
+        JoinSessionByName(cachedSessions[0].Name);
 
+        return true;
     }
 
-    private void CreateSessionButtons(List<SessionInfo> newSessionList)
+    private void JoinSessionByName(string sessionName)
     {
-        DestroyAllCurrentButtons();
-        SessionButton currentSessionButton;
-        newSessionList.ForEach(sessionInfo =>
-        {
-            currentSessionButton = Instantiate(SessionButtonPrefab, this.SessionsParent);
-            currentSessionButton.SetData(sessionInfo, (chosenSession) =>
-            {
-                this.LobbyComponent.JoinSession(sessionInfo.Name);
-                this.Close();
-
-            });
-
-        });
-
+        this.LobbyComponent.JoinSession(sessionName);
+        this.Close();
     }
 
     private void ListenToSessionChanges()
@@ -99,6 +87,42 @@ public class LobbyScreen : BaseView
 
         var allButtons = SessionsParent.GetComponentsInChildren<SessionButton>();
         foreach (var button in allButtons) { Destroy(button.gameObject); }
+
+    }
+
+    private void CreateSessionButtons(List<SessionInfo> newSessionList)
+    {
+        cachedSessions = newSessionList;
+        DestroyAllCurrentButtons();
+        SessionButton currentSessionButton;
+        newSessionList.ForEach(sessionInfo =>
+        {
+            currentSessionButton = Instantiate(SessionButtonPrefab, this.SessionsParent);
+            currentSessionButton.SetData(sessionInfo, (chosenSession) =>
+            {
+                JoinSessionByName(sessionInfo.Name);
+
+            });
+
+        });
+
+    }
+
+    public void BackToMenu()
+    {
+        this.Hide();
+        menuInstance.Show();
+
+
+    }
+
+    public override void Close()
+    {
+        if (isClosed)
+            return;
+
+        base.Close();
+        menuInstance.Close();
 
     }
 

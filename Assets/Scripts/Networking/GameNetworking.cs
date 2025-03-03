@@ -24,6 +24,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         get
         {
+            if (_runner == null) return false;
             return _runner.IsServer;
         }
     }

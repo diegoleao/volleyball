@@ -42,6 +42,7 @@ public class GameState : MonoBehaviour
         },
         () =>
         {
+            Debug.Log($"Unable to enter as {mode}");
             //Handle error
         });
         
@@ -104,7 +105,10 @@ public class GameState : MonoBehaviour
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
-                SetState(State.RallyStart);
+                if (!this.matchInfo.IsMatchFinished) 
+                { 
+                    SetState(State.RallyStart); 
+                }
                 break;
 
             case State.SetFinished:
@@ -149,7 +153,6 @@ public class GameState : MonoBehaviour
     {
         //Player winning and losing animations
         //Focus camera on winning players field to show them animating
-
     }
 
     public void HandleTeamScoring(Team scoringTeam)

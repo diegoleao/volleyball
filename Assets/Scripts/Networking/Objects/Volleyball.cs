@@ -84,8 +84,11 @@ public class Volleyball : NetworkBehaviour
 
     public async void StopMoving()
     {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
+        if (rb)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
@@ -104,10 +107,9 @@ public class Volleyball : NetworkBehaviour
         {
             Debug.Log("[Ball-Floor] Still grounded. CONFIRM touch!");
             IsGrounded = true;
-            proximityTrigger.enabled = false;
+            if(proximityTrigger) proximityTrigger.enabled = false;
             Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
             StopMoving();
-            GetComponentInChildren<VolleyballHitTrigger>()?.gameObject?.SetActive(false);
 
         }
         else

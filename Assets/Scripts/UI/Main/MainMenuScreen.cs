@@ -1,28 +1,38 @@
 using Fusion;
+using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenuScreen : BaseView
 {
     [SerializeField] LobbyScreen LobbyPrefab;
+    [SerializeField] Button QuickJoinButton;
 
     private LobbyScreen lobbyInstance;
 
-    private void Start()
+    void Start()
     {
+        QuickJoinButton.interactable = false;
         CreateHiddenLobby();
-
+        QuickJoingTextMesh().text = "JOIN (CHECKING FOR AVAILABLE SESSIONS...)";
     }
 
     public void StartMatch(bool isHost)
     {
-        StartMatch("TestRoom", isHost);
+        if (isHost)
+        {
+            Provider.Instance.GameState.StartMultiplayerMatch($"Match {Guid.NewGuid()}", GameMode.Host);
+            Close();
+        }
+        else
+        {
+            if (lobbyInstance.QuickJoinFirstSession()) 
+                Close();
 
-    }
+        }
 
-    public void StartMatch(string roomName, bool isHost)
-    {
-        Provider.Instance.GameState.StartMultiplayerMatch(roomName, isHost ? GameMode.Host : GameMode.Client);
-        Close();
     }
 
     public void StartSinglePlayer()
@@ -51,8 +61,23 @@ public class MainMenuScreen : BaseView
         {
             this.lobbyInstance = Instantiate(LobbyPrefab);
             this.lobbyInstance.Initialize(this);
+            this.lobbyInstance.SubscribeToSessionChanges(SessionsUpdateHandler);
         }
 
+    }
+
+    private void SessionsUpdateHandler(List<SessionInfo> newSessions)
+    {
+        QuickJoinButton.interactable = (newSessions.Count > 0);
+
+        QuickJoingTextMesh().text
+            = (QuickJoinButton.interactable) ? "JOIN (READY)" : "JOIN (CHECKING FOR AVAILABLE SESSIONS...)";
+
+    }
+
+    private TextMeshProUGUI QuickJoingTextMesh()
+    {
+        return QuickJoinButton.GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public override void Close()
