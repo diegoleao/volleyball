@@ -74,16 +74,12 @@ public class Player : NetworkBehaviour
 
             if ((bufferedBallBounce > 0) && IsTimeForBufferedBounce())
             {
+                Debug.Log($"Executing buffered ball bounce {bufferedBallBounce}");
                 if (!AttemptBallBounce())
                 {
                     bufferedBallBounce--;
                 }
 
-            }
-
-            if (isTouchingVolleyball)
-            {
-                isTouchingVolleyball = false;
             }
 
         }
@@ -107,11 +103,19 @@ public class Player : NetworkBehaviour
         previousAttemptTime = Time.time;
 
         Debug.Log($"[Ball-P] Attempting ball impulse...");
-        if (IsWithinHitDistance() && volleyball != null)
+
+        if(volleyball == null)
+        {
+            Debug.Log($"[Ball-P] Volleyball is NULL - ABORT.");
+            return false;
+        }
+
+        if (IsWithinHittingDistance())
         {
             Debug.Log($"[Ball-P] Applied impulse to {volleyball.name}");
             volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
             bufferedBallBounce = 0;
+            isTouchingVolleyball = false;
             return true;
 
         }
@@ -120,7 +124,7 @@ public class Player : NetworkBehaviour
 
     }
 
-    private bool IsWithinHitDistance()
+    private bool IsWithinHittingDistance()
     {
         if (isTouchingVolleyball)
         {

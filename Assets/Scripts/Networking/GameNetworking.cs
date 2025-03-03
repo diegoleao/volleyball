@@ -214,7 +214,8 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("Spawn Volleyball");
 
-        DestroyAllBalls();
+        if (FindObjectsOfType<Volleyball>().Any(t => !t.IsGroundChecking))
+            return;
 
         if (HasStateAuthority)
         {

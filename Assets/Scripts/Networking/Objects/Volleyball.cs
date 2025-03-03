@@ -15,6 +15,14 @@ public class Volleyball : NetworkBehaviour
 
     public bool IsGrounded { get; private set; }
 
+    public bool IsGroundChecking
+    { 
+        get
+        {
+            return IsGrounded || bufferedGrounded;
+        }
+    }
+
     //Private
     private Vector3 CourtCenter;
 
