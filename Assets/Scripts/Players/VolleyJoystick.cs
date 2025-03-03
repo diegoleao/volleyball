@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class VolleyJoystick : MonoBehaviour
 {
+#if UNITY_EDITOR
+    [SerializeField] bool simulateJoystick;
+#endif
     [SerializeField] DynamicJoystick dynamicJoystick;
     [SerializeField] Button ButtonFire;
     [SerializeField] Button ButtonJump;
@@ -10,9 +13,29 @@ public class VolleyJoystick : MonoBehaviour
     int fireButtonQueried;
     int jumpButtonQueried;
 
-    public float Horizontal => dynamicJoystick.Horizontal;
+    public float Horizontal
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return Input.GetAxisRaw("Horizontal");
+#else
+            return dynamicJoystick.Horizontal;
+#endif
+        }
+    }
 
-    public float Vertical => dynamicJoystick.Vertical;
+    public float Vertical
+    {
+        get
+        {
+#if UNITY_EDITOR
+            return Input.GetAxisRaw("Vertical");
+#else
+            return dynamicJoystick.Vertical;
+#endif
+        }
+    }
 
     void Start()
     {

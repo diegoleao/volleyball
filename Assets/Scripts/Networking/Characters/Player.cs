@@ -7,7 +7,7 @@ using UnityEngine;
 public class Player : NetworkBehaviour
 {
     [Header("Player Attributes")]
-    [SerializeField] float maxImpulseDistance = 0.5f;
+    [SerializeField] float maxImpulseDistance = 3;
     [SerializeField] float timeBetweenBufferAttempts;
 
     //Private
@@ -19,6 +19,7 @@ public class Player : NetworkBehaviour
     private VolleyballHitTrigger possibleBallTrigger;
     private int bufferedBallBounce = 0;
     private float previousAttemptTime;
+    private float currentDistanceFromBall;
 
 
     void Awake()
@@ -73,7 +74,7 @@ public class Player : NetworkBehaviour
 
             }
 
-            if (volleyball == null || !IsVolleyballWithinReach())
+            if (isTouchingVolleyball && (volleyball == null || !IsVolleyballWithinReach()))
             {
                 Debug.Log("[Ball-Player] Player NOT TOUCHING BALL ANYMORE ===========================");
                 isTouchingVolleyball = false;
@@ -143,7 +144,12 @@ public class Player : NetworkBehaviour
 
     private bool IsVolleyballWithinReach()
     {
-        return Vector3.Distance(this.transform.position, volleyball.transform.position) <= maxImpulseDistance;
+        currentDistanceFromBall = Vector3.Distance(this.transform.position, volleyball.transform.position);
+
+        //Debug.LogWarning($"Distance {distanceFromBall} smaller than {maxImpulseDistance}? {distanceFromBall <= maxImpulseDistance}");
+
+        return currentDistanceFromBall <= maxImpulseDistance;
+        
     }
 
     private void MoveCharacter(NetworkInputData data)
@@ -157,17 +163,42 @@ public class Player : NetworkBehaviour
     public void OnTriggerEnter(Collider other)
     {
         possibleBallTrigger = other.GetComponent<VolleyballHitTrigger>();
-        if (possibleBallTrigger != null)
+
+        if(possibleBallTrigger == null)
         {
-            if (!possibleBallTrigger.Volleyball.IsGrounded)
+            return;
+        }
+
+        if (isTouchingVolleyball && (possibleBallTrigger != null) && (this.volleyball != null) && (this.volleyball == possibleBallTrigger.Volleyball))
+            return;
+
+        if (SetVolleyballTouching(possibleBallTrigger))
+        {
+            Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name}) ===========================");
+        }
+
+    }
+
+    public void OnTriggerStay(Collider other)
+    {
+        possibleBallTrigger = other.GetComponent<VolleyballHitTrigger>();
+        SetVolleyballTouching(possibleBallTrigger);
+
+    }
+
+    private bool SetVolleyballTouching(VolleyballHitTrigger trigger)
+    {
+        if (trigger != null)
+        {
+            if (!trigger.Volleyball.IsGrounded)
             {
                 isTouchingVolleyball = true;
-                InjectVolleyball(possibleBallTrigger.Volleyball);
-                Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name}) ===========================");
+                InjectVolleyball(trigger.Volleyball);
+                return true;
             }
 
         }
-
+        return false;
     }
 
     public void InjectVolleyball(Volleyball volleyball)

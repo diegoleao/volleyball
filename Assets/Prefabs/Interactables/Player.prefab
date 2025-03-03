@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxImpulseDistance: 3
   timeBetweenBufferAttempts: 0.3
 --- !u!1 &2836249579507856444
 GameObject:
