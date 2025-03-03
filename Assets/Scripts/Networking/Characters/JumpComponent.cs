@@ -14,12 +14,13 @@ public class JumpComponent : NetworkBehaviour
 
     public void Jump()
     {
+        Debug.Log("[Player] Jump pressed");
         if (netCharController.Grounded)
         {
             Vector3 velocity = netCharController.Velocity;
             velocity.y = jumpForce;
             netCharController.Velocity = velocity;
-            Debug.Log("Player jumped!");
+            Debug.Log("[Player] Player jumped!");
 
         }
 

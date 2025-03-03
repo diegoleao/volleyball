@@ -105,9 +105,9 @@ public class Volleyball : NetworkBehaviour
             Debug.Log("[Ball-Floor] Still grounded. CONFIRM touch!");
             IsGrounded = true;
             proximityTrigger.enabled = false;
-            GetComponentInChildren<VolleyballHitTrigger>()?.gameObject?.SetActive(false);
             Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
             StopMoving();
+            GetComponentInChildren<VolleyballHitTrigger>()?.gameObject?.SetActive(false);
 
         }
         else

@@ -6,13 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(JumpComponent))]
 public class Player : NetworkBehaviour
 {
-    //Inspector
-    //[Header("Player Attributes")]
-    //[SerializeField] float speed = 6;
-    //[SerializeField] float ballHittingDelay = 0.1f;
-
-    //[Networked] private TickTimer delay { get; set; }
-
+    [Header("Player Attributes")]
     [SerializeField] float maxImpulseDistance = 0.5f;
     [SerializeField] float timeBetweenBufferAttempts;
 
@@ -52,18 +46,15 @@ public class Player : NetworkBehaviour
 
         if (HasStateAuthority)
         {
-
             if (data.buttons.IsSet(NetworkInputData.BUTTON_1_JUMP))
             {
-                Debug.Log("Jump pressed - Player");
                 jumpComponent.Jump();
 
             }
 
-            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))// && delay.ExpiredOrNotRunning(Runner))
+            if (data.buttons.IsSet(NetworkInputData.BUTTON_0_FIRE))
             {
-                Debug.Log("[Ball-P] BUTTON_0_FIRE Pressed");
-
+                Debug.Log("[Ball-Player] BUTTON_0_FIRE Pressed");
                 if (!AttemptBallBounce())
                 {
                     BufferBallBounceAttempts();
@@ -74,12 +65,18 @@ public class Player : NetworkBehaviour
 
             if ((bufferedBallBounce > 0) && IsTimeForBufferedBounce())
             {
-                Debug.Log($"Executing buffered ball bounce {bufferedBallBounce}");
+                Debug.Log($"[Ball-Player] Executing buffered ball bounce {bufferedBallBounce}");
                 if (!AttemptBallBounce())
                 {
                     bufferedBallBounce--;
                 }
 
+            }
+
+            if (volleyball == null || !IsVolleyballWithinReach())
+            {
+                Debug.Log("[Ball-Player] Player NOT TOUCHING BALL ANYMORE ===========================");
+                isTouchingVolleyball = false;
             }
 
         }
@@ -132,16 +129,21 @@ public class Player : NetworkBehaviour
             return true;
         }
 
-        if(Vector3.Distance(this.transform.position, volleyball.transform.position) <= maxImpulseDistance)
+        if (IsVolleyballWithinReach())
         {
             Debug.Log("[Ball-Player] Is within hitting distance (Vector3.Distance).");
             return true;
         }
 
         Debug.Log($"[Ball-P] Not able to apply ball impulse yet.");
-        
+
         return false;
-        
+
+    }
+
+    private bool IsVolleyballWithinReach()
+    {
+        return Vector3.Distance(this.transform.position, volleyball.transform.position) <= maxImpulseDistance;
     }
 
     private void MoveCharacter(NetworkInputData data)
@@ -161,7 +163,7 @@ public class Player : NetworkBehaviour
             {
                 isTouchingVolleyball = true;
                 InjectVolleyball(possibleBallTrigger.Volleyball);
-                Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name})");
+                Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name}) ===========================");
             }
 
         }
@@ -173,20 +175,5 @@ public class Player : NetworkBehaviour
         this.volleyball = volleyball;
 
     }
-
-    //    public void SetVolleyballColliding(Volleyball volleyball, bool isTriggerColliding)
-    //    {
-    //        if (isTriggerColliding)
-    //        {
-    //            //Debug.Log($"Volleyball {volleyball.name} touched player.");
-    //s            this.volleyball = volleyball;
-    //        }
-    //        else
-    //        {
-    //            Debug.Log($"Volleyball {volleyball.name} not touching player anymore.");
-    //            this.volleyball = null;
-    //        }
-
-    //    }
 
 }
