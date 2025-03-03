@@ -1,4 +1,5 @@
 using Fusion;
+using UnityEngine;
 using UnityEngine.Events;
 
 public interface IVolleyballGameplay
@@ -7,7 +8,9 @@ public interface IVolleyballGameplay
 
     public void InjectMatchInfo(MatchInfo matchInfo);
 
-    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height);
+    public void SpawnVolleyball(Team team);
+
+    public void SpawnVolleyball(GameObject volleyBallPrefab, CourtTriggers courtTriggers, Team team);
 
     public void ResetPlayerPositions();
 

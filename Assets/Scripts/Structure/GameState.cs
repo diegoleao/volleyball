@@ -81,6 +81,7 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.StartMatch:
+                FindAnyObjectByType<OptionsScreen>().Show();
                 Debug.Log("Player 2 entered. Match Start! =========");
                 SetState(State.RallyStart);
                 winScreenInstance?.Close();
@@ -96,7 +97,7 @@ public class GameState : MonoBehaviour
             case State.RallyStart:
                 if(this.state != State.RallyStart)
                 {
-                    Provider.Instance.BallSpawner.SpawnVolleyball(ServingTeam);
+                    Provider.Instance.API.SpawnVolleyball(ServingTeam);
                 }
                 break;
 
@@ -243,7 +244,7 @@ public class GameState : MonoBehaviour
 
     public void StartGameplay()
     {
-        SetState(GameState.State.StartMatch);
+        SetState(State.StartMatch);
 
     }
 

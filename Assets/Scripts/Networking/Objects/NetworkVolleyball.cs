@@ -3,12 +3,14 @@ using Fusion;
 using System;
 using UniRx;
 
-public class NetworkVolleyball : NetworkBehaviour
+public class NetworkVolleyball : NetworkBehaviour, IVolleyball
 {
     [Header("Parameters")]
     [SerializeField] float groundTouchDelay = 0.3f;
     [SerializeField] float Impulse = 6;
     [SerializeField] float despawnDelay = 5.0f;
+    [SerializeField] float spawnHeight = 5.0f;
+    public float SpawnHeight => this.spawnHeight;
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;

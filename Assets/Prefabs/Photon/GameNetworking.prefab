@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd6095565daaa54b8533a2be875102c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requiredPlayers: 2
   _playerPrefab:
     RawGuidValue: eb1913f1af9352d4a93db9a469e8e754
+  _volleybalPrefab: {fileID: 8135431122864898509, guid: 2007c9f538e5a8f4e80c136e0d3a8ee4, type: 3}
   _matchInfoPrefab:
     RawGuidValue: 65eea36cb352cf04d9ee4b0a93639348
-  _ballSpawnerPrefab:
-    RawGuidValue: 03ebaade822d1384b8e6f48ee173ce79

@@ -18,14 +18,10 @@ public class Provider : MonoBehaviour
     public GameState GameState => this.gameState;
 
 
-    [SerializeField] BallSpawner ballSpawner;
-    public BallSpawner BallSpawner => this.ballSpawner;
-
-
     [SerializeField] GameplayFacade gameplayFacade;
     public GameplayFacade GameplayFacade => this.gameplayFacade;
 
-    public GameNetworking API => GameplayFacade.GameNetworking;
+    public IVolleyballGameplay API => GameplayFacade.CurrentAPI;
 
     [Header("Scene Components")]
 

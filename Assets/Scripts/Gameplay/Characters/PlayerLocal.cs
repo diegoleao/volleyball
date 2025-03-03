@@ -147,7 +147,7 @@ public class PlayerLocal : MonoBehaviour
     {
         if (trigger != null)
         {
-            if (!trigger.Volleyball.IsGrounded)
+            if (!trigger.LocalVolleybal.IsGrounded)
             {
                 isTouchingVolleyball = true;
                 InjectVolleyball(trigger.LocalVolleybal);

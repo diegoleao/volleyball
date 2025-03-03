@@ -4,7 +4,8 @@ using UnityEngine;
 public class CourtFloor : MonoBehaviour
 {
     [SerializeField] private Team TargetOfWichTeam;
-    private NetworkVolleyball volleyball;
+
+    private IVolleyball volleyball;
 
     public void OnTriggerEnter(Collider other)
     {

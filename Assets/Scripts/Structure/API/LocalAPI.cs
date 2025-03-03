@@ -29,6 +29,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         InstantiatePlayer(Team.A, isAI: false);
         InstantiatePlayer(Team.B, isAI: false);
+        Provider.Instance.GameState.StartGameplay();
 
     }
 
@@ -36,6 +37,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         InstantiatePlayer(Team.A, isAI: false);
         InstantiatePlayer(Team.B, isAI: true);
+        Provider.Instance.GameState.StartGameplay();
 
     }
 
@@ -62,8 +64,22 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
         DestroyMatch();
     }
 
-    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
+    public void SpawnVolleyball(Team team)
     {
+        this.SpawnVolleyball(_volleyBallPrefab.gameObject, Provider.Instance.CourtTriggers, team);
+
+    }
+
+    public void SpawnVolleyball(GameObject volleyBallPrefab, CourtTriggers courtTriggers, Team team)
+    {
+        Debug.Log("Spawn Volleyball");
+
+        if (FindObjectsOfType<Volleyball>().Any(t => !t.IsGroundChecking))
+            return;
+
+        Instantiate(volleyBallPrefab,
+            Provider.Instance.CourtTriggers.GetBallSpawnPosition(team, _volleyBallPrefab.SpawnHeight), 
+            Quaternion.identity);
 
     }
 

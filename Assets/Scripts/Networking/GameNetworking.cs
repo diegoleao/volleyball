@@ -18,6 +18,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     [SerializeField] NetworkPrefabRef _playerPrefab;
 
+    [SerializeField] GameObject _volleybalPrefab;
+
     [SerializeField] NetworkPrefabRef _matchInfoPrefab;
 
     public bool HasStateAuthority
@@ -213,7 +215,12 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     }
 
-    public void SpawnBall(NetworkVolleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
+    public void SpawnVolleyball(Team team)
+    {
+        SpawnVolleyball(this._volleybalPrefab, Provider.Instance.CourtTriggers, team);
+    }
+
+    public void SpawnVolleyball(GameObject volleyBallPrefab, CourtTriggers courtTriggers, Team team)
     {
         Debug.Log("Spawn Volleyball");
 
@@ -222,8 +229,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
         if (HasStateAuthority)
         {
-            _runner.Spawn(volleyBall,
-                         Provider.Instance.CourtTriggers.GetBallSpawnPosition(team, height),//TODO: Instanciar do outro lado da quadra também,
+            _runner.Spawn(volleyBallPrefab,
+                         courtTriggers.GetBallSpawnPosition(team, volleyBallPrefab.GetComponent<NetworkVolleyball>().SpawnHeight),
                          Quaternion.identity,
                          null,
                          (runner, obj) =>
@@ -232,6 +239,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
                          });
 
         }
+
     }
 
     [Button]
@@ -328,4 +336,5 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
+
 }

@@ -2,7 +2,7 @@ using System;
 using UniRx;
 using UnityEngine;
 
-public class Volleyball : MonoBehaviour
+public class Volleyball : MonoBehaviour, IVolleyball
 {
     [Header("Parameters")]
     [SerializeField] float groundTouchDelay = 0.3f;
@@ -11,6 +11,9 @@ public class Volleyball : MonoBehaviour
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
+
+    [SerializeField] float spawnHeight = 5;
+    public float SpawnHeight => spawnHeight;
 
     public bool IsGrounded { get; private set; }
 
