@@ -13,6 +13,7 @@ public class Player : NetworkBehaviour
 
     //[Networked] private TickTimer delay { get; set; }
 
+    [SerializeField] float maxImpulseDistance = 0.5f;
     [SerializeField] float timeBetweenBufferAttempts;
 
     //Private
@@ -106,19 +107,37 @@ public class Player : NetworkBehaviour
         previousAttemptTime = Time.time;
 
         Debug.Log($"[Ball-P] Attempting ball impulse...");
-        if (isTouchingVolleyball && volleyball != null)
+        if (IsWithinHitDistance() && volleyball != null)
         {
             Debug.Log($"[Ball-P] Applied impulse to {volleyball.name}");
             volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
             bufferedBallBounce = 0;
             return true;
-        }
-        else
-        {
-            Debug.Log($"[Ball-P] Not able to apply ball impulse yet.");
-            return false;
+
         }
 
+        return false;
+
+    }
+
+    private bool IsWithinHitDistance()
+    {
+        if (isTouchingVolleyball)
+        {
+            Debug.Log("[Ball-Player] Is touching volleyball (trigger)");
+            return true;
+        }
+
+        if(Vector3.Distance(this.transform.position, volleyball.transform.position) <= maxImpulseDistance)
+        {
+            Debug.Log("[Ball-Player] Is within hitting distance (Vector3.Distance).");
+            return true;
+        }
+
+        Debug.Log($"[Ball-P] Not able to apply ball impulse yet.");
+        
+        return false;
+        
     }
 
     private void MoveCharacter(NetworkInputData data)
@@ -137,15 +156,17 @@ public class Player : NetworkBehaviour
             if (!possibleBallTrigger.Volleyball.IsGrounded)
             {
                 isTouchingVolleyball = true;
-                volleyball = possibleBallTrigger.Volleyball;
-                //Debug.Log($"Hit {other.name}");
-            }
-            else
-            {
-                isTouchingVolleyball = false;
+                InjectVolleyball(possibleBallTrigger.Volleyball);
+                Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name})");
             }
 
         }
+
+    }
+
+    public void InjectVolleyball(Volleyball volleyball)
+    {
+        this.volleyball = volleyball;
 
     }
 

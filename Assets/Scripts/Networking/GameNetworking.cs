@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -119,10 +120,13 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    private void DestroyAllBalls()
+    public void DestroyAllBalls()
     {
-        var allVolleyballs = FindObjectsByType<Volleyball>(sortMode: FindObjectsSortMode.None);
-        allVolleyballs.ForEach(t => { _runner.Despawn(t.GetComponent<NetworkObject>()); });
+        if (HasStateAuthority)
+        {
+            var allVolleyballs = FindObjectsByType<Volleyball>(sortMode: FindObjectsSortMode.None);
+            allVolleyballs.Where(t => !t.IsGrounded).ForEach(t => { _runner.Despawn(t.GetComponent<NetworkObject>()); });
+        }
 
     }
 
@@ -209,6 +213,8 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     public void SpawnBall(Volleyball volleyBall, CourtTriggers courtTriggers, Team team, float height)
     {
         Debug.Log("Spawn Volleyball");
+
+        DestroyAllBalls();
 
         if (HasStateAuthority)
         {

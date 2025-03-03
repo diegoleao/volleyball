@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2249517702159497894}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -132,8 +132,8 @@ GameObject:
   - component: {fileID: 5882729239902988984}
   - component: {fileID: 8078477543612296481}
   - component: {fileID: 8371222019359541061}
-  - component: {fileID: 1123110131972554759}
   - component: {fileID: 684968155535346168}
+  - component: {fileID: 1123110131972554759}
   m_Layer: 8
   m_Name: Volleyball
   m_TagString: Untagged
@@ -249,21 +249,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.67
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1123110131972554759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8135431122864898509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 327e85c7f93ed6449a90f4439c7534e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Impulse: 12
-  despawnDelay: 1.2
-  proximityTrigger: {fileID: 8143697982595510806}
 --- !u!114 &684968155535346168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,6 +265,22 @@ MonoBehaviour:
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
+--- !u!114 &1123110131972554759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135431122864898509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 327e85c7f93ed6449a90f4439c7534e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundTouchDelay: 0.3
+  Impulse: 12
+  despawnDelay: 1.2
+  proximityTrigger: {fileID: 8143697982595510806}
 --- !u!1001 &7354536712489698658
 PrefabInstance:
   m_ObjectHideFlags: 0

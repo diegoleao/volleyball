@@ -132,15 +132,15 @@ public class Provider : MonoBehaviour
 
         if(Instance.IsDebuggingVolleyball)
         {
-            //if (objectToRegister is Volleyball)
-            //{
-            //    var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
-            //    foreach (var player in players)
-            //    {
-            //        player.SetVolleyballColliding(objectToRegister as Volleyball, true);
-            //    }
+            if (objectToRegister is Volleyball)
+            {
+                var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
+                foreach (var player in players)
+                {
+                    player.InjectVolleyball(objectToRegister as Volleyball);
+                }
 
-            //}
+            }
 
         }
 

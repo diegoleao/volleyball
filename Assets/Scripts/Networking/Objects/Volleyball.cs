@@ -5,8 +5,12 @@ using UniRx;
 
 public class Volleyball : NetworkBehaviour
 {
+    [Header("Parameters")]
+    [SerializeField] float groundTouchDelay = 0.3f;
     [SerializeField] float Impulse = 6;
     [SerializeField] float despawnDelay = 5.0f;
+
+    [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
 
     public bool IsGrounded { get; private set; }
@@ -19,6 +23,9 @@ public class Volleyball : NetworkBehaviour
     private Rigidbody rb;
 
     private static int idCounter;
+
+    private bool bufferedGrounded;
+
 
     void Awake()
     {
@@ -37,7 +44,8 @@ public class Volleyball : NetworkBehaviour
             Debug.Log($"Ignoring hit on grounded Volleybal {this?.name}");
             return;
         }
-            
+
+        bufferedGrounded = false;
 
         //forward = hitDirection.sqrMagnitude > 0 ? hitDirection : playerDirection;
         forward = (CourtCenter - this.transform.position);
@@ -77,12 +85,27 @@ public class Volleyball : NetworkBehaviour
 
     }
 
-    public void HandleGroundTouch(Team scoringTeam)
+    public async void HandleGroundTouch(Team scoringTeam)
     {
-        IsGrounded = true;
-        proximityTrigger.enabled = false;
-        Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
-        StopMoving();
+        bufferedGrounded = true;
+        Debug.Log("[Ball-Floor] Buffered Ground");
+
+        await Observable.Timer(TimeSpan.FromSeconds(this.groundTouchDelay));
+
+        if (bufferedGrounded)
+        {
+            Debug.Log("[Ball-Floor] Still grounded. CONFIRM touch!");
+            IsGrounded = true;
+            proximityTrigger.enabled = false;
+            GetComponentInChildren<VolleyballHitTrigger>()?.gameObject?.SetActive(false);
+            Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
+            StopMoving();
+
+        }
+        else
+        {
+            Debug.Log("[Ball-Floor] Not grounded anymore. IGNORING...");
+        }
 
     }
 
