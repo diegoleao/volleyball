@@ -8,9 +8,9 @@ public class WinScreen : BaseView
 
     [SerializeField] TextMeshProUGUI textMeshProUGUI;
 
-    private MatchInfo.ScoreData winningScore;
+    private PlayerScoreData winningScore;
 
-    public void SetData(MatchInfo.ScoreData winningScore)
+    public void SetData(PlayerScoreData winningScore)
     {
         this.winningScore = winningScore;
         this.textMeshProUGUI.text = $"Team \"{(winningScore.playerId == 0 ? "A" : "B")}\" Wins!";

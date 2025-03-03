@@ -10,6 +10,8 @@ public class Player : NetworkBehaviour
     [SerializeField] float maxImpulseDistance = 3;
     [SerializeField] float timeBetweenBufferAttempts;
 
+    public Team Team { get; private set; }
+
     //Private
     private NetworkCharacterController netCharController;
     private Vector3 forward;
@@ -21,12 +23,20 @@ public class Player : NetworkBehaviour
     private float previousAttemptTime;
     private float currentDistanceFromBall;
 
+    private bool isAI;
 
     void Awake()
     {
         netCharController = GetComponent<NetworkCharacterController>();
         jumpComponent = GetComponent<JumpComponent>();
         forward = Vector3.forward;
+
+    }
+
+    public void Initialize(Team team, bool isAI)
+    {
+        this.Team = team;
+        this.isAI = isAI;
 
     }
 
@@ -174,7 +184,7 @@ public class Player : NetworkBehaviour
 
         if (SetVolleyballTouching(possibleBallTrigger))
         {
-            Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name}) ===========================");
+            Debug.Log($"[Player-Ball] On Trigger Enter Ball ({other.name}) ----------------------");
         }
 
     }

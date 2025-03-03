@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
+public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunnerCallbacks
 {
 
     [SerializeField] int requiredPlayers = 2;
@@ -56,7 +56,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public async void StartNetwork(string roomName, GameMode gameMode, UnityAction finished = null, UnityAction error = null)
+    public async void StartNetworkGame(string roomName, GameMode gameMode, UnityAction finished = null, UnityAction error = null)
     {
         _runner = CreateNetworkRunner();
 
@@ -72,7 +72,9 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
         }
 
-        if(_runner == null)
+        Debug.Log($"ProvideInput set to: {_runner.ProvideInput}, IsClient: {_runner.IsClient}");
+
+        if (_runner == null)
         {
             error?.Invoke();
         }
@@ -117,7 +119,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         ResetPlayerPositions();
         DestroyAllBalls();
-        matchInfo?.ResetScore();
+        matchInfo?.ResetNetworkedScore();
 
     }
 
@@ -139,14 +141,14 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
             NetworkObject networkPlayerObject 
                 = runner.Spawn(_playerPrefab, GetTeamSpawnPosition(player), Quaternion.identity, player);
 
-            networkPlayerObject.transform.rotation = GetInitialRotation(networkPlayerObject.transform.position);
+            networkPlayerObject.transform.rotation = LocalAPI.GetInitialRotation(networkPlayerObject.transform.position);
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
 
-            if ((playersInGame >= requiredPlayers) && !matchInfo.HasGameStarted)
+            if ((playersInGame >= requiredPlayers) && !matchInfo.HasMatchStarted)
             {
-                matchInfo.HasGameStarted = true;
+                matchInfo.HasMatchStarted = true;
 
             }
         }
@@ -178,7 +180,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if (matchInfo == null || matchInfo.IsMatchFinished || !matchInfo.HasGameStarted)
+        if (matchInfo == null || matchInfo.IsMatchFinished || !matchInfo.HasMatchStarted)
         {
             //Debug.Log($"MATCH FINISHED - IGNORING Input.");
             return;
@@ -249,26 +251,15 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
     {
         Vector3 initialSpawnPosition = GetTeamSpawnPosition(player);
         networkPlayerObject.GetComponent<NetworkCharacterController>()
-                           .Teleport(initialSpawnPosition, 
-                                     GetInitialRotation(initialSpawnPosition));
+                           .Teleport(initialSpawnPosition,
+                                     LocalAPI.GetInitialRotation(initialSpawnPosition));
 
     }
 
     private Vector3 GetTeamSpawnPosition(PlayerRef player, float spawnHeight = 1)
     {
         //TODO: FIX THIS CALCULATION, THE TEAM A IS NOT ALWAYS THE CURRENT PLAYER
-        return Provider.Instance
-                       .CourtTriggers
-                       .GetTeamSpawnPosition(((player == _runner.LocalPlayer) ? Team.A : Team.B), spawnHeight);
-
-    }
-
-    public Quaternion GetInitialRotation(Vector3 currentPosition)
-    {
-        Vector3 targetPositionToLookAt = Provider.Instance.CourtCenter.position;
-        targetPositionToLookAt.y = currentPosition.y; // Prevent character from bending up or down
-
-        return Quaternion.LookRotation(targetPositionToLookAt - currentPosition, Vector3.up);
+        return LocalAPI.GetTeamSpawnPosition((player == _runner.LocalPlayer) ? Team.A : Team.B);
 
     }
 
@@ -277,9 +268,7 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
         var runner = gameObject.AddComponent<NetworkRunner>();
 
         //Let it know that we will be providing user input
-        runner.ProvideInput = true; 
-        
-        Debug.Log($"ProvideInput set to: {runner.ProvideInput}");
+        runner.ProvideInput = true;
 
         return runner;
 
@@ -321,7 +310,11 @@ public class GameNetworking : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
-    public void OnConnectedToServer(NetworkRunner runner) { }
+    public void OnConnectedToServer(NetworkRunner runner)
+    {
+        Debug.Log("Client successfully connected to server.");
+    }
+
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }

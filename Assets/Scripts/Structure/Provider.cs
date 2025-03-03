@@ -13,26 +13,19 @@ public class Provider : MonoBehaviour
 
     public bool IsDebuggingVolleyball;
 
+
     [SerializeField] GameState gameState;
     public GameState GameState => this.gameState;
 
-    [SerializeField] GameNetworking GameNetworkingPrefab;
-    private GameNetworking _gameNetworkingInstance;
 
     [SerializeField] BallSpawner ballSpawner;
     public BallSpawner BallSpawner => this.ballSpawner;
-    
-    public GameNetworking GameNetworking
-    {
-        get
-        {
-            if(_gameNetworkingInstance == null)
-            {
-                _gameNetworkingInstance = Instantiate(GameNetworkingPrefab, this.transform);
-            }
-            return _gameNetworkingInstance;
-        }
-    }
+
+
+    [SerializeField] GameplayFacade gameplayFacade;
+    public GameplayFacade GameplayFacade => this.gameplayFacade;
+
+    public GameNetworking API => GameplayFacade.GameNetworking;
 
     [Header("Scene Components")]
 
@@ -78,7 +71,7 @@ public class Provider : MonoBehaviour
     {
         get
         {
-            return GameNetworking.HasStateAuthority;
+            return API.HasStateAuthority;
         }
     }
 
@@ -126,7 +119,7 @@ public class Provider : MonoBehaviour
 
             FindAnyObjectByType<HudView>().Initialize(objectToRegister as MatchInfo);
 
-            Instance.GameNetworking.InjectMatchInfo(objectToRegister as MatchInfo);
+            Instance.API.InjectMatchInfo(objectToRegister as MatchInfo);
 
         }
 

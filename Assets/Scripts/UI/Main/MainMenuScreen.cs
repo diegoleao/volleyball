@@ -21,6 +21,7 @@ public class MainMenuScreen : BaseView
 #if !UNITY_STANDALONE_WIN
         LocalMultiplayer.gameObject.SetActive(false);
 #endif
+
     }
 
     public void StartMatch(bool isHost)
@@ -41,15 +42,15 @@ public class MainMenuScreen : BaseView
 
     public void StartSinglePlayer()
     {
-        //Provider.Instance.GameState.StartSingleplayerMatch();
-        //Close();
+        Provider.Instance.GameplayFacade.StartSingleplayerMatch();
+        Close();
 
     }
 
     public void StartLocalMultiplayer()
     {
-        //Start
-        //Close();
+        Provider.Instance.GameplayFacade.StartLocalMatch();
+        Close();
 
     }
 

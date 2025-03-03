@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2912398093342959145}
   - component: {fileID: 913512534729449442}
   - component: {fileID: 8090347704916014936}
+  - component: {fileID: 8966032410926759534}
   m_Layer: 0
   m_Name: MatchInfo
   m_TagString: Untagged
@@ -45,10 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c1b364940b4ad41ad0dd875ff9b6be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreList: []
-  ScoreChanged:
-    m_PersistentCalls:
-      m_Calls: []
+  localMatchInfo: {fileID: 0}
 --- !u!114 &8090347704916014936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,3 +66,25 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 913512534729449442}
   ForceRemoteRenderTimeframe: 0
+--- !u!114 &8966032410926759534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3865108970929653216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e416bd1c0e119ba448675d0b7775f924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Scores: []
+  ScoreChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  TeamScoreEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerWonEvent:
+    m_PersistentCalls:
+      m_Calls: []

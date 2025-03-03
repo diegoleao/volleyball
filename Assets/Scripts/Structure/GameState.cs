@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UniRx;
 using UnityEngine;
@@ -18,7 +19,7 @@ public class GameState : MonoBehaviour
 
     public Team ServingTeam { get; private set; }
 
-    public MatchInfo.ScoreData winningScore { get; internal set; }
+    public PlayerScoreData winningScore { get; internal set; }
 
 
     private WinScreen winScreenInstance;
@@ -36,7 +37,7 @@ public class GameState : MonoBehaviour
 
     public void StartMultiplayerMatch(string roomName, GameMode mode)
     {
-        Provider.Instance.GameNetworking.StartNetwork(roomName, mode, () =>
+        Provider.Instance.GameplayFacade.StartNetworkMatch(roomName, mode, () =>
         {
             SetState(State.WaitForPlayer2);
         },
@@ -101,7 +102,7 @@ public class GameState : MonoBehaviour
 
             case State.AwardingPoints:
                 if(ResetPlayerPositionOnScore)
-                    Provider.Instance.GameNetworking.ResetPlayerPositions();
+                    Provider.Instance.API.ResetPlayerPositions();
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
@@ -130,7 +131,7 @@ public class GameState : MonoBehaviour
 
             case State.FinishMatch:
             case State.AbortMatch:
-                Provider.Instance.GameNetworking.ShutdownNetworkMatch();
+                Provider.Instance.API.ShutdownNetworkMatch();
                 ReturnToMainScreen();
                 FindAnyObjectByType<OptionsScreen>().Hide();
                 break;
@@ -145,7 +146,7 @@ public class GameState : MonoBehaviour
 
     public void ResetMatch()
     {
-        Provider.Instance.GameNetworking.ResetMatch();
+        Provider.Instance.API.ResetMatch();
 
     }
 
@@ -164,11 +165,10 @@ public class GameState : MonoBehaviour
             return;
 
         this.ServingTeam = scoringTeam;
-        SetState(State.AwardingPoints);
 
     }
 
-    public void HandlePlayerWinning(MatchInfo.ScoreData scoreData)
+    public void HandlePlayerWinning(PlayerScoreData scoreData)
     {
         this.winningScore = scoreData;
         Provider.Instance.GameState.SetState(GameState.State.WinState);
@@ -181,7 +181,7 @@ public class GameState : MonoBehaviour
         if (Provider.Instance.HasStateAuthority)
         {
             Debug.Log($"Increase Score for Team {team}");
-            this.matchInfo.AddScore(team);
+            this.matchInfo.AddNetworkedScore(team);
 
         }
 
@@ -189,7 +189,7 @@ public class GameState : MonoBehaviour
 
     private void ResetCourtState()
     {
-        Provider.Instance.GameNetworking.ResetPlayerPositions();
+        Provider.Instance.API.ResetPlayerPositions();
 
     }
 
@@ -223,8 +223,21 @@ public class GameState : MonoBehaviour
     {
         this.matchInfo = matchInfo;
 
-        matchInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
-        matchInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
+        matchInfo.LocalInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
+        matchInfo.LocalInfo.ScoreChangedEvent.AddListener(HandleScoreChanged);
+        matchInfo.LocalInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
+
+    }
+
+    private void HandleScoreChanged(List<PlayerScoreData> scores)
+    {
+        if (matchInfo.IsMatchFinished)
+            return;
+
+        if (scores.All(t => t.score == 0))
+            return;
+
+        SetState(State.AwardingPoints);
 
     }
 

@@ -6,32 +6,54 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(LocalMatchInfo))]
 public class MatchInfo : NetworkBehaviour
 {
-
-    private const int TeamA_ID = 0;
-    private const int TeamB_ID = 1;
+    private LocalMatchInfo localMatchInfo;
+    public LocalMatchInfo LocalInfo => localMatchInfo;
 
     [Networked] public bool HasGameStarted { get; set; }
 
-    [ShowInInspector][Sirenix.OdinInspector.ReadOnly]
-    public bool IsMatchFinished
-    {
+    public bool HasMatchStarted 
+    { 
         get
         {
-            return this.Score.Any(scoreInfo => scoreInfo.score >= 7);
+            return (localMatchInfo.PlayMode == PlayMode.Network) ? HasGameStarted : localMatchInfo.HasLocalGameStarted;
+        }
+        set
+        {
+            HasGameStarted = value;
+            localMatchInfo.HasLocalGameStarted = value;
+
         }
 
     }
 
-    [Sirenix.OdinInspector.ReadOnly]
-    public List<ScoreData> Score = new List<ScoreData>();
+    [Networked]
+    private int ScoringTeam { get; set; }
 
-    public UnityEvent<List<ScoreData>> ScoreChangedEvent;
+    public int CurrentScoringTeam
+    {
+        get
+        {
+            return (localMatchInfo.PlayMode == PlayMode.Network) ? ScoringTeam : localMatchInfo.ScoringTeam;
+        }
+        set
+        {
+            ScoringTeam = value;
+            localMatchInfo.ScoringTeam = value;
 
-    public UnityEvent<Team> TeamScoreEvent;
+        }
 
-    public UnityEvent<ScoreData> PlayerWonEvent;
+    }
+
+    public bool IsMatchFinished
+    {
+        get
+        {
+            return localMatchInfo.IsMatchFinished;
+        }
+    }
 
     //Networked
     [ShowInInspector]
@@ -42,133 +64,101 @@ public class MatchInfo : NetworkBehaviour
     [Networked, Capacity(2)]
     private NetworkArray<int> NetworkedPlayers => default;
 
-    [Networked]
-    private int ScoringTeam { get; set; }
-
-    //Private
-    private ChangeDetector _changeDetector;
-
-    private Team tempScoringTeam;
+    //Private network variable
+    private ChangeDetector changeDetector;
 
     public override void Spawned()
     {
-        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
-        InitScores(player1: 0, player2: 1);//TODO: change it to real ids
+        localMatchInfo = GetComponent<LocalMatchInfo>();
+        HasMatchStarted = false;
+        changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+        InitNetworkScores(player1: 0, player2: 1);//TODO: change it to real ids
+        localMatchInfo.SetPlayerMode(PlayMode.Network);
         Provider.Register<MatchInfo>(this);
-
     }
 
-    public void Update() 
-    {
-        foreach (var change in _changeDetector.DetectChanges(this))
-        {
-            switch (change)
-            {
-                case nameof(NetworkedScore):
-                    HandleScoreUpdates();
-                    break;
-
-                case nameof(ScoringTeam):
-                    HandleTeamScoreUpdate();
-                    break;
-
-                case nameof(HasGameStarted):
-                    Provider.Instance.GameState.StartGameplay();
-                    break;
-            }
-        }
-    }
-
-    private void HandleTeamScoreUpdate()
-    {
-        tempScoringTeam = (Team)ScoringTeam;
-
-        if (tempScoringTeam != Team.None)
-        {
-            Debug.Log($"Scoring Event for {tempScoringTeam}");
-            TeamScoreEvent?.Invoke(tempScoringTeam);
-            if (HasStateAuthority)
-            {
-                ResetScoringTeam();
-            }
-
-        }
-
-    }
-
-    private void ResetScoringTeam()
-    {
-        ScoringTeam = (int)Team.None;
-
-    }
-
-    private void HandleScoreUpdates()
-    {
-        var newScores = GetScoresAsList();
-
-        if (!IsMatchFinished)
-        {
-            CheckWinningPlayer(newScores);
-        }
-
-        this.Score = newScores;
-        ScoreChangedEvent?.Invoke(this.Score);
-
-    }
-
-    private void CheckWinningPlayer(List<ScoreData> newScores)
-    {
-        var winningPlayer = newScores.Find(t => t.score >= 7);
-        if (winningPlayer != null)
-        {
-            Debug.Log($"WINNER! Player: {winningPlayer.playerId}");
-            PlayerWonEvent?.Invoke(winningPlayer);
-        }
-
-    }
-
-    private void InitScores(int player1, int player2)
+    private void InitNetworkScores(int player1, int player2)
     {
         NetworkedPlayers.Set(0, player1);
         NetworkedPlayers.Set(1, player2);
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
-        Score = GetScoresAsList();
+        localMatchInfo.Scores = GetNetworkedScoresAsList();
         ResetScoringTeam();
-        ScoreChangedEvent.Invoke(Score);
+        localMatchInfo.ScoreChangedEvent.Invoke(localMatchInfo.Scores);
 
     }
 
-    public void AddScore(Team team)
+    private void ResetScoringTeam()
     {
-        int playerId = GetPlayerId(team);
+        CurrentScoringTeam = (int)Team.None;
+
+    }
+
+    public void Update() 
+    {
+        foreach (var change in changeDetector.DetectChanges(this))
+        {
+            switch (change)
+            {
+                case nameof(NetworkedScore):
+                    Debug.Log($"{change} CHANGE DETECTED =============");
+                    this.localMatchInfo.HandleScoreUpdates(GetNetworkedScoresAsList());
+                    break;
+
+                case nameof(ScoringTeam):
+                    Debug.Log($"{change} CHANGE DETECTED VALUE: {ScoringTeam} =============");
+                    if (this.localMatchInfo.HandleTeamScoreUpdate() && HasStateAuthority)
+                    {
+                        ResetScoringTeam();//Reset scoring team after each successful match point
+                    }
+                    break;
+
+                case nameof(HasGameStarted):
+                    Debug.Log($"{change} CHANGE DETECTED VALUE: {HasGameStarted} =============");
+                    Provider.Instance.GameState.StartGameplay();
+                    break;
+
+                default:
+                    Debug.LogError($"UNKNOWN CHANGE DETECTED: {change}");
+                    break;
+            }
+
+        }
+
+    }
+
+    public void AddNetworkedScore(Team team)
+    {
+        int playerId = this.localMatchInfo.GetPlayerId(team);
 
         if (HasStateAuthority) // Only update on the authoritative side
         {
-            if (IsMatchFinished)
+            if (localMatchInfo.IsMatchFinished)
             {
                 Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId}");
                 return;
             }
 
-            ScoringTeam = (int)team;
+            CurrentScoringTeam = (int)team;
 
-            var playerIndex = FindPlayerIndex(playerId);
+            var playerIndex = FindNetworkedPlayerIndex(playerId);
             if (playerIndex >= 0)
             {
+                Debug.Log($"ADDING SCORE to player \"{playerId}\".");
                 NetworkedScore.Set(playerIndex, NetworkedScore[playerIndex] + 1);
             }
             else
             {
                 Debug.LogError($"Can't ADD score to undefined player \"{playerId}\".");
             }
-        }
 
+        }
     }
 
-    public int GetScore(int playerId)
+    private int GetNetworkedScore(int playerId)
     {
-        int playerIndex = FindPlayerIndex(playerId);
+        int playerIndex = this.FindNetworkedPlayerIndex(playerId);
         if (playerIndex < 0)
         {
             Debug.LogError($"Can't GET score to undefined player \"{playerId}\".");
@@ -178,47 +168,22 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
-    public void ResetScore()
-    {
-        NetworkedScore.Set(0, 0);
-        NetworkedScore.Set(1, 0);
-    }
-
-    private int FindPlayerIndex(int playerId)
+    private int FindNetworkedPlayerIndex(int playerId)
     {
         return this.NetworkedPlayers.ToList().FindIndex(t => t == playerId);
 
     }
 
-    private List<ScoreData> GetScoresAsList()
+    public void ResetNetworkedScore()
     {
-        return new List<ScoreData>
-        {
-            new ScoreData
-            {
-                playerId = NetworkedPlayers[0],
-                score = NetworkedScore[0]
-            },
-            new ScoreData
-            {
-                playerId = NetworkedPlayers[1],
-                score = NetworkedScore[1]
-            }
-        };
-
+        NetworkedScore.Set(0, 0);
+        NetworkedScore.Set(1, 0);
     }
 
-    private static int GetPlayerId(Team team)
+    private List<PlayerScoreData> GetNetworkedScoresAsList()
     {
-        return (team == Team.A) ? TeamA_ID : TeamB_ID;
-    }
+        return localMatchInfo.GetScoresAsList(NetworkedPlayers[0], NetworkedScore[0], NetworkedPlayers[1], NetworkedScore[1]);
 
-    [Serializable]
-    public class ScoreData
-    {
-        public int playerId;
-        public int score;
     }
-
 
 }

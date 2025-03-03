@@ -23,7 +23,7 @@ public class BallSpawner : MonoBehaviour
     [Button]
     public void SpawnVolleyball(Team team)
     {
-        Provider.Instance.GameNetworking.SpawnBall(this.volleyBall, this.courtTriggers, team, height);
+        Provider.Instance.API.SpawnBall(this.volleyBall, this.courtTriggers, team, height);
 
     }
 
