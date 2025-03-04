@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpComponent), typeof(JoystickSingleplayer), typeof(SinglePlayerMovement))]
-public class PlayerLocal : MonoBehaviour
+public class LocalPlayer : MonoBehaviour
 {
     [Header("Player Attributes")]
     [SerializeField] float maxDistanceFromBall = 3;
@@ -16,7 +16,7 @@ public class PlayerLocal : MonoBehaviour
     private Vector3 forward;
     private bool isTouchingVolleyball;
     private float currentDistanceFromBall;
-    private Volleyball volleyball;
+    private LocalVolleyball volleyball;
     private JumpComponent jumpComponent;
     private VolleyballHitTrigger possibleBallTrigger;
     private JoystickSingleplayer joystickSingleplayer;
@@ -158,7 +158,7 @@ public class PlayerLocal : MonoBehaviour
         return false;
     }
 
-    public void InjectVolleyball(Volleyball volleyball)
+    public void InjectVolleyball(LocalVolleyball volleyball)
     {
         this.volleyball = volleyball;
 

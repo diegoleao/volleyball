@@ -102,7 +102,7 @@ public class LocalMatchInfo : MonoBehaviour
             return false;
         }
         
-        Debug.Log($"Scoring Event for {tempScoringTeam}");
+        Debug.Log($"[LocaMatchInfo] Scoring Event for {tempScoringTeam}");
         TeamScoreEvent?.Invoke(tempScoringTeam);
         return true;
 
@@ -110,12 +110,12 @@ public class LocalMatchInfo : MonoBehaviour
 
     public void HandleScoreUpdates(List<PlayerScoreData> newScores)
     {
+        this.Scores = newScores;
+
         if (IsMatchFinished)
         {
-            CheckWinningPlayer(newScores);
+            CheckWinningPlayer(this.Scores);
         }
-
-        this.Scores = newScores;
 
         ScoreChangedEvent?.Invoke(this.Scores);
 

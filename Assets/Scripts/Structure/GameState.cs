@@ -111,7 +111,18 @@ public class GameState : MonoBehaviour
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
                 if (!this.GetLocalMatchInfo().IsMatchFinished) 
                 { 
-                    SetState(State.RallyStart); 
+                    SetState(State.RallyStart);
+#if UNITY_EDITOR
+                    Debug.Log($"Match still ongoing at A: {GetLocalMatchInfo().Scores[0].score} vs B: {GetLocalMatchInfo().Scores[1].score}.");
+#endif
+                }
+                else
+                {
+#if UNITY_EDITOR
+                    Debug.Log($"Match finished, skipping Rally Start. Final Score A: {GetLocalMatchInfo().Scores[0].score} vs B: {GetLocalMatchInfo().Scores[1].score}.");
+#else
+                    Debug.Log("Match finished, Skipping Rally Start.");
+#endif
                 }
                 break;
 
@@ -184,7 +195,7 @@ public class GameState : MonoBehaviour
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            Debug.Log($"Increase Score for Team {team}");
+            Debug.Log($"[GameState] Increase Score for Team {team}");
             if(Provider.Instance.NetworkMode == NetworkMode.Network)
             {
                 this.matchInfo.AddNetworkedScore(team);
@@ -277,6 +288,12 @@ public class GameState : MonoBehaviour
 
     }
 
+    public void ToggleDebug()
+    {
+        Provider.Instance.CourtTriggers.ToggleDebugVolumes();
+
+    }
+
     [Serializable]
     public enum State
     {
@@ -299,7 +316,7 @@ public class GameState : MonoBehaviour
 [Serializable]
 public enum Team
 {
+    None,
     A,
-    B,
-    None
+    B
 }

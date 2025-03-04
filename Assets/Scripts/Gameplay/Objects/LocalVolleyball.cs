@@ -2,17 +2,19 @@ using System;
 using UniRx;
 using UnityEngine;
 
-public class Volleyball : MonoBehaviour, IVolleyball
+public class LocalVolleyball : MonoBehaviour, IVolleyball
 {
     [Header("Parameters")]
     [SerializeField] float groundTouchDelay = 0.3f;
-    [SerializeField] float Impulse = 6;
-    [SerializeField] float despawnDelay = 5.0f;
+    [SerializeField] float Impulse = 13;
+    [SerializeField] float despawnDelay = 2;
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
+    [SerializeField] GroundProjection IndicatorCircle;
 
     [SerializeField] float spawnHeight = 5;
+
     public float SpawnHeight => spawnHeight;
 
     public bool IsGrounded { get; private set; }
@@ -45,7 +47,7 @@ public class Volleyball : MonoBehaviour, IVolleyball
         rb = GetComponent<Rigidbody>();
         Provider.Register<NetworkVolleyball>(this);
         idCounter++;
-        this.gameObject.name += " " + idCounter;
+        this.gameObject.name += $" [{idCounter}]";
 
     }
 
@@ -81,8 +83,11 @@ public class Volleyball : MonoBehaviour, IVolleyball
             rb.angularVelocity = Vector3.zero;
         }
 
+        IndicatorCircle.StopAnimation();
+
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
+        proximityTrigger.GetComponentInChildren<SphereCollider>().enabled = false;
         if (this != null && this.gameObject != null) Destroy(this.gameObject);
 
     }

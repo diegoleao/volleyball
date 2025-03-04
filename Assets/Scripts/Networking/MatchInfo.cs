@@ -101,12 +101,12 @@ public class MatchInfo : NetworkBehaviour
             switch (change)
             {
                 case nameof(NetworkedScore):
-                    Debug.Log($"{change} CHANGE DETECTED =============");
+                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {NetworkedScore} =============");
                     this.localMatchInfo.HandleScoreUpdates(GetNetworkedScoresAsList());
                     break;
 
                 case nameof(ScoringTeam):
-                    Debug.Log($"{change} CHANGE DETECTED VALUE: {ScoringTeam} =============");
+                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {(Team)ScoringTeam} =============");
                     if (this.localMatchInfo.HandleTeamScoreUpdate() && HasStateAuthority)
                     {
                         ResetScoringTeam();//Reset scoring team after each successful match point
@@ -114,12 +114,17 @@ public class MatchInfo : NetworkBehaviour
                     break;
 
                 case nameof(HasGameStarted):
-                    Debug.Log($"{change} CHANGE DETECTED VALUE: {HasGameStarted} =============");
+                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {HasGameStarted} =============");
                     Provider.Instance.GameState.StartGameplay();
                     break;
 
+                case nameof(NetworkedPlayers):
+                    //TODO: Make it possible for players to 
+                    //choose Team A or Team B instead of automatically assigning a team
+                    break;
+
                 default:
-                    Debug.LogError($"UNKNOWN CHANGE DETECTED: {change}");
+                    Debug.LogError($"[CHANGE DETECTOR] UNKNOWN CHANGE TO: {change}");
                     break;
             }
 
@@ -135,7 +140,7 @@ public class MatchInfo : NetworkBehaviour
         {
             if (localMatchInfo.IsMatchFinished)
             {
-                Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId}");
+                Debug.Log($"[MatchInfo] MATCH FINISHED - IGNORING Score for Player Id {playerId}");
                 return;
             }
 
@@ -144,12 +149,12 @@ public class MatchInfo : NetworkBehaviour
             var playerIndex = FindNetworkedPlayerIndex(playerId);
             if (playerIndex >= 0)
             {
-                Debug.Log($"ADDING SCORE to player \"{playerId}\".");
+                Debug.Log($"[MatchInfo] ADDING NETWORKED SCORE to player \"{playerId}\".");
                 NetworkedScore.Set(playerIndex, NetworkedScore[playerIndex] + 1);
             }
             else
             {
-                Debug.LogError($"Can't ADD score to undefined player \"{playerId}\".");
+                Debug.LogError($"[MatchInfo] Can't ADD score to undefined player \"{playerId}\".");
             }
 
         }
@@ -160,7 +165,7 @@ public class MatchInfo : NetworkBehaviour
         int playerIndex = this.FindNetworkedPlayerIndex(playerId);
         if (playerIndex < 0)
         {
-            Debug.LogError($"Can't GET score to undefined player \"{playerId}\".");
+            Debug.LogError($"[MatchInfo] Can't GET score to undefined player \"{playerId}\".");
             return -1;
         }
         return NetworkedScore[playerIndex];

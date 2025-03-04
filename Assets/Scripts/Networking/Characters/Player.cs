@@ -30,6 +30,7 @@ public class Player : NetworkBehaviour
         netCharController = GetComponent<NetworkCharacterController>();
         jumpComponent = GetComponent<NetworkJumpComponent>();
         forward = Vector3.forward;
+
     }
 
     public void Initialize(Team team, bool isAI)

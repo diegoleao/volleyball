@@ -118,8 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb47936ed86629f489d5eaf121073ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volleybal: {fileID: 0}
-  localVolleybal: {fileID: 5866156519231181102}
+  volleybal: {fileID: 4259678699005099315}
+  localVolleybal: {fileID: 0}
 --- !u!1 &8135431122864898509
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,11 +130,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2206349565266555660}
   - component: {fileID: 3346208980516894780}
+  - component: {fileID: 5882729239902988984}
+  - component: {fileID: 8078477543612296481}
   - component: {fileID: 8371222019359541061}
   - component: {fileID: 684968155535346168}
-  - component: {fileID: 5866156519231181102}
+  - component: {fileID: 4259678699005099315}
   m_Layer: 8
-  m_Name: LocalVolleyball
+  m_Name: NetworkVolleyball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,6 +186,49 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &5882729239902988984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135431122864898509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a591d221a634417e9827eb58e17de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 1
+  _interpolationTarget: {fileID: 0}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
+--- !u!114 &8078477543612296481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135431122864898509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 784592842
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 5882729239902988984}
+  - {fileID: 4259678699005099315}
+  ForceRemoteRenderTimeframe: 0
 --- !u!135 &8371222019359541061
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -217,11 +262,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ab1d91cb4853b408aaf21dfc5e2d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Circle: {fileID: 2654776454380230599, guid: 133f3852a073ab14e90b92be9c3d975b, type: 3}
+  GraphicsPrefab: {fileID: 8028910120391866275, guid: 133f3852a073ab14e90b92be9c3d975b, type: 3}
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
---- !u!114 &5866156519231181102
+--- !u!114 &4259678699005099315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,12 +275,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8135431122864898509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33f12ddbbb5c4549a7a39af49387ab4, type: 3}
+  m_Script: {fileID: 11500000, guid: 126faa950cf14ba41bc5fb8d2c7728b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundTouchDelay: 0.3
-  Impulse: 6
-  despawnDelay: 5
+  Impulse: 13
+  despawnDelay: 2
+  spawnHeight: 5
   proximityTrigger: {fileID: 8143697982595510806}
 --- !u!1001 &7354536712489698658
 PrefabInstance:

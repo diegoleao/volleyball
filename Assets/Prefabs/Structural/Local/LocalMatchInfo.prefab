@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3977717794218282296}
   - component: {fileID: -2296424194429009422}
   m_Layer: 0
-  m_Name: MatchInfo_Local
+  m_Name: LocalMatchInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

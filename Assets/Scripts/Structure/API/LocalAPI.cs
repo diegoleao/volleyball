@@ -6,9 +6,9 @@ using System;
 
 public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 {
-    [SerializeField] PlayerLocal _playerPrefab;
+    [SerializeField] LocalPlayer _playerPrefab;
 
-    [SerializeField] Volleyball _volleyBallPrefab;
+    [SerializeField] LocalVolleyball _volleyBallPrefab;
 
     [SerializeField] LocalMatchInfo _localMatchInfoPrefab;
 
@@ -86,7 +86,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         Debug.Log("Spawn Volleyball");
 
-        if (FindObjectsOfType<Volleyball>().Any(t => !t.IsGroundChecking))
+        if (FindObjectsOfType<LocalVolleyball>().Any(t => !t.IsGroundChecking))
             return;
 
         Instantiate(volleyBallPrefab,
@@ -121,14 +121,14 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     private void DestroyAllPlayers()
     {
-        var allPlayers = FindObjectsOfType<PlayerLocal>();
+        var allPlayers = FindObjectsOfType<LocalPlayer>();
         allPlayers.ForEach(player => { Destroy(player.gameObject); });
 
     }
 
     public void DestroyAllBalls()
     {
-        var allVolleyballs = FindObjectsOfType<Volleyball>();
+        var allVolleyballs = FindObjectsOfType<LocalVolleyball>();
         allVolleyballs.Where(t => !t.IsGrounded).ForEach(nonGrounded => { Destroy(nonGrounded.gameObject); });
 
     }

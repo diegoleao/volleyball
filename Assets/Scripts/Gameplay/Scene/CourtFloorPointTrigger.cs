@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class CourtFloor : MonoBehaviour
+public class CourtFloorPointTrigger : MonoBehaviour
 {
     [SerializeField] private Team TargetOfWichTeam;
 

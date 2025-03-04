@@ -6,7 +6,7 @@ public class VolleyballHitTrigger : MonoBehaviour
     [SerializeField] NetworkVolleyball volleybal;
     public NetworkVolleyball Volleyball => this.volleybal;
 
-    [SerializeField] Volleyball localVolleybal;
-    public Volleyball LocalVolleybal => this.localVolleybal;
+    [SerializeField] LocalVolleyball localVolleybal;
+    public LocalVolleyball LocalVolleybal => this.localVolleybal;
 
 }

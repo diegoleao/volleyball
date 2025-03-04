@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class NetworkJumpComponent : NetworkBehaviour
 {
-    public bool IsLocalPlayer;
     [SerializeField] private float jumpForce = 10f;
     private NetworkCharacterController netCharController;
 

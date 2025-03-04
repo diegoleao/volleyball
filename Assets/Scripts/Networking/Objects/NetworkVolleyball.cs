@@ -96,7 +96,7 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
 
         if (bufferedGrounded)
         {
-            Debug.Log("[Ball-Floor] Still grounded. CONFIRM touch!");
+            Debug.Log("[Ball-Floor] Still grounded. CONFIRMED SCORE!");
             IsGrounded = true;
             if(proximityTrigger) proximityTrigger.enabled = false;
             Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);

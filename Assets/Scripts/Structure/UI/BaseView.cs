@@ -9,6 +9,8 @@ public class BaseView : MonoBehaviour
 
     protected bool isClosed;
 
+    protected bool isVisible;
+
     void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -22,6 +24,7 @@ public class BaseView : MonoBehaviour
         canvasGroup.alpha = 1;
         this.gameObject.name = this.gameObject.name.Replace("** ", "");
         this.gameObject.name = this.gameObject.name.Replace(" (Hidden) **", "");
+        isVisible = true;
 
     }
 
@@ -30,7 +33,11 @@ public class BaseView : MonoBehaviour
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.alpha = 0;
-        this.gameObject.name = $"** {this.gameObject.name} (Hidden) **";
+        if (isVisible)
+        {
+            this.gameObject.name = $"** {this.gameObject.name} (Hidden) **";
+        }
+        isVisible = false;
 
     }
 
