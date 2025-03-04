@@ -21,6 +21,8 @@ public class Provider : MonoBehaviour
     [SerializeField] GameplayFacade gameplayFacade;
     public GameplayFacade GameplayFacade => this.gameplayFacade;
 
+    public NetworkMode NetworkMode => GameplayFacade.PlayMode;
+
     public IVolleyballGameplay API => GameplayFacade.CurrentAPI;
 
     [Header("Scene Components")]
@@ -113,13 +115,23 @@ public class Provider : MonoBehaviour
         {
             Instance.GameState.SetMatchInfo(objectToRegister as MatchInfo);
 
-            FindAnyObjectByType<HudView>().Initialize(objectToRegister as MatchInfo);
+            FindAnyObjectByType<HudView>().Initialize((objectToRegister as MatchInfo).LocalInfo);
 
             Instance.API.InjectMatchInfo(objectToRegister as MatchInfo);
 
         }
 
-        if(Instance.IsDebuggingVolleyball)
+        if (objectToRegister is LocalMatchInfo)
+        {
+            Instance.GameState.SetLocalMatchInfo(objectToRegister as LocalMatchInfo);
+
+            FindAnyObjectByType<HudView>().Initialize(objectToRegister as LocalMatchInfo);
+
+            Instance.API.InjectMatchInfo(objectToRegister as LocalMatchInfo);
+
+        }
+
+        if (Instance.IsDebuggingVolleyball)
         {
             if (objectToRegister is NetworkVolleyball)
             {

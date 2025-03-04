@@ -9,7 +9,7 @@ public class CourtFloor : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        volleyball = other.GetComponent<NetworkVolleyball>();
+        volleyball = other.GetComponent<IVolleyball>();
         if (volleyball != null)
         {
             volleyball.HandleGroundTouch(TargetOfWichTeam);

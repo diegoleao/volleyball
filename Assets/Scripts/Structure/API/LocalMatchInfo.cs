@@ -36,21 +36,12 @@ public class LocalMatchInfo : MonoBehaviour
 
     public UnityEvent<PlayerScoreData> PlayerWonEvent;
 
-    public PlayMode PlayMode { get; private set; }
-
     private Team tempScoringTeam { get; set; }
 
     public void InitializeLocal()
     {
-        SetPlayerMode(PlayMode.Local);
         InitScores(player1: 0, player2: 1);
         Provider.Register<LocalMatchInfo>(this);
-
-    }
-
-    public void SetPlayerMode(PlayMode playMode)
-    {
-        this.PlayMode = playMode;
 
     }
 
@@ -79,7 +70,7 @@ public class LocalMatchInfo : MonoBehaviour
 
     }
 
-    private void AddLocalScore(Team team)
+    public void AddLocalScore(Team team)
     {
         int playerId = GetPlayerId(team);
 
@@ -90,7 +81,10 @@ public class LocalMatchInfo : MonoBehaviour
         }
 
         ScoringTeam = (int)team;
+        HandleTeamScoreUpdate();
+
         GetPlayerScore(playerId).score++;
+        HandleScoreUpdates(this.Scores);
 
     }
 
@@ -116,7 +110,7 @@ public class LocalMatchInfo : MonoBehaviour
 
     public void HandleScoreUpdates(List<PlayerScoreData> newScores)
     {
-        if (!IsMatchFinished)
+        if (IsMatchFinished)
         {
             CheckWinningPlayer(newScores);
         }

@@ -306,6 +306,10 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
         this.matchInfo = matchInfo;
 
     }
+    public void InjectMatchInfo(LocalMatchInfo matchInfo)
+    {
+
+    }
 
     void OnApplicationQuit()
     {
@@ -315,6 +319,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
         }
 
     }
+    public void UnloadScene() { }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
@@ -322,7 +327,6 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     {
         Debug.Log("Client successfully connected to server.");
     }
-
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }

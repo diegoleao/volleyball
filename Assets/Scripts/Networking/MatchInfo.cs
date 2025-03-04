@@ -18,7 +18,7 @@ public class MatchInfo : NetworkBehaviour
     { 
         get
         {
-            return (localMatchInfo.PlayMode == PlayMode.Network) ? HasGameStarted : localMatchInfo.HasLocalGameStarted;
+            return (Provider.Instance.NetworkMode == NetworkMode.Network) ? HasGameStarted : localMatchInfo.HasLocalGameStarted;
         }
         set
         {
@@ -36,7 +36,7 @@ public class MatchInfo : NetworkBehaviour
     {
         get
         {
-            return (localMatchInfo.PlayMode == PlayMode.Network) ? ScoringTeam : localMatchInfo.ScoringTeam;
+            return (Provider.Instance.NetworkMode == NetworkMode.Network) ? ScoringTeam : localMatchInfo.ScoringTeam;
         }
         set
         {
@@ -73,7 +73,6 @@ public class MatchInfo : NetworkBehaviour
         HasMatchStarted = false;
         changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
         InitNetworkScores(player1: 0, player2: 1);//TODO: change it to real ids
-        localMatchInfo.SetPlayerMode(PlayMode.Network);
         Provider.Register<MatchInfo>(this);
     }
 

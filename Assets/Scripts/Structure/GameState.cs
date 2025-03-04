@@ -28,6 +28,8 @@ public class GameState : MonoBehaviour
 
     private MatchInfo matchInfo;
 
+    private LocalMatchInfo localMatchInfo;
+
 
     public void Initialize()
     {
@@ -107,7 +109,7 @@ public class GameState : MonoBehaviour
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
-                if (!this.matchInfo.IsMatchFinished) 
+                if (!this.GetLocalMatchInfo().IsMatchFinished) 
                 { 
                     SetState(State.RallyStart); 
                 }
@@ -128,6 +130,7 @@ public class GameState : MonoBehaviour
                 //***Wait for a few seconds
                 SetCourtToWinState();
                 FindAnyObjectByType<OptionsScreen>().Hide();
+                Provider.Instance.API.UnloadScene();
                 break;
 
             case State.FinishMatch:
@@ -159,7 +162,7 @@ public class GameState : MonoBehaviour
 
     public void HandleTeamScoring(Team scoringTeam)
     {
-        if (matchInfo.IsMatchFinished)
+        if (GetLocalMatchInfo().IsMatchFinished)
             return;
 
         if (scoringTeam == Team.None)
@@ -182,7 +185,14 @@ public class GameState : MonoBehaviour
         if (Provider.Instance.HasStateAuthority)
         {
             Debug.Log($"Increase Score for Team {team}");
-            this.matchInfo.AddNetworkedScore(team);
+            if(Provider.Instance.NetworkMode == NetworkMode.Network)
+            {
+                this.matchInfo.AddNetworkedScore(team);
+            }
+            else
+            {
+                this.localMatchInfo.AddLocalScore(team);
+            }
 
         }
 
@@ -223,16 +233,35 @@ public class GameState : MonoBehaviour
     public void SetMatchInfo(MatchInfo matchInfo)
     {
         this.matchInfo = matchInfo;
+        SetLocalMatchInfo(matchInfo.LocalInfo);
 
-        matchInfo.LocalInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
-        matchInfo.LocalInfo.ScoreChangedEvent.AddListener(HandleScoreChanged);
-        matchInfo.LocalInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
+    }
 
+    public void SetLocalMatchInfo(LocalMatchInfo localMatchInfo)
+    {
+        this.localMatchInfo = localMatchInfo;
+        localMatchInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
+        localMatchInfo.ScoreChangedEvent.AddListener(HandleScoreChanged);
+        localMatchInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
+
+    }
+
+    private LocalMatchInfo GetLocalMatchInfo()
+    {
+        if(Provider.Instance.NetworkMode == NetworkMode.Network)
+        {
+            return matchInfo.LocalInfo;
+        }
+        else
+        {
+            return localMatchInfo;
+        }
+        
     }
 
     private void HandleScoreChanged(List<PlayerScoreData> scores)
     {
-        if (matchInfo.IsMatchFinished)
+        if (GetLocalMatchInfo().IsMatchFinished)
             return;
 
         if (scores.All(t => t.score == 0))

@@ -10,19 +10,20 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     [SerializeField] Volleyball _volleyBallPrefab;
 
+    [SerializeField] LocalMatchInfo _localMatchInfoPrefab;
+
     public bool HasStateAuthority => true;
 
     private GameState gameState;
 
     private VolleyJoystick volleyJoystick;
 
-    private MatchInfo matchInfo;
+    private LocalMatchInfo localMatchInfo;
 
     void Awake()
     {
         this.gameState = Provider.Instance.GameState;
         this.volleyJoystick = Provider.Instance.VolleyJoystick;
-
     }
 
     public void StartLocalMultiplayerMatch()
@@ -30,7 +31,9 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
         InstantiatePlayer(Team.A, isAI: false);
         InstantiatePlayer(Team.B, isAI: false);
         Provider.Instance.GameState.StartGameplay();
-
+        this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
+        this.localMatchInfo.InitializeLocal();
+        Provider.Register<LocalMatchInfo>(this.localMatchInfo);
     }
 
     public void StartSingleplayerMatch()
@@ -38,6 +41,9 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
         InstantiatePlayer(Team.A, isAI: false);
         InstantiatePlayer(Team.B, isAI: true);
         Provider.Instance.GameState.StartGameplay();
+        this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
+        this.localMatchInfo.InitializeLocal();
+        Provider.Register<LocalMatchInfo>(this.localMatchInfo);
 
     }
 
@@ -59,9 +65,15 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void ShutdownNetworkMatch()
     {
+        UnloadScene();
+    }
+
+    public void UnloadScene()
+    {
         DestroyAllPlayers();
         DestroyAllBalls();
         DestroyMatch();
+
     }
 
     public void SpawnVolleyball(Team team)
@@ -121,15 +133,17 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     }
 
-    public void InjectMatchInfo(MatchInfo matchInfo)
+    public void InjectMatchInfo(LocalMatchInfo localMatchInfo)
     {
-        this.matchInfo = matchInfo;
+        this.localMatchInfo = localMatchInfo;
 
     }
 
+    public void InjectMatchInfo(MatchInfo matchInfo) { }
+
     private void DestroyMatch()
     {
-        Destroy(this.matchInfo?.gameObject);
+        Destroy(this.localMatchInfo?.gameObject);
 
     }
 
