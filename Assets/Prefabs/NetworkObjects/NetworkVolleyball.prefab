@@ -279,10 +279,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundTouchDelay: 0.3
-  Impulse: 13
-  despawnDelay: 2
+  Impulse: 14
+  despawnDelay: 1
   spawnHeight: 5
   proximityTrigger: {fileID: 8143697982595510806}
+  IndicatorCircle: {fileID: 684968155535346168}
 --- !u!1001 &7354536712489698658
 PrefabInstance:
   m_ObjectHideFlags: 0

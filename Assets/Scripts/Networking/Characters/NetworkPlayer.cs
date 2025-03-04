@@ -5,11 +5,11 @@ using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkJumpComponent))]
-public class Player : NetworkBehaviour
+public class NetworkPlayer : NetworkBehaviour
 {
     [Header("Player Attributes")]
     [SerializeField] float maxImpulseDistance = 3;
-    [SerializeField] float timeBetweenBufferAttempts;
+    [SerializeField] float timeBetweenBufferAttempts = 0.3f;
 
     public Team Team { get; private set; }
 
@@ -217,9 +217,9 @@ public class Player : NetworkBehaviour
         return false;
     }
 
-    public void InjectVolleyball(NetworkVolleyball volleyball)
+    public void InjectVolleyball(IVolleyball volleyball)
     {
-        this.volleyball = volleyball;
+        this.volleyball = (NetworkVolleyball)volleyball;
 
     }
 

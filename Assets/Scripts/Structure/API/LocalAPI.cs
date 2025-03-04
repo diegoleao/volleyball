@@ -56,7 +56,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void ResetPlayerPositions()
     {
-        FindObjectsOfType<Player>().ToList().ForEach(character =>
+        FindObjectsOfType<NetworkPlayer>().ToList().ForEach(character =>
         {
             ResetPlayerToInitialPosition(character);
         });
@@ -95,7 +95,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     }
 
-    private void ResetPlayerToInitialPosition(Player player)
+    private void ResetPlayerToInitialPosition(NetworkPlayer player)
     {
         player.transform.position = GetTeamSpawnPosition(player.Team);
         player.transform.rotation = GetInitialRotation(player.transform.position);

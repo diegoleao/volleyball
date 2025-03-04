@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class LocalVolleyball : MonoBehaviour, IVolleyball
 {
+
     [Header("Parameters")]
     [SerializeField] float groundTouchDelay = 0.3f;
     [SerializeField] float Impulse = 13;
-    [SerializeField] float despawnDelay = 2;
+    [SerializeField] float despawnDelay = 1;
+    [SerializeField] float spawnHeight = 5;
+    public float SpawnHeight => spawnHeight;
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
     [SerializeField] GroundProjection IndicatorCircle;
-
-    [SerializeField] float spawnHeight = 5;
-
-    public float SpawnHeight => spawnHeight;
 
     public bool IsGrounded { get; private set; }
 
@@ -48,6 +47,12 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
         Provider.Register<NetworkVolleyball>(this);
         idCounter++;
         this.gameObject.name += $" [{idCounter}]";
+#if UNITY_EDITOR
+        if (Provider.Instance.SpeedUpForDebugging)
+        {
+            despawnDelay = 0;
+        }
+#endif
 
     }
 
@@ -84,10 +89,10 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
         }
 
         IndicatorCircle.StopAnimation();
+        proximityTrigger.GetComponentInChildren<SphereCollider>().enabled = false;
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 
-        proximityTrigger.GetComponentInChildren<SphereCollider>().enabled = false;
         if (this != null && this.gameObject != null) Destroy(this.gameObject);
 
     }
@@ -95,13 +100,13 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
     public async void HandleGroundTouch(Team scoringTeam)
     {
         bufferedGrounded = true;
-        Debug.Log("[Ball-Floor] Buffered Ground");
+        Debug.Log($"[Ball-Floor] ({this.name}) Buffered Ground");
 
         await Observable.Timer(TimeSpan.FromSeconds(this.groundTouchDelay));
 
         if (bufferedGrounded)
         {
-            Debug.Log("[Ball-Floor] Still grounded. CONFIRM touch!");
+            Debug.Log($"[Ball-Floor] ({this.name}) Still grounded. CONFIRM touch!");
             IsGrounded = true;
             if (proximityTrigger) proximityTrigger.enabled = false;
             Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);

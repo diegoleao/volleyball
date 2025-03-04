@@ -147,10 +147,10 @@ public class LocalPlayer : MonoBehaviour
     {
         if (trigger != null)
         {
-            if (!trigger.LocalVolleybal.IsGrounded)
+            if (!trigger.Volleyball.IsGrounded)
             {
                 isTouchingVolleyball = true;
-                InjectVolleyball(trigger.LocalVolleybal);
+                InjectVolleyball(trigger.Volleyball);
                 return true;
             }
 
@@ -158,9 +158,9 @@ public class LocalPlayer : MonoBehaviour
         return false;
     }
 
-    public void InjectVolleyball(LocalVolleyball volleyball)
+    public void InjectVolleyball(IVolleyball volleyball)
     {
-        this.volleyball = volleyball;
+        this.volleyball = (LocalVolleyball)volleyball;
 
     }
 

@@ -64,7 +64,7 @@ public class LocalMatchInfo : MonoBehaviour
         var winningPlayer = newScores.Find(t => t.score >= 7);
         if (winningPlayer != null)
         {
-            Debug.Log($"WINNER! Player: {winningPlayer.playerId}");
+            Debug.Log($"WINNER! Player: {winningPlayer.playerId} (Team {(Team)winningPlayer.playerId})");
             PlayerWonEvent?.Invoke(winningPlayer);
         }
 
@@ -76,7 +76,7 @@ public class LocalMatchInfo : MonoBehaviour
 
         if (IsMatchFinished)
         {
-            Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId}");
+            Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId} (Team {(Team)playerId})");
             return;
         }
 
@@ -102,7 +102,7 @@ public class LocalMatchInfo : MonoBehaviour
             return false;
         }
         
-        Debug.Log($"[LocaMatchInfo] Scoring Event for {tempScoringTeam}");
+        Debug.Log($"[LocaMatchInfo] Scoring Event for Team {tempScoringTeam}");
         TeamScoreEvent?.Invoke(tempScoringTeam);
         return true;
 

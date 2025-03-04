@@ -5,6 +5,7 @@ using UniRx;
 
 public class NetworkVolleyball : NetworkBehaviour, IVolleyball
 {
+
     [Header("Parameters")]
     [SerializeField] float groundTouchDelay = 0.3f;
     [SerializeField] float Impulse = 6;
@@ -14,6 +15,7 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
+    [SerializeField] GroundProjection IndicatorCircle;
 
     public bool IsGrounded { get; private set; }
 
@@ -46,6 +48,12 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
         Provider.Register<NetworkVolleyball>(this);
         idCounter++;
         this.gameObject.name += " "+idCounter;
+#if UNITY_EDITOR
+        if (Provider.Instance.SpeedUpForDebugging)
+        {
+            despawnDelay = 0;
+        }
+#endif
 
     }
 
@@ -82,8 +90,9 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
         }
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
+        IndicatorCircle.StopAnimation();
 
-        if(this != null && this.gameObject != null) Destroy(this.gameObject);
+        if (this != null && this.gameObject != null) Destroy(this.gameObject);
 
     }
 

@@ -19,14 +19,11 @@ public abstract class BaseAnimationBehaviour : MonoBehaviour
 
     }
 
-    public void SetOwner(GameObject animationTarget)
-    {
-        this.animationTarget = animationTarget;
-
-    }
-
     public void Play()
     {
+        if (this == null)
+            return;
+
         if (animationTarget == null)
             animationTarget = this.gameObject;
 
@@ -38,6 +35,9 @@ public abstract class BaseAnimationBehaviour : MonoBehaviour
 
     public void Stop()
     {
+        if (this == null)
+            return;
+
         if (animationTarget == null)
             animationTarget = this.gameObject;
 

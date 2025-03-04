@@ -11,9 +11,13 @@ using static GameState;
 public class Provider : MonoBehaviour
 {
 
-    public bool IsDebuggingVolleyball;
+#if UNITY_EDITOR
+    [Header("Debug")]
+    public bool SpeedUpForDebugging;
+#endif
 
 
+    [Header("References")]
     [SerializeField] GameState gameState;
     public GameState GameState => this.gameState;
 
@@ -130,21 +134,6 @@ public class Provider : MonoBehaviour
             Instance.API.InjectMatchInfo(objectToRegister as LocalMatchInfo);
 
         }
-
-        if (Instance.IsDebuggingVolleyball)
-        {
-            if (objectToRegister is NetworkVolleyball)
-            {
-                var players = FindObjectsByType<Player>(FindObjectsSortMode.None);
-                foreach (var player in players)
-                {
-                    player.InjectVolleyball(objectToRegister as NetworkVolleyball);
-                }
-
-            }
-
-        }
-
 
     }
 
