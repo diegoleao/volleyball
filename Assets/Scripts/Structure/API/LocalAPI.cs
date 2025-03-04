@@ -121,14 +121,14 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     private void DestroyAllPlayers()
     {
-        var allVolleyballs = FindObjectsOfType<Player>();
-        allVolleyballs.ForEach(player => { Destroy(player.gameObject); });
+        var allPlayers = FindObjectsOfType<PlayerLocal>();
+        allPlayers.ForEach(player => { Destroy(player.gameObject); });
 
     }
 
     public void DestroyAllBalls()
     {
-        var allVolleyballs = FindObjectsOfType<NetworkVolleyball>();
+        var allVolleyballs = FindObjectsOfType<Volleyball>();
         allVolleyballs.Where(t => !t.IsGrounded).ForEach(nonGrounded => { Destroy(nonGrounded.gameObject); });
 
     }
@@ -143,7 +143,10 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     private void DestroyMatch()
     {
-        Destroy(this.localMatchInfo?.gameObject);
+        if(this.localMatchInfo != null)
+            Destroy(this.localMatchInfo.gameObject);
+
+        UnloadScene();
 
     }
 
