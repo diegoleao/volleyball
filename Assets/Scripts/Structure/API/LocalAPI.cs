@@ -146,8 +146,6 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
         if(this.localMatchInfo != null)
             Destroy(this.localMatchInfo.gameObject);
 
-        UnloadScene();
-
     }
 
     private void InstantiatePlayer(Team team, bool isAI)
