@@ -73,7 +73,7 @@ public class Provider : MonoBehaviour
     {
         get
         {
-            return API.HasStateAuthority;
+            return GameplayFacade.GameNetworking.HasStateAuthority;
         }
     }
 

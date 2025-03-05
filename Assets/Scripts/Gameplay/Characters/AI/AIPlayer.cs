@@ -4,7 +4,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AIPlayer : MonoBehaviour, IPlayer
+public class AIPlayer : MonoBehaviour
 {
 
     [Header("AI Configuration")]
@@ -17,7 +17,7 @@ public class AIPlayer : MonoBehaviour, IPlayer
     private BallHitting ballHitting;
     private JumpComponent jumpComponent;
     private AIMovement aiMovement;
-    private IVolleyball currentVolleyball;
+    private LocalVolleyball currentVolleyball;
     private Vector3 currentVelocity;
     private float ballDistance;
 
@@ -46,7 +46,7 @@ public class AIPlayer : MonoBehaviour, IPlayer
 
     public void InjectVolleyball(IVolleyball currentVolleyball)
     {
-        this.currentVolleyball = currentVolleyball;
+        this.currentVolleyball = (LocalVolleyball)currentVolleyball;
         this.aiMovement.InjectVolleyball(this.currentVolleyball);
 
     }

@@ -23,7 +23,7 @@ public abstract class BaseMovement : MonoBehaviour
     {
         this.rb = GetComponent<Rigidbody>();
         courtCenter = Provider.Instance.CourtCenter.position;
-        spawnCenter = Provider.Instance.CourtTriggers.GetTeamSpawnPosition(team, transform.position.y);
+        spawnCenter = Provider.Instance.CourtTriggers.GetSpawnCenter(team);
         isInitialized = true;
 
     }

@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(JumpComponent), typeof(JoystickSingleplayer), typeof(PlayerMovement))]
-public class LocalPlayer : MonoBehaviour, IPlayer
+public class LocalPlayer : MonoBehaviour
 {
     public Team Team { get; private set; }
 

@@ -5,7 +5,7 @@ using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkJumpComponent))]
-public class NetworkPlayer : NetworkBehaviour, IPlayer
+public class NetworkPlayer : NetworkBehaviour
 {
     [Header("Player Attributes")]
     [SerializeField] float maxImpulseDistance = 3;
@@ -26,14 +26,19 @@ public class NetworkPlayer : NetworkBehaviour, IPlayer
     private float currentDistanceFromBall;
     private bool isInitialized;
 
+    public override void Spawned()
+    {
+        Initialize();
 
-    public void Initialize(Team team)
+    }
+
+    public void Initialize()
     {
         netCharController = GetComponent<NetworkCharacterController>();
         jumpComponent = GetComponent<NetworkJumpComponent>();
 
         this.forward = gameObject.transform.forward;
-        this.Team = team;
+        this.Team = Provider.Instance.GameplayFacade.MyNetworkTeam;
 
         isInitialized = true;
 

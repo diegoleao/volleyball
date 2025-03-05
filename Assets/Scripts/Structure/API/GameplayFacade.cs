@@ -1,4 +1,5 @@
 using Fusion;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +8,14 @@ public class GameplayFacade : MonoBehaviour
     public IVolleyballGameplay CurrentAPI { get; private set; }
 
     public NetworkMode PlayMode { get; private set; }
+
+    public Team MyNetworkTeam
+    {
+        get
+        {
+            return GameNetworking.IsHost ? Team.A : Team.B;
+        }
+    }
 
     [Header("Structural")]
 

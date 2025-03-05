@@ -190,22 +190,20 @@ public class GameState : MonoBehaviour
 
     }
 
-    [Button]
-    public void IncreaseScoreFor(Team team)
+    public void IncreaseNetworkedScoreFor(Team team)
     {
         if (Provider.Instance.HasStateAuthority)
         {
-            Debug.Log($"[GameState] Increase Score for Team {team}");
-            if(Provider.Instance.NetworkMode == NetworkMode.Network)
-            {
-                this.matchInfo.AddNetworkedScore(team);
-            }
-            else
-            {
-                this.localMatchInfo.AddLocalScore(team);
-            }
-
+            Debug.Log($"[GameState][Networked] Increase Score for Team {team}");
+            this.matchInfo.AddNetworkedScore(team);
         }
+
+    }
+
+    public void IncreaseLocalScoreFor(Team team)
+    {
+        Debug.Log($"[GameState] Increase Score for Team {team}");
+        this.localMatchInfo.AddLocalScore(team);
 
     }
 

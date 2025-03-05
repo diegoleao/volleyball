@@ -1,7 +1,7 @@
 ﻿using UniRx;
 using UnityEngine;
 
-public class BallHitting : MonoBehaviour, IPlayer
+public class BallHitting : MonoBehaviour
 {
     [Header("Player Attributes")]
     [SerializeField] float maxDistanceFromBall = 3;
@@ -10,7 +10,7 @@ public class BallHitting : MonoBehaviour, IPlayer
 
     private bool isTouchingVolleyball;
     private float currentDistanceFromBall;
-    private LocalVolleyball volleyball;
+    private IVolleyball volleyball;
     private VolleyballHitTrigger possibleBallTrigger;
     private bool ballHitQueued;
     private bool isInitialized;
@@ -25,7 +25,7 @@ public class BallHitting : MonoBehaviour, IPlayer
 
     public void InjectVolleyball(IVolleyball volleyball)
     {
-        this.volleyball = (LocalVolleyball)volleyball;
+        this.volleyball = volleyball;
 
     }
 
@@ -45,7 +45,6 @@ public class BallHitting : MonoBehaviour, IPlayer
             Debug.Log("[BallHitting] ball Hit Queued");
             AttemptImpulseOnBall();
             ballHitQueued = false;
-
         }
 
     }
@@ -73,7 +72,7 @@ public class BallHitting : MonoBehaviour, IPlayer
 
         if (IsWithinHittingDistance())
         {
-            Debug.Log($"[BallHitting] Applied impulse to {volleyball.name}");
+            Debug.Log($"[BallHitting] Applied impulse to {volleyball.Name}");
             volleyball.ApplyImpulse(this.transform.forward, this.transform.forward);
             isTouchingVolleyball = false;
             return true;
@@ -106,7 +105,7 @@ public class BallHitting : MonoBehaviour, IPlayer
 
     private bool IsVolleyballWithinReach()
     {
-        currentDistanceFromBall = Vector3.Distance(this.transform.position, volleyball.transform.position);
+        currentDistanceFromBall = Vector3.Distance(this.transform.position, volleyball.Position);
 
         //Debug.LogWarning($"Distance {distanceFromBall} smaller than {maxImpulseDistance}? {distanceFromBall <= maxImpulseDistance}");
 

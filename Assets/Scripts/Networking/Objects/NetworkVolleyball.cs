@@ -11,16 +11,26 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
     [SerializeField] float Impulse = 6;
     [SerializeField] float despawnDelay = 5.0f;
     [SerializeField] float spawnHeight = 5.0f;
-    public float SpawnHeight => this.spawnHeight;
-
-    public Vector3 Position => transform.position;
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
     [SerializeField] GroundProjection IndicatorCircle;
 
-    public bool IsGrounded { get; private set; }
+    public float SpawnHeight => this.spawnHeight;
+    public string Name => gameObject.name;
 
+    public Vector3 Position
+    {
+        get
+        {
+            if(this == null || transform == null) return Vector3.zero;
+
+            return transform.position;
+
+        }
+    }
+
+    public bool IsGrounded { get; private set; }
     public bool IsGroundChecking
     { 
         get
@@ -29,17 +39,11 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
         }
     }
 
-    //Private
     private Vector3 CourtCenter;
-
     private Vector3 forward;
-
     private Rigidbody rb;
-
     private static int idCounter;
-
     private bool bufferedGrounded;
-
     private Vector3 centerDirection;
 
 
@@ -110,7 +114,7 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
             Debug.Log("[Ball-Floor] Still grounded. CONFIRMED SCORE!");
             IsGrounded = true;
             if(proximityTrigger) proximityTrigger.enabled = false;
-            Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
+            Provider.Instance.GameState.IncreaseNetworkedScoreFor(scoringTeam);
             StopMoving();
 
         }

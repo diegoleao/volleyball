@@ -7,10 +7,12 @@ public class CourtTriggers : MonoBehaviour
     [Header("Team A")]
     [SerializeField] BoxCollider TeamAPlayerSpawn;
     [SerializeField] BoxCollider TeamABallVolume;
+    [SerializeField] Transform TeamACourtCenter;
 
     [Header("Team B")]
     [SerializeField] BoxCollider teamBPlayerSpawn;
     [SerializeField] BoxCollider teamBBallVolume;
+    [SerializeField] Transform TeamBCourtCenter;
 
     private bool isDebugVisible = false;
 
@@ -22,6 +24,12 @@ public class CourtTriggers : MonoBehaviour
         { 
             t.enabled = isDebugVisible;
         });
+
+    }
+
+    public Vector3 GetSpawnCenter(Team team)
+    {
+        return (team == Team.A) ? TeamACourtCenter.position : TeamBCourtCenter.position;
 
     }
 

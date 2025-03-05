@@ -10,15 +10,26 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
     [SerializeField] float Impulse = 13;
     [SerializeField] float despawnDelay = 1;
     [SerializeField] float spawnHeight = 5;
-    public float SpawnHeight => spawnHeight;
 
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
     [SerializeField] GroundProjection IndicatorCircle;
+    public string Name => gameObject.name;
+    public float SpawnHeight => spawnHeight;
+
+    public Vector3 Position
+    {
+        get
+        {
+            if (this == null || transform == null) return Vector3.zero;
+
+            return transform.position;
+
+        }
+    }
 
     public bool IsGrounded { get; private set; }
 
-    public Vector3 Position => transform.position;
 
     public bool IsGroundChecking
     {
@@ -30,17 +41,11 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
 
     //Private
     private Vector3 CourtCenter;
-
     private Vector3 forward;
-
     private Rigidbody rb;
-
     private static int idCounter;
-
     private bool bufferedGrounded;
-
     private Vector3 centerDirection;
-
 
     void Awake()
     {
@@ -109,7 +114,7 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
             Debug.Log($"[Ball-Floor] ({this.name}) Still grounded. CONFIRM touch!");
             IsGrounded = true;
             if (proximityTrigger) proximityTrigger.enabled = false;
-            Provider.Instance.GameState.IncreaseScoreFor(scoringTeam);
+            Provider.Instance.GameState.IncreaseLocalScoreFor(scoringTeam);
             StopMoving();
 
         }

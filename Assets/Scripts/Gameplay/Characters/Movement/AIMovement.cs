@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class AIMovement : BaseMovement
 {
+#if UNITY_EDITOR
+    [SerializeField] bool IsDebugging;
+#endif
 
     private IVolleyball currentVolleyball;
 
@@ -12,7 +15,7 @@ public class AIMovement : BaseMovement
 
     public void ForceStop()
     {
-        Debug.Log("[AI] STOP (SO WE CAN HIT THE BALL)");
+        Log("[AI] STOP (SO WE CAN HIT THE BALL)");
         moveDirection = Vector3.zero;
         FaceOtherCourtImmediately();
     }
@@ -21,7 +24,7 @@ public class AIMovement : BaseMovement
     {
         if (currentVolleyball == null)
         {
-            Debug.Log("[AI] NO VOLLEYBALL");
+            Log("[AI] NO VOLLEYBALL");
             ForceStop();
             return;
         }
@@ -46,7 +49,7 @@ public class AIMovement : BaseMovement
         if (auxDistance.sqrMagnitude <= 0.02f)
         {
             moveDirection = Vector3.zero;
-            Debug.Log("[AI] CLOSE ENOUGH, NOW STOP");
+            Log("[AI] CLOSE ENOUGH, NOW STOP");
         }
 
     }
@@ -56,12 +59,21 @@ public class AIMovement : BaseMovement
 
         if (isBallInSight)
         {
-            Debug.Log("[AI] MOVING TOWARDS IT");
+            Log("[AI] MOVING TOWARDS IT");
         }
         else
         {
-            Debug.Log("[AI] MOVE TO CENTER, LOST BALL");
+            Log("[AI] MOVE TO CENTER, LOST BALL");
         }
+
+    }
+
+    private void Log(string message)
+    {
+#if UNITY_EDITOR
+        if (IsDebugging)
+            Debug.Log(message);
+#endif
 
     }
 

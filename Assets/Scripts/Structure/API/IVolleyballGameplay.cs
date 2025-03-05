@@ -4,7 +4,6 @@ using UnityEngine.Events;
 
 public interface IVolleyballGameplay
 {
-    public bool HasStateAuthority { get; }
 
     public void InjectMatchInfo(MatchInfo matchInfo);
 
