@@ -4,7 +4,8 @@ using System;
 using UniRx;
 using UnityEngine;
 
-[RequireComponent(typeof(NetworkJumpComponent), typeof(NetworkBallHitting), typeof(NetworkCharacterController))]
+[RequireComponent(typeof(NetworkJumpComponent), typeof(NetworkBallHitting))]
+[RequireComponent(typeof(NetworkCharacterController), typeof(NetworkMovement))]
 public class NetworkPlayer : NetworkBehaviour
 {
     [ShowInInspector][Sirenix.OdinInspector.ReadOnly]
@@ -32,6 +33,7 @@ public class NetworkPlayer : NetworkBehaviour
         networkBallImpulse = GetComponent<NetworkBallHitting>();
         networkBallImpulse.Initialize(this.Team);
 
+        networkMovement = GetComponent<NetworkMovement>();
         networkMovement.Initialize(Runner);
 
         isInitialized = true;

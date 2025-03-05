@@ -112,7 +112,7 @@ public abstract class BaseVolleyball : MonoBehaviour
         }
 
         IndicatorCircle.StopAnimation();
-        proximityTrigger.GetComponentInChildren<SphereCollider>().enabled = false;
+        proximityTrigger.enabled = false;
 
         await Observable.Timer(TimeSpan.FromSeconds(this.despawnDelay));
 

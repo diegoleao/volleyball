@@ -117,10 +117,16 @@ public class Provider : MonoBehaviour
 
     private static void RemovePreviousVersions(MonoBehaviour objectToRegister)
     {
-        if ((objectToRegister != null) && objectToRegister is LocalVolleyball)
+        if (objectToRegister is LocalVolleyball)
         {
             Unregister<LocalVolleyball>();
         }
+
+        if (objectToRegister is NetworkVolleyball)
+        {
+            Unregister<NetworkVolleyball>();
+        }
+
     }
 
     private static void InjectUniqueObjects(MonoBehaviour objectToRegister)
