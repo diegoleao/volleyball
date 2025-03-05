@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 8371222019359541061}
   - component: {fileID: 684968155535346168}
   - component: {fileID: 4259678699005099315}
+  - component: {fileID: 5678085096170727851}
   m_Layer: 8
   m_Name: NetworkVolleyball
   m_TagString: Untagged
@@ -226,7 +227,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 5882729239902988984}
-  - {fileID: 4259678699005099315}
+  - {fileID: 5678085096170727851}
   ForceRemoteRenderTimeframe: 0
 --- !u!135 &8371222019359541061
 SphereCollider:
@@ -278,11 +279,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundTouchDelay: 0.3
-  Impulse: 14
+  Impulse: 13
   despawnDelay: 1
-  spawnHeight: 6
-  proximityTrigger: {fileID: 8143697982595510806}
+  spawnHeight: 5
+  proximityTrigger: {fileID: 8371222019359541061}
   IndicatorCircle: {fileID: 684968155535346168}
+--- !u!114 &5678085096170727851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8135431122864898509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d141fafdf4b41df45bacedeacb05f25b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volleyball: {fileID: 4259678699005099315}
 --- !u!1001 &7354536712489698658
 PrefabInstance:
   m_ObjectHideFlags: 0

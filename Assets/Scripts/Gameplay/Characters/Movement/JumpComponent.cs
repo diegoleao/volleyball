@@ -13,6 +13,7 @@ public class JumpComponent : MonoBehaviour
     private Rigidbody rb;
     private JoystickSingleplayer joystickSingleplayer;
     private bool initialized;
+    private bool jumpQueued;
 
     public void Initialize()
     {
@@ -21,8 +22,6 @@ public class JumpComponent : MonoBehaviour
         joystickSingleplayer = GetComponent<JoystickSingleplayer>();
 
     }
-
-    private bool queueJump;
 
     void Update()
     {
@@ -38,17 +37,17 @@ public class JumpComponent : MonoBehaviour
 
     public void ExecuteJump()
     {
-        queueJump = true;
+        jumpQueued = true;
 
     }
 
     private void FixedUpdate()
     {
-        if (queueJump)
+        if (jumpQueued)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isGrounded = false;
-            queueJump = false;
+            jumpQueued = false;
         }
 
     }

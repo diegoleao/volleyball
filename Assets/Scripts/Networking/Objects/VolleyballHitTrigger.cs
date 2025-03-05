@@ -4,6 +4,6 @@ using UnityEngine.Events;
 public class VolleyballHitTrigger : MonoBehaviour
 {
     [SerializeField] MonoBehaviour volleybal;
-    public IVolleyball Volleyball => (IVolleyball)this.volleybal;
+    public BaseVolleyball Volleyball => (BaseVolleyball)this.volleybal;
 
 }

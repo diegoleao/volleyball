@@ -4,7 +4,8 @@ using System;
 using UniRx;
 using UnityEngine;
 
-[RequireComponent(typeof(JumpComponent), typeof(JoystickSingleplayer), typeof(PlayerMovement))]
+[RequireComponent(typeof(JumpComponent), typeof(BallHitting))]
+[RequireComponent(typeof(JoystickSingleplayer), typeof(PlayerMovement))]
 public class LocalPlayer : MonoBehaviour
 {
     public Team Team { get; private set; }
@@ -34,7 +35,7 @@ public class LocalPlayer : MonoBehaviour
 
     }
 
-    public void InjectVolleyball(IVolleyball volleyball)
+    public void InjectVolleyball(BaseVolleyball volleyball)
     {
         this.volleyball = (LocalVolleyball)volleyball;
         ballHitting.InjectVolleyball(this.volleyball);

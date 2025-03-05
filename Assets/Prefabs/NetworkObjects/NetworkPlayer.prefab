@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8736455547786544508}
   - component: {fileID: 1550713204865366733}
   - component: {fileID: 8537830836841734961}
-  - component: {fileID: -3247196047384602136}
+  - component: {fileID: 902998419930968545}
   - component: {fileID: 7069551806041455091}
   m_Layer: 10
   m_Name: NetworkPlayer
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpForce: 10
---- !u!114 &-3247196047384602136
+--- !u!114 &902998419930968545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,10 +144,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 228050481578901523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b123148496988742b3822cfa9e47ac5, type: 3}
+  m_Script: {fileID: 11500000, guid: eb6ab1ffc7f0f9d4ca76469d8e6e51db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxDistanceFromBall: 3
+  maxImpulseDistance: 3
+  timeBetweenBufferAttempts: 0.3
 --- !u!114 &7069551806041455091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,8 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0aeccdc36ada64080c9f4d441d192d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxImpulseDistance: 3
-  timeBetweenBufferAttempts: 0.3
 --- !u!1 &2836249579507856444
 GameObject:
   m_ObjectHideFlags: 0

@@ -44,7 +44,7 @@ public class AIPlayer : MonoBehaviour
 
     }
 
-    public void InjectVolleyball(IVolleyball currentVolleyball)
+    public void InjectVolleyball(BaseVolleyball currentVolleyball)
     {
         this.currentVolleyball = (LocalVolleyball)currentVolleyball;
         this.aiMovement.InjectVolleyball(this.currentVolleyball);
