@@ -135,6 +135,18 @@ public class Provider : MonoBehaviour
 
         }
 
+        if (objectToRegister is LocalVolleyball)
+        {
+            FindAnyObjectByType<AIPlayer>()?.InjectVolleyball(objectToRegister as LocalVolleyball);
+
+        }
+
+        if (objectToRegister is NetworkVolleyball)
+        {
+            FindAnyObjectByType<AIPlayer>()?.InjectVolleyball(objectToRegister as NetworkVolleyball);
+
+        }
+
     }
 
     public static T Get<T>(bool findDisabledObjects = false) where T : MonoBehaviour

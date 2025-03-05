@@ -18,6 +18,8 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
 
     public bool IsGrounded { get; private set; }
 
+    public Vector3 Position => transform.position;
+
     public bool IsGroundChecking
     {
         get
@@ -44,18 +46,16 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
     {
         CourtCenter = Provider.Instance.CourtCenter.position;
         rb = GetComponent<Rigidbody>();
-        Provider.Register<NetworkVolleyball>(this);
-        idCounter++;
-        this.gameObject.name += $" [{idCounter}]";
+        SetDescriptiveName();
 #if UNITY_EDITOR
         if (Provider.Instance.SpeedUpForDebugging)
         {
             despawnDelay = 0;
         }
 #endif
+        Provider.Register<NetworkVolleyball>(this);
 
     }
-
 
     public void ApplyImpulse(Vector3 hitDirection, Vector3 playerDirection)
     {
@@ -118,6 +118,12 @@ public class LocalVolleyball : MonoBehaviour, IVolleyball
             Debug.Log("[Ball-Floor] Not grounded anymore. IGNORING...");
         }
 
+    }
+
+    private void SetDescriptiveName()
+    {
+        idCounter++;
+        this.gameObject.name += $" [{idCounter}]";
     }
 
 }

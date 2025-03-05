@@ -1,31 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(JoystickSingleplayer))]
-public class SinglePlayerMovement : MonoBehaviour
+public abstract class BaseMovement : MonoBehaviour
 {
-    [SerializeField] float speed;
+    [SerializeField] protected float speed = 10;
 
-    private Rigidbody rb;
+    [SerializeField] protected float rotationSpeed = 10f;
 
-    private bool isInitialized;
+    protected Rigidbody rb;
 
-    private Vector3 moveDirection;
+    protected bool isInitialized;
 
-    private JoystickSingleplayer joystickSingleplayer;
+    protected Vector3 moveDirection;
 
-    [SerializeField] float rotationSpeed = 10f;
+    protected Vector3 currentVelocity;
 
-    private Vector3 forward;
-
-    private Vector3 currentVelocity;
-
-    public void Initialize()
+    public virtual void Initialize()
     {
+        this.rb = GetComponent<Rigidbody>();
         isInitialized = true;
-        rb = GetComponent<Rigidbody>();
-        joystickSingleplayer = GetComponent<JoystickSingleplayer>();
 
     }
 
@@ -34,9 +27,11 @@ public class SinglePlayerMovement : MonoBehaviour
         if (!isInitialized)
             return;
 
-        moveDirection = new Vector3(joystickSingleplayer.Horizontal, 0, joystickSingleplayer.Vertical);
+        UpdateMovement();
 
     }
+
+    protected virtual void UpdateMovement() { }
 
     private void FixedUpdate()
     {

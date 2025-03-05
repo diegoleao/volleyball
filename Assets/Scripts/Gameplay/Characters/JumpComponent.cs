@@ -6,6 +6,7 @@ using UnityEngine;
 public class JumpComponent : MonoBehaviour
 {
 
+    [SerializeField] bool isAI;
     [SerializeField] float jumpForce;
 
     private bool isGrounded;
@@ -25,13 +26,19 @@ public class JumpComponent : MonoBehaviour
 
     void Update()
     {
-        if (!initialized)
+        if (!initialized || isAI)
             return;
 
         if (joystickSingleplayer.GetJumpButtonDown() && isGrounded)
         {
-            queueJump = true;
+            ExecuteJump();
         }
+
+    }
+
+    public void ExecuteJump()
+    {
+        queueJump = true;
 
     }
 

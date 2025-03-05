@@ -12,13 +12,11 @@ GameObject:
   - component: {fileID: 7339881779827842543}
   - component: {fileID: 2838174721752459666}
   - component: {fileID: 1550713204865366733}
-  - component: {fileID: 1182683776907058074}
   - component: {fileID: 4085589829480379859}
-  - component: {fileID: 4572858411430773135}
-  - component: {fileID: 2643551255841019021}
-  - component: {fileID: 4049814396059919965}
+  - component: {fileID: 3256877458633645432}
+  - component: {fileID: 3570459248763090716}
   m_Layer: 10
-  m_Name: LocalPlayer
+  m_Name: AI_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,18 +105,6 @@ MonoBehaviour:
   GroundLayerMask:
     serializedVersion: 2
     m_Bits: 512
---- !u!114 &1182683776907058074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228050481578901523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1cee5e6b15089a4b8f2338bc26b6a1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4085589829480379859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,9 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5730a41cfc19249987c0b6ee7d7875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAI: 0
+  isAI: 1
   jumpForce: 7.62
---- !u!114 &4572858411430773135
+--- !u!114 &3256877458633645432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,25 +128,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 228050481578901523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b123148496988742b3822cfa9e47ac5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxDistanceFromBall: 3
---- !u!114 &2643551255841019021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228050481578901523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874ae30c5f743604e86b406ed54eb410, type: 3}
+  m_Script: {fileID: 11500000, guid: 9acff7816a7ce30419109f13ee39470b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  rotationSpeed: 20
---- !u!114 &4049814396059919965
+  rotationSpeed: 10
+--- !u!114 &3570459248763090716
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,9 +142,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 228050481578901523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17f842ff2fe384c468d593bf088791b0, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d54be303239bd74b9fe7efd80a1f593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballFollowDistance: 10
+  ballHitDistance: 1.8
+  AIMovement: {fileID: 3256877458633645432}
 --- !u!1 &2836249579507856444
 GameObject:
   m_ObjectHideFlags: 0

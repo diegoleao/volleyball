@@ -22,6 +22,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     [SerializeField] NetworkPrefabRef _matchInfoPrefab;
 
+
     public bool HasStateAuthority
     {
         get
@@ -32,7 +33,6 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     }
 
 
-    //Private
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _runner;
@@ -51,6 +51,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     private VolleyJoystick volleyJoystick;
 
+    private GameMode gameMode;
+
     void Awake()
     {
         this.gameState = Provider.Instance.GameState;
@@ -60,6 +62,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     public async void StartNetworkGame(string roomName, GameMode gameMode, UnityAction finished = null, UnityAction error = null)
     {
+        this.gameMode = gameMode;
+
         _runner = CreateNetworkRunner();
 
         CreateRunnerPhysics();
@@ -144,6 +148,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
                 = runner.Spawn(_playerPrefab, GetTeamSpawnPosition(player), Quaternion.identity, player);
 
             networkPlayerObject.transform.rotation = LocalAPI.GetInitialRotation(networkPlayerObject.transform.position);
+
+            networkPlayerObject.GetComponent<IPlayer>().Initialize((this.gameMode == GameMode.Host ? Team.A : Team.B), isAI: false);
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);

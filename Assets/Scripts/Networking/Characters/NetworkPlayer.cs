@@ -5,13 +5,14 @@ using UniRx;
 using UnityEngine;
 
 [RequireComponent(typeof(NetworkJumpComponent))]
-public class NetworkPlayer : NetworkBehaviour
+public class NetworkPlayer : NetworkBehaviour, IPlayer
 {
     [Header("Player Attributes")]
     [SerializeField] float maxImpulseDistance = 3;
     [SerializeField] float timeBetweenBufferAttempts = 0.3f;
 
     public Team Team { get; private set; }
+    public bool IsAI { get; private set; }
 
     //Private
     private NetworkCharacterController netCharController;
@@ -23,22 +24,22 @@ public class NetworkPlayer : NetworkBehaviour
     private int bufferedBallBounce = 0;
     private float previousAttemptTime;
     private float currentDistanceFromBall;
-    private bool isAI;
+    private bool isInitialized;
 
-    void Awake()
-    {
-        netCharController = GetComponent<NetworkCharacterController>();
-        jumpComponent = GetComponent<NetworkJumpComponent>();
-        forward = Vector3.forward;
-
-    }
 
     public void Initialize(Team team, bool isAI)
     {
+        netCharController = GetComponent<NetworkCharacterController>();
+        jumpComponent = GetComponent<NetworkJumpComponent>();
+
+        this.forward = gameObject.transform.forward;
         this.Team = team;
-        this.isAI = isAI;
+        this.IsAI = isAI;
+
+        isInitialized = true;
 
     }
+
 
     public override void FixedUpdateNetwork()
     {

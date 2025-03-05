@@ -13,6 +13,8 @@ public class NetworkVolleyball : NetworkBehaviour, IVolleyball
     [SerializeField] float spawnHeight = 5.0f;
     public float SpawnHeight => this.spawnHeight;
 
+    public Vector3 Position => transform.position;
+
     [Header("References")]
     [SerializeField] SphereCollider proximityTrigger;
     [SerializeField] GroundProjection IndicatorCircle;
