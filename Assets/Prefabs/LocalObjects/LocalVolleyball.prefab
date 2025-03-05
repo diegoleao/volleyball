@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6478e6d81b5e9c3438e67998bebb1a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundTouchDelay: 0.3
+  groundTouchDelay: 0
   Impulse: 14
   despawnDelay: 1
   spawnHeight: 5

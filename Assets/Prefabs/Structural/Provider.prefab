@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 4049814396059919965, guid: 1b4bc34579660bd4ab55e0d29e72d593, type: 3}
+  _AIPlayer: {fileID: 3570459248763090716, guid: 97581cf5c251b504d9ff754d24e68bcd, type: 3}
   _volleyBallPrefab: {fileID: 6065229033956300211, guid: 929a63c7089c9c143ba8b06d5f715575, type: 3}
   _localMatchInfoPrefab: {fileID: -2296424194429009422, guid: 7c95077bf60e021499d256abc63c1a0d, type: 3}
 --- !u!1 &8827645930992769453
@@ -93,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bf4139576943343a1355f7dd51cebc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsDebuggingVolleyball: 0
+  SpeedUpForDebugging: 0
   gameState: {fileID: 7029205177472448252}
   gameplayFacade: {fileID: 1314488750105559997}
   volleyJoystick: {fileID: 0}

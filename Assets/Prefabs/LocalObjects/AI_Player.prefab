@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1550713204865366733}
   - component: {fileID: 4085589829480379859}
   - component: {fileID: 3256877458633645432}
+  - component: {fileID: 6734544729210264472}
   - component: {fileID: 3570459248763090716}
   m_Layer: 10
   m_Name: AI_Player
@@ -131,8 +132,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acff7816a7ce30419109f13ee39470b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 5
   rotationSpeed: 10
+--- !u!114 &6734544729210264472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228050481578901523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b123148496988742b3822cfa9e47ac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistanceFromBall: 3
 --- !u!114 &3570459248763090716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,9 +159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d54be303239bd74b9fe7efd80a1f593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ballFollowDistance: 10
+  ballFollowDistance: 3
   ballHitDistance: 1.8
-  AIMovement: {fileID: 3256877458633645432}
 --- !u!1 &2836249579507856444
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,14 +27,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayer
     private bool isInitialized;
 
 
-    public void Initialize(Team team, bool isAI)
+    public void Initialize(Team team)
     {
         netCharController = GetComponent<NetworkCharacterController>();
         jumpComponent = GetComponent<NetworkJumpComponent>();
 
         this.forward = gameObject.transform.forward;
         this.Team = team;
-        this.IsAI = isAI;
 
         isInitialized = true;
 

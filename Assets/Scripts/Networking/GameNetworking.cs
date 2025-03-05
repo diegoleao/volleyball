@@ -149,7 +149,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
             networkPlayerObject.transform.rotation = LocalAPI.GetInitialRotation(networkPlayerObject.transform.position);
 
-            networkPlayerObject.GetComponent<IPlayer>().Initialize((this.gameMode == GameMode.Host ? Team.A : Team.B), isAI: false);
+            networkPlayerObject.GetComponent<IPlayer>().Initialize(this.gameMode == GameMode.Host ? Team.A : Team.B);
 
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);

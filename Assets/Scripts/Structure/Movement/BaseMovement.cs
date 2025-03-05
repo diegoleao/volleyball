@@ -15,9 +15,12 @@ public abstract class BaseMovement : MonoBehaviour
 
     protected Vector3 currentVelocity;
 
+    protected Vector3 courtCenter;
+
     public virtual void Initialize()
     {
         this.rb = GetComponent<Rigidbody>();
+        courtCenter = Provider.Instance.CourtCenter.position;
         isInitialized = true;
 
     }
@@ -46,10 +49,12 @@ public abstract class BaseMovement : MonoBehaviour
 
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime));
+
         }
         else
         {
             rb.velocity = new Vector3(0, currentVelocity.y, 0);
+
         }
 
     }

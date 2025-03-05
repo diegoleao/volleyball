@@ -8,7 +8,6 @@ using UnityEngine;
 public class LocalPlayer : MonoBehaviour, IPlayer
 {
     public Team Team { get; private set; }
-    public bool IsAI { get; private set; }
 
     private bool isInitialized;
     private bool isTouchingVolleyball;
@@ -17,20 +16,19 @@ public class LocalPlayer : MonoBehaviour, IPlayer
     private JoystickSingleplayer joystickSingleplayer;
     private BallHitting ballHitting;
 
-    public void Initialize(Team team, bool isAI)
+    public void Initialize(Team team)
     {
         joystickSingleplayer = GetComponent<JoystickSingleplayer>();
         joystickSingleplayer.Initialize(team);
 
         ballHitting = GetComponent<BallHitting>();
-        ballHitting.Initialize(team, isAI);
+        ballHitting.Initialize(team);
 
         GetComponent<PlayerMovement>().Initialize();
 
         GetComponent<JumpComponent>().Initialize();
 
         this.Team = team;
-        this.IsAI = isAI;
 
         isInitialized = true;
 

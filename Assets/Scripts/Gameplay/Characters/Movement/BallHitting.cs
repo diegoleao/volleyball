@@ -7,31 +7,18 @@ public class BallHitting : MonoBehaviour, IPlayer
     [SerializeField] float maxDistanceFromBall = 3;
 
     public Team Team { get; private set; }
-    public bool IsAI { get; private set; }
 
-    private Vector3 forward;
     private bool isTouchingVolleyball;
     private float currentDistanceFromBall;
     private LocalVolleyball volleyball;
     private VolleyballHitTrigger possibleBallTrigger;
-    private JoystickSingleplayer joystickSingleplayer;
-    private bool isInitialized;
     private bool ballHitQueued;
+    private bool isInitialized;
 
 
-    public void Initialize(Team team, bool isAI)
+    public void Initialize(Team team)
     {
-
-        joystickSingleplayer = GetComponent<JoystickSingleplayer>();
-        joystickSingleplayer.Initialize(team);
-
-        GetComponent<PlayerMovement>().Initialize();
-        GetComponent<JumpComponent>().Initialize();
-
-        this.forward = gameObject.transform.forward;
         this.Team = team;
-        this.IsAI = isAI;
-
         isInitialized = true;
 
     }

@@ -8,6 +8,8 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 {
     [SerializeField] LocalPlayer _playerPrefab;
 
+    [SerializeField] AIPlayer _AIPlayer;
+
     [SerializeField] LocalVolleyball _volleyBallPrefab;
 
     [SerializeField] LocalMatchInfo _localMatchInfoPrefab;
@@ -28,8 +30,8 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void StartLocalMultiplayerMatch()
     {
-        InstantiatePlayer(Team.A, isAI: false);
-        InstantiatePlayer(Team.B, isAI: false);
+        InstantiatePlayer(Team.A);
+        InstantiatePlayer(Team.B);
         Provider.Instance.GameState.StartGameplay();
         this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
         this.localMatchInfo.InitializeLocal();
@@ -38,8 +40,8 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void StartSingleplayerMatch()
     {
-        InstantiatePlayer(Team.A, isAI: false);
-        InstantiatePlayer(Team.B, isAI: true);
+        InstantiatePlayer(Team.A);
+        InstantiateAI(Team.B);
         Provider.Instance.GameState.StartGameplay();
         this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
         this.localMatchInfo.InitializeLocal();
@@ -50,7 +52,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     public void ResetMatch()
     {
         ResetPlayerPositions();
-        DestroyAllBalls();
+        DestroyAllNonGroundedBalls();
 
     }
 
@@ -71,7 +73,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     public void UnloadScene()
     {
         DestroyAllPlayers();
-        DestroyAllBalls();
+        DestroyAllNonGroundedBalls();
         DestroyMatch();
 
     }
@@ -121,12 +123,12 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     private void DestroyAllPlayers()
     {
-        var allPlayers = FindObjectsOfType<LocalPlayer>();
-        allPlayers.ForEach(player => { Destroy(player.gameObject); });
+        DestroyAll<LocalPlayer>();
+        DestroyAll<AIPlayer>();
 
     }
 
-    public void DestroyAllBalls()
+    public void DestroyAllNonGroundedBalls()
     {
         var allVolleyballs = FindObjectsOfType<LocalVolleyball>();
         allVolleyballs.Where(t => !t.IsGrounded).ForEach(nonGrounded => { Destroy(nonGrounded.gameObject); });
@@ -148,15 +150,34 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     }
 
-    private void InstantiatePlayer(Team team, bool isAI)
+    private void InstantiatePlayer(Team team)
     {
         var player = Instantiate(_playerPrefab,
-                                 GetTeamSpawnPosition(team), 
+                                 GetTeamSpawnPosition(team),
                                  Quaternion.identity);
 
-        player.Initialize(team, isAI);
+        player.Initialize(team);
 
         player.transform.rotation = LocalAPI.GetInitialRotation(player.transform.position);
+
+    }
+
+    private void InstantiateAI(Team team)
+    {
+        var player = Instantiate(_AIPlayer,
+                                 GetTeamSpawnPosition(team),
+                                 Quaternion.identity);
+
+        player.Initialize(team);
+
+        player.transform.rotation = LocalAPI.GetInitialRotation(player.transform.position);
+
+    }
+
+    private static void DestroyAll<T>() where T : MonoBehaviour
+    {
+        var all = FindObjectsOfType<T>();
+        all.ForEach(t => { Destroy(t.gameObject); });
 
     }
 
