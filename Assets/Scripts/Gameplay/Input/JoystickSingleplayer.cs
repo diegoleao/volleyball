@@ -61,7 +61,11 @@ public class JoystickSingleplayer : MonoBehaviour
     {
         if (team == Team.A)
         {
+#if UNITY_STANDALONE_WIN
             return Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K) || Input.GetButtonDown("Fire1");
+#else
+            return joystick.GetFireButton();
+#endif
         }
         else
         {
@@ -74,7 +78,11 @@ public class JoystickSingleplayer : MonoBehaviour
     {
         if (team == Team.A)
         {
+#if UNITY_STANDALONE_WIN
             return Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump");
+#else
+            return joystick.GetJumpButton();
+#endif
         }
         else
         {
