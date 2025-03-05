@@ -235,7 +235,7 @@ MonoBehaviour:
   groundTouchDelay: 0
   Impulse: 14
   despawnDelay: 1
-  spawnHeight: 5
+  spawnHeight: 6
   proximityTrigger: {fileID: 8143697982595510806}
   IndicatorCircle: {fileID: 684968155535346168}
 --- !u!1001 &7354536712489698658
