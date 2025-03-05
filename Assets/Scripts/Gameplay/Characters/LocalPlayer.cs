@@ -24,7 +24,7 @@ public class LocalPlayer : MonoBehaviour, IPlayer
         ballHitting = GetComponent<BallHitting>();
         ballHitting.Initialize(team);
 
-        GetComponent<PlayerMovement>().Initialize();
+        GetComponent<PlayerMovement>().Initialize(team);
 
         GetComponent<JumpComponent>().Initialize();
 

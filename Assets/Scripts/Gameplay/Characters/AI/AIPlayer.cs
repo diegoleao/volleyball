@@ -30,16 +30,17 @@ public class AIPlayer : MonoBehaviour, IPlayer
 
     public void Initialize(Team team)
     {
+        this.Team = team;
+
         this.jumpComponent = GetComponent<JumpComponent>();
         this.jumpComponent.Initialize();
 
         this.ballHitting = GetComponent<BallHitting>();
-        this.ballHitting.Initialize(team);
+        this.ballHitting.Initialize(this.Team);
 
         this.aiMovement = GetComponent<AIMovement>();
-        this.aiMovement.Initialize();
+        this.aiMovement.Initialize(this.Team);
 
-        this.Team = team;
 
     }
 
@@ -59,27 +60,21 @@ public class AIPlayer : MonoBehaviour, IPlayer
 
         if (IsBallNearby())
         {
-            MoveTowardsTheBall();
+            if (IsBallWithinHitDistance())
+            {
+                this.aiMovement.ForceStop();
+                this.aiMovement.FaceOtherCourtImmediately();
+                ballHitting.HitTheBall();
+            }
+            else
+            {
+                this.aiMovement.UpdateMovementDirection(isBallInSight: true);
+
+            }
         }
         else
         {
             this.aiMovement.UpdateMovementDirection(isBallInSight: false);
-        }
-
-    }
-
-    private void MoveTowardsTheBall()
-    {
-
-        if (IsBallWithinHitDistance())
-        {
-            ballHitting.HitTheBall();
-            this.aiMovement.ForceStop();
-        }
-        else
-        {
-            this.aiMovement.UpdateMovementDirection(isBallInSight: true);
-
         }
 
     }

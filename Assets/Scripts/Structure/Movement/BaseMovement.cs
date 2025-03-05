@@ -17,10 +17,13 @@ public abstract class BaseMovement : MonoBehaviour
 
     protected Vector3 courtCenter;
 
-    public virtual void Initialize()
+    protected Vector3 spawnCenter;
+
+    public virtual void Initialize(Team team)
     {
         this.rb = GetComponent<Rigidbody>();
         courtCenter = Provider.Instance.CourtCenter.position;
+        spawnCenter = Provider.Instance.CourtTriggers.GetTeamSpawnPosition(team, transform.position.y);
         isInitialized = true;
 
     }
@@ -35,6 +38,15 @@ public abstract class BaseMovement : MonoBehaviour
     }
 
     protected virtual void UpdateMovement() { }
+
+    public void FaceOtherCourtImmediately()
+    {
+        moveDirection = courtCenter - this.transform.position;
+        moveDirection.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+        rb.MoveRotation(targetRotation);
+
+    }
 
     private void FixedUpdate()
     {

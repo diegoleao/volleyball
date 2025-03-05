@@ -8,30 +8,42 @@ public class AIMovement : BaseMovement
     private IVolleyball currentVolleyball;
 
     private Vector3 auxPosition;
+    private Vector3 auxDistance;
 
     public void ForceStop()
     {
         Debug.Log("[AI] STOP (SO WE CAN HIT THE BALL)");
         moveDirection = Vector3.zero;
-
+        FaceOtherCourtImmediately();
     }
 
     public void UpdateMovementDirection(bool isBallInSight)
     {
+        if (currentVolleyball == null)
+        {
+            Debug.Log("[AI] NO VOLLEYBALL");
+            ForceStop();
+            return;
+        }
+
+#if UNITY_EDITOR
         PrintSituation(isBallInSight);
+#endif
 
         if (isBallInSight)
         {
-            moveDirection = (GetAdaptedVolleyballPosition() - this.transform.position).normalized;
+            auxDistance = GetAdaptedVolleyballPosition() - this.transform.position;
+            moveDirection = auxDistance.normalized;
             moveDirection.y = 0;
         }
         else
         {
-            moveDirection = (GetAdaptedCourtCenter() - this.transform.position).normalized;
+            auxDistance = GetAdaptedSpawnCenter() - this.transform.position;
+            moveDirection = auxDistance.normalized;
             moveDirection.y = 0;
         }
 
-        if (moveDirection.sqrMagnitude <= 0.01f)
+        if (auxDistance.sqrMagnitude <= 0.02f)
         {
             moveDirection = Vector3.zero;
             Debug.Log("[AI] CLOSE ENOUGH, NOW STOP");
@@ -39,29 +51,8 @@ public class AIMovement : BaseMovement
 
     }
 
-    private Vector3 GetAdaptedCourtCenter()
-    {
-        auxPosition = courtCenter;
-        auxPosition.y = this.transform.position.y;
-        return auxPosition;
-
-    }
-
-    private Vector3 GetAdaptedVolleyballPosition()
-    {
-        auxPosition = currentVolleyball.Position;
-        auxPosition.y = this.transform.position.y;
-        return auxPosition;
-
-    }
-
     private void PrintSituation(bool isBallInSight)
     {
-        if(currentVolleyball == null)
-        {
-            Debug.Log("[AI] NO VOLLEYBALL");
-            return;
-        }
 
         if (isBallInSight)
         {
@@ -79,4 +70,21 @@ public class AIMovement : BaseMovement
         this.currentVolleyball = currentVolleyball;
 
     }
+
+    private Vector3 GetAdaptedSpawnCenter()
+    {
+        auxPosition = spawnCenter;
+        auxPosition.y = this.transform.position.y;
+        return auxPosition;
+
+    }
+
+    private Vector3 GetAdaptedVolleyballPosition()
+    {
+        auxPosition = currentVolleyball.Position;
+        auxPosition.y = this.transform.position.y;
+        return auxPosition;
+
+    }
+
 }

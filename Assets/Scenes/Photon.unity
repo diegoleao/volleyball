@@ -747,8 +747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dbbe9df54bfa6a40ba8518e6c0698a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamAPlayerSpawn: {fileID: 2144031513}
-  teamABallVolume: {fileID: 923278555}
+  TeamAPlayerSpawn: {fileID: 2144031513}
+  TeamABallVolume: {fileID: 1243455521}
   teamBPlayerSpawn: {fileID: 31549224}
   teamBBallVolume: {fileID: 1243455521}
 --- !u!1 &663894265

@@ -6,10 +6,10 @@ public class PlayerMovement : BaseMovement
 {
     private JoystickSingleplayer joystickSingleplayer;
 
-    public override void Initialize()
+    public override void Initialize(Team team)
     {
         joystickSingleplayer = GetComponent<JoystickSingleplayer>();
-        base.Initialize();
+        base.Initialize(team);
 
     }
 

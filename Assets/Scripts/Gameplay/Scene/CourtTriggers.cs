@@ -5,8 +5,8 @@ using UnityEngine;
 public class CourtTriggers : MonoBehaviour
 {
     [Header("Team A")]
-    [SerializeField] BoxCollider teamAPlayerSpawn;
-    [SerializeField] BoxCollider teamABallVolume;
+    [SerializeField] BoxCollider TeamAPlayerSpawn;
+    [SerializeField] BoxCollider TeamABallVolume;
 
     [Header("Team B")]
     [SerializeField] BoxCollider teamBPlayerSpawn;
@@ -27,13 +27,13 @@ public class CourtTriggers : MonoBehaviour
 
     public Vector3 GetTeamSpawnPosition(Team team, float height)
     {
-        return GetRandomPositionInBox(teamAPlayerSpawn, teamBPlayerSpawn, height, team);
+        return GetRandomPositionInBox(TeamAPlayerSpawn, teamBPlayerSpawn, height, team);
 
     }
 
     public Vector3 GetBallSpawnPosition(Team team, float height)
     {
-        return GetRandomPositionInBox(teamABallVolume, teamBBallVolume, height, team);
+        return GetRandomPositionInBox(TeamABallVolume, teamBBallVolume, height, team);
 
     }
 
