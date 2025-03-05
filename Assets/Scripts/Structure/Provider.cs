@@ -95,6 +95,8 @@ public class Provider : MonoBehaviour
     {
         try
         {
+            RemovePreviousVersions(objectToRegister);
+
             //Removes deleted objects before accessing their properties next
             registeredObjects.RemoveAll(t => t == null);
 
@@ -102,7 +104,7 @@ public class Provider : MonoBehaviour
 
             registeredObjects.Add(objectToRegister);
 
-            InjectObjectsWhenNecessary(objectToRegister);
+            InjectUniqueObjects(objectToRegister);
 
         }
         catch (Exception exc)
@@ -113,7 +115,15 @@ public class Provider : MonoBehaviour
 
     }
 
-    private static void InjectObjectsWhenNecessary(MonoBehaviour objectToRegister)
+    private static void RemovePreviousVersions(MonoBehaviour objectToRegister)
+    {
+        if ((objectToRegister != null) && objectToRegister is LocalVolleyball)
+        {
+            Unregister<LocalVolleyball>();
+        }
+    }
+
+    private static void InjectUniqueObjects(MonoBehaviour objectToRegister)
     {
         if (objectToRegister is MatchInfo)
         {
@@ -141,12 +151,6 @@ public class Provider : MonoBehaviour
 
         }
 
-        if (objectToRegister is NetworkVolleyball)
-        {
-            FindAnyObjectByType<AIPlayer>()?.InjectVolleyball(objectToRegister as NetworkVolleyball);
-
-        }
-
     }
 
     public static T Get<T>(bool findDisabledObjects = false) where T : MonoBehaviour
@@ -167,6 +171,18 @@ public class Provider : MonoBehaviour
         }
 
         return registeredObject;
+
+    }
+
+    public static bool Unregister<T>(bool findDisabledObjects = false) where T : MonoBehaviour
+    {
+        var objectToRemove = Get<T>(findDisabledObjects);
+
+        if (objectToRemove == null) return false;
+
+        registeredObjects.Remove(objectToRemove);
+
+        return true;
 
     }
 

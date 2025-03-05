@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AIPlayer : MonoBehaviour
 {
+    [SerializeField] bool isDebugging;
 
     [Header("AI Configuration")]
     [SerializeField] float ballFollowDistance = 10;
@@ -40,13 +41,13 @@ public class AIPlayer : MonoBehaviour
 
         this.aiMovement = GetComponent<AIMovement>();
         this.aiMovement.Initialize(this.Team);
-
+        Provider.Register<AIPlayer>(this);
 
     }
 
-    public void InjectVolleyball(BaseVolleyball currentVolleyball)
+    public void InjectVolleyball(LocalVolleyball currentVolleyball)
     {
-        this.currentVolleyball = (LocalVolleyball)currentVolleyball;
+        this.currentVolleyball = currentVolleyball;
         this.aiMovement.InjectVolleyball(this.currentVolleyball);
 
     }
@@ -54,39 +55,55 @@ public class AIPlayer : MonoBehaviour
     void Update()
     {
         if (currentVolleyball == null)
+        {
+            Debug.LogError("[AI] currentVolleyball shouldn't be null");
             return;
+        }
+        else
+        {
+            Log($"currentVolleyball={currentVolleyball.name}");
+            
+        }
 
         ballDistance = Vector3.Distance(this.transform.position, currentVolleyball.Position);
 
-        if (IsBallNearby())
+        if (CanFollowBall())
         {
-            if (IsBallWithinHitDistance())
+            if (InHitDistance())
             {
-                this.aiMovement.ForceStop();
-                this.aiMovement.FaceOtherCourtImmediately();
+                Log($"[InHitDistance] {ballDistance}");
+                this.aiMovement.StopToHitTheBall();
                 ballHitting.HitTheBall();
             }
             else
             {
-                this.aiMovement.UpdateMovementDirection(isBallInSight: true);
-
+                Log($"[CanFollowBall] {ballDistance}");
+                this.aiMovement.MovementUpdate(isBallInSight: true);
             }
         }
         else
         {
-            this.aiMovement.UpdateMovementDirection(isBallInSight: false);
+            this.aiMovement.MovementUpdate(isBallInSight: false);
         }
 
     }
 
-    private bool IsBallWithinHitDistance()
+    private bool InHitDistance()
     {
         return ballDistance < ballHitDistance;
     }
 
-    private bool IsBallNearby()
+    private bool CanFollowBall()
     {
         return ballDistance < ballFollowDistance;
+    }
+    private void Log(string message)
+    {
+#if UNITY_EDITOR
+        if (isDebugging)
+            Debug.Log($"[AI][Player] {message}");
+#endif
+
     }
 
 }

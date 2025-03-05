@@ -4,7 +4,7 @@ public class LocalVolleyball : BaseVolleyball
 
     public override void Register(BaseVolleyball volleyball)
     {
-        Provider.Register<LocalVolleyball>((LocalVolleyball)volleyball);
+        Provider.Register<LocalVolleyball>(volleyball);
 
     }
 

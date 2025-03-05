@@ -8,26 +8,21 @@ public class AIMovement : BaseMovement
     [SerializeField] bool IsDebugging;
 #endif
 
-    private BaseVolleyball currentVolleyball;
+    private LocalVolleyball currentVolleyball;
 
     private Vector3 auxPosition;
     private Vector3 auxDistance;
 
-    public void ForceStop()
+    private bool isStopped;
+
+    public void StopToHitTheBall()
     {
         Log("STOP (SO WE CAN HIT THE BALL)");
-        moveDirection = Vector3.zero;
-        //FaceOtherCourtImmediately();
+        StopMoving();
     }
 
-    public void UpdateMovementDirection(bool isBallInSight)
+    public void MovementUpdate(bool isBallInSight)
     {
-        if (currentVolleyball == null)
-        {
-            Log("NO VOLLEYBALL");
-            ForceStop();
-            return;
-        }
 
         if (isBallInSight)
         {
@@ -46,13 +41,17 @@ public class AIMovement : BaseMovement
 
         if (auxDistance.sqrMagnitude <= 0.02f)
         {
-            moveDirection = Vector3.zero;
-            Log("CLOSE ENOUGH, NOW STOP");
+            Log("STOP (BALL DISTANCE TOO SMALL)");
+            StopMoving();
+        }
+        else
+        {
+            isStopped = false;
         }
 
     }
 
-    public void InjectVolleyball(BaseVolleyball currentVolleyball)
+    public void InjectVolleyball(LocalVolleyball currentVolleyball)
     {
         this.currentVolleyball = currentVolleyball;
 
@@ -71,6 +70,14 @@ public class AIMovement : BaseMovement
         auxPosition = currentVolleyball.Position;
         auxPosition.y = this.transform.position.y;
         return auxPosition;
+
+    }
+
+    private void StopMoving()
+    {
+        FaceOtherCourtImmediately();
+        moveDirection = Vector3.zero;
+        isStopped = true;
 
     }
 

@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9acff7816a7ce30419109f13ee39470b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5.6
+  speed: 5
   rotationSpeed: 10
   IsDebugging: 1
 --- !u!114 &6734544729210264472
@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d54be303239bd74b9fe7efd80a1f593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDebugging: 1
   ballFollowDistance: 9
   ballHitDistance: 1.8
 --- !u!1 &2836249579507856444

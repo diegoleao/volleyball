@@ -105,7 +105,7 @@ public abstract class BaseBallImpulse : MonoBehaviour
     {
         currentDistanceFromBall = Vector3.Distance(this.transform.position, volleyball.Position);
 
-        //Debug.LogWarning($"Distance {distanceFromBall} smaller than {maxImpulseDistance}? {distanceFromBall <= maxImpulseDistance}");
+        //Debug.LogWarning($"{currentDistanceFromBall} <= {maxDistanceFromBall}: {currentDistanceFromBall <= maxDistanceFromBall}");
 
         return currentDistanceFromBall <= maxDistanceFromBall;
 
