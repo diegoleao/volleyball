@@ -16,7 +16,7 @@ public class MobileDebugBehaviour : MonoBehaviour
             SetActive(false);
 
         if (dontDestroyOnLoad)
-            DontDestroyOnLoad(this);
+            DontDestroyOnLoad(this.gameObject);
 
     }
 
