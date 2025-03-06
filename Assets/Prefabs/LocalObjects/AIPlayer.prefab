@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   rotationSpeed: 10
+  SpeedReductionOnAndroid: 0.3
   IsDebugging: 0
 --- !u!114 &6734544729210264472
 MonoBehaviour:

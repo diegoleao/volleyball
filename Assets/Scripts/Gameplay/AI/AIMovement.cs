@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AIMovement : BaseMovement
 {
+
+    [SerializeField] float SpeedReductionOnAndroid = 0.5f;
 #if UNITY_EDITOR
     [SerializeField] bool IsDebugging;
 #endif
@@ -14,6 +16,13 @@ public class AIMovement : BaseMovement
     private Vector3 auxDistance;
 
     private bool isStopped;
+
+#if UNITY_ANDROID
+    void Start()
+    {
+        this.speed = this.speed * 1-SpeedReductionOnAndroid;
+    }
+#endif
 
     public void StopToHitTheBall()
     {
