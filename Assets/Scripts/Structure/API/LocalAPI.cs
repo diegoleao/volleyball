@@ -52,15 +52,20 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     public void ResetMatch()
     {
         ResetPlayerPositions();
-        DestroyAllNonGroundedBalls();
+        DestroyAllBalls();
+        this.localMatchInfo.ResetScore();
 
     }
 
     public void ResetPlayerPositions()
     {
-        FindObjectsOfType<NetworkPlayer>().ToList().ForEach(character =>
+        FindObjectsOfType<LocalPlayer>().ToList().ForEach(character =>
         {
-            ResetPlayerToInitialPosition(character);
+            ResetPlayerToInitialPosition(character.transform, character.Team);
+        });
+        FindObjectsOfType<AIPlayer>().ToList().ForEach(character =>
+        {
+            ResetPlayerToInitialPosition(character.transform, character.Team);
         });
 
     }
@@ -97,10 +102,10 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     }
 
-    private void ResetPlayerToInitialPosition(NetworkPlayer player)
+    private void ResetPlayerToInitialPosition(Transform player, Team team)
     {
-        player.transform.position = GetTeamSpawnPosition(player.Team);
-        player.transform.rotation = GetInitialRotation(player.transform.position);
+        player.position = GetTeamSpawnPosition(team);
+        player.rotation = GetInitialRotation(player.transform.position);
 
     }
 
@@ -132,6 +137,13 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         var allVolleyballs = FindObjectsOfType<LocalVolleyball>();
         allVolleyballs.Where(t => !t.IsGrounded).ForEach(nonGrounded => { Destroy(nonGrounded.gameObject); });
+
+    }
+
+    public void DestroyAllBalls()
+    {
+        var allVolleyballs = FindObjectsOfType<LocalVolleyball>();
+        allVolleyballs.ForEach(ball => { Destroy(ball.gameObject); });
 
     }
 

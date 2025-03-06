@@ -178,10 +178,42 @@ public class MatchInfo : NetworkBehaviour
 
     }
 
-    public void ResetNetworkedScore()
+    [Button]
+    public void RequestMatchReset()
+    {
+        if (Runner.IsClient)
+        {
+            RPC_RequestRestart();
+        }
+        else
+        {
+            MatchReset();
+        }
+
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_RequestRestart(RpcInfo info = default)
+    {
+        if (Runner.IsServer)
+        {
+            MatchReset();
+        }
+    }
+
+    private void MatchReset()
+    {
+        Provider.Instance.GameplayFacade.GameNetworking.ResetPlayerPositions();
+        Provider.Instance.GameplayFacade.GameNetworking.DestroyAllBalls();
+        ResetScores();
+
+    }
+
+    private void ResetScores()
     {
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
+
     }
 
     private List<PlayerScoreData> GetNetworkedScoresAsList()

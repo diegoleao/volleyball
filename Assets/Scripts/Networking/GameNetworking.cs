@@ -120,12 +120,9 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     }
 
-    [Button]
     public void ResetMatch()
     {
-        ResetPlayerPositions();
-        DestroyAllBalls();
-        matchInfo?.ResetNetworkedScore();
+        matchInfo?.RequestMatchReset();
 
     }
 

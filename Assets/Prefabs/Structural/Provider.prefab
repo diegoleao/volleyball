@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98508052a9ec384d8145930611e40f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BallSpawnDelay: 1
   ResetPlayerPositionOnScore: 0
   MainMenu: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
   WinScreen: {fileID: 6763790122878942547, guid: 6eca5d07069efc645ae6277265bc3ad0, type: 3}

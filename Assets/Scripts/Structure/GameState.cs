@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
+    [SerializeField] float BallSpawnDelay = 1f;
 
     [SerializeField] bool ResetPlayerPositionOnScore;
 
@@ -25,6 +26,8 @@ public class GameState : MonoBehaviour
     private WinScreen winScreenInstance;
 
     private State state;
+
+    private State previousState;
 
     private MatchInfo matchInfo;
 
@@ -64,9 +67,12 @@ public class GameState : MonoBehaviour
 
     }
 
-    public void SetState(State state)
+    public void SetState(State newState)
     {
-        switch (state)
+        this.previousState = this.state;
+        this.state = newState;
+
+        switch (this.state)
         {
             case State.Menu:
                 FindAnyObjectByType<OptionsScreen>().Hide();
@@ -91,15 +97,19 @@ public class GameState : MonoBehaviour
 
             case State.RestartMatch:
                 FindAnyObjectByType<OptionsScreen>().Show();
-                ResetMatch();
-                SetState(State.RallyStart);
+                Provider.Instance.API.ResetMatch();
                 winScreenInstance?.Close();
+                DelaySetRallyStartState();
+
                 break;
 
             case State.RallyStart:
-                if(this.state != State.RallyStart)
+                if(this.previousState != State.RallyStart)
                 {
-                    Provider.Instance.API.SpawnVolleyball(ServingTeam);
+                    Observable.Timer(TimeSpan.FromSeconds(BallSpawnDelay)).Subscribe(_ =>
+                    {
+                        Provider.Instance.API.SpawnVolleyball(ServingTeam);
+                    });
                 }
                 break;
 
@@ -155,13 +165,17 @@ public class GameState : MonoBehaviour
                 break;
 
         }
-        this.state = state;
 
+    }
+
+    private void DelaySetRallyStartState()
+    {
+        Observable.NextFrame().Subscribe(_ => { SetState(State.RallyStart); });
     }
 
     public void ResetMatch()
     {
-        Provider.Instance.API.ResetMatch();
+        
 
     }
 
@@ -274,7 +288,9 @@ public class GameState : MonoBehaviour
             return;
 
         if (scores.All(t => t.score == 0))
-            return;
+        {
+            DelaySetRallyStartState();
+        }
 
         SetState(State.AwardingPoints);
 

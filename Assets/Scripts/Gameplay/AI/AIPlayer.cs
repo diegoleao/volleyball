@@ -56,13 +56,8 @@ public class AIPlayer : MonoBehaviour
     {
         if (currentVolleyball == null)
         {
-            Debug.LogError("[AI] currentVolleyball shouldn't be null");
+            this.aiMovement.MovementUpdate(isBallInSight: false);
             return;
-        }
-        else
-        {
-            Log($"currentVolleyball={currentVolleyball.name}");
-            
         }
 
         ballDistance = Vector3.Distance(this.transform.position, currentVolleyball.Position);
