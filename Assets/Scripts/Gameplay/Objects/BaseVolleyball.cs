@@ -122,6 +122,9 @@ public abstract class BaseVolleyball : MonoBehaviour
 
     public async void HandleGroundTouch(Team scoringTeam)
     {
+        if (bufferedGrounded)
+            return;
+
         bufferedGrounded = true;
         Debug.Log($"[Ball-Floor] ({this.name}) Buffered Ground");
 
@@ -129,7 +132,7 @@ public abstract class BaseVolleyball : MonoBehaviour
 
         if (bufferedGrounded)
         {
-            Debug.Log($"[Ball-Floor] ({this.name}) Still grounded. CONFIRM SCORE!");
+            Debug.Log($"[Ball-Floor] ({this.name}) Still grounded. CONFIRM SCORE!");    
             IsGrounded = true;
             if (proximityTrigger) proximityTrigger.enabled = false;
             IncreaseScoreForTeam(scoringTeam);
@@ -140,6 +143,8 @@ public abstract class BaseVolleyball : MonoBehaviour
         {
             Debug.Log("[Ball-Floor] Not grounded anymore. IGNORING...");
         }
+
+        bufferedGrounded = false;
 
     }
 

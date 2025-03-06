@@ -1982,6 +1982,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1905487196}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2007056125 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2247706556327120247, guid: 7aacf39a37f14684080038efea94b884, type: 3}
+  m_PrefabInstance: {fileID: 1946751459068450825}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7cda214586e464a823bf6ba9934d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2062673602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2413,6 +2424,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeadsUpDisplay
       objectReference: {fileID: 0}
+    - target: {fileID: 2571978562614492088, guid: 00525105d783fb74ab54fe116bcc83fc, type: 3}
+      propertyPath: mobileDebugBehaviour
+      value: 
+      objectReference: {fileID: 2007056125}
     - target: {fileID: 2793128076287818061, guid: 00525105d783fb74ab54fe116bcc83fc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
