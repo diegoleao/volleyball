@@ -280,7 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1134ad8c7760b5841bdc23d57d567573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobileDebugBehaviour: {fileID: 0}
 --- !u!1 &1474828562503282338
 GameObject:
   m_ObjectHideFlags: 0
@@ -1482,7 +1481,7 @@ GameObject:
   - component: {fileID: 4894474104284555155}
   - component: {fileID: 1424033716462935963}
   m_Layer: 5
-  m_Name: VolleyJoystick
+  m_Name: VirtualJoystick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

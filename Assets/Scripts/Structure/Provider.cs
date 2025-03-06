@@ -31,8 +31,8 @@ public class Provider : MonoBehaviour
 
     [Header("Scene Components")]
 
-    [SerializeField] VolleyJoystick volleyJoystick;
-    public VolleyJoystick VolleyJoystick => this.volleyJoystick;
+    [SerializeField] VirtualJoystick volleyJoystick;
+    public VirtualJoystick VolleyJoystick => this.volleyJoystick;
 
     [SerializeField] CourtTriggers courtTriggers;
     public CourtTriggers CourtTriggers => this.courtTriggers;

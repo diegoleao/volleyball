@@ -1,7 +1,7 @@
     using UnityEngine;
 using UnityEngine.UI;
 
-public class VolleyJoystick : MonoBehaviour
+public class VirtualJoystick : MonoBehaviour
 {
 #if UNITY_EDITOR
     [SerializeField] bool simulateJoystick;

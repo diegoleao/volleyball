@@ -7,7 +7,7 @@ public class JoystickSingleplayer : MonoBehaviour
     [ShowInInspector][ReadOnly]
     private Team team = Team.None;
 
-    private VolleyJoystick joystick;
+    private VirtualJoystick joystick;
 
     public void Initialize(Team team)
     {

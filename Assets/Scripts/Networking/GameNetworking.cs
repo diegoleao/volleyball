@@ -49,7 +49,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     private GameState gameState;
 
-    private VolleyJoystick volleyJoystick;
+    private VirtualJoystick volleyJoystick;
 
     public GameMode GameMode;
 

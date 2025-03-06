@@ -18,7 +18,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     private GameState gameState;
 
-    private VolleyJoystick volleyJoystick;
+    private VirtualJoystick volleyJoystick;
 
     private LocalMatchInfo localMatchInfo;
 
