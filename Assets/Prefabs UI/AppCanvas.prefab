@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1233021610985601265
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 126820378906311631}
+  - component: {fileID: 540528049763917268}
+  m_Layer: 0
+  m_Name: AppCanvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &126820378906311631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233021610985601265}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.8562005, y: 0.40692902, z: 7.0735397}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &540528049763917268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1233021610985601265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335d702e62a1b63409babf1f66afc810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startupScreen: {fileID: 0}
+  instancedViewTypes:
+  - {fileID: -7895233717178997293, guid: 1213989798060c94e8a199af4a0fc986, type: 3}
+  ViewPrefabs:
+  - {fileID: -7895233717178997293, guid: 1213989798060c94e8a199af4a0fc986, type: 3}
+  - {fileID: -8092589119131161144, guid: 4352cf2a6106f1547ae73c0256953ef6, type: 3}
+  - {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
+  - {fileID: 6763790122878942547, guid: 6eca5d07069efc645ae6277265bc3ad0, type: 3}
+  - {fileID: 2571978562614492088, guid: 00525105d783fb74ab54fe116bcc83fc, type: 3}
+  CurrentCanvasOverlay: 0
+  onCreateSuccess:
+    m_PersistentCalls:
+      m_Calls: []

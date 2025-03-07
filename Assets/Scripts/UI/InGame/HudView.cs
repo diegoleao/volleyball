@@ -11,6 +11,11 @@ public class HudView : BaseView
 
     public TextMeshProUGUI ScoreTeamB;
 
+    protected override void OnFirstExibition()
+    {
+
+    }
+
     public void Initialize(LocalMatchInfo localMatchInfo)
     {
         ScoreTeamA.text = "00";
@@ -29,5 +34,4 @@ public class HudView : BaseView
         ScoreTeamB.text = "00";
 
     }
-
 }

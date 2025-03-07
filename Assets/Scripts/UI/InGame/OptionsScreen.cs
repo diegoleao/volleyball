@@ -5,7 +5,15 @@ using UnityEngine;
 public class OptionsScreen : BaseView
 {
 
-    MobileDebugBehaviour mobileDebugBehaviour;
+    [SerializeField] VirtualJoystick _virtualJoystick;
+    public VirtualJoystick VirtualJoystick => _virtualJoystick;
+
+    private MobileDebugBehaviour mobileDebugBehaviour;
+
+    protected override void OnFirstExibition()
+    {
+
+    }
 
     void Awake()
     {

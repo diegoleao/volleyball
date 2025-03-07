@@ -7,11 +7,8 @@ using UnityEngine.UI;
 
 public class MainMenuScreen : BaseView
 {
-    [SerializeField] LobbyScreen LobbyPrefab;
     [SerializeField] Button QuickJoinButton;
     [SerializeField] Button LocalMultiplayer;
-
-    private LobbyScreen lobbyInstance;
 
     void Start()
     {
@@ -24,6 +21,17 @@ public class MainMenuScreen : BaseView
 
     }
 
+    protected override void OnFirstExibition()
+    {
+
+    }
+
+    protected override void OnClose()
+    {
+        GetView<LobbyScreen>()?.Close();
+
+    }
+
     public void StartMatch(bool isHost)
     {
         if (isHost)
@@ -33,7 +41,7 @@ public class MainMenuScreen : BaseView
         }
         else
         {
-            if (lobbyInstance.QuickJoinFirstSession()) 
+            if (GetView<LobbyScreen>().QuickJoinFirstSession())
                 Close();
 
         }
@@ -56,18 +64,14 @@ public class MainMenuScreen : BaseView
 
     public void EnterLobby()
     {
-        this.lobbyInstance.Show();
+        GetView<LobbyScreen>().Show();
         this.Hide();
+
     }
 
     private void CreateHiddenLobby()
     {
-        if (this.lobbyInstance == null)
-        {
-            this.lobbyInstance = Instantiate(LobbyPrefab);
-            this.lobbyInstance.Initialize(this);
-            this.lobbyInstance.SubscribeToSessionChanges(SessionsUpdateHandler);
-        }
+        this.GetOrCreate<LobbyScreen>().SubscribeToChanges(SessionsUpdateHandler);
 
     }
 
@@ -83,15 +87,6 @@ public class MainMenuScreen : BaseView
     private TextMeshProUGUI QuickJoingTextMesh()
     {
         return QuickJoinButton.GetComponentInChildren<TextMeshProUGUI>();
-    }
-
-    public override void Close()
-    {
-        if (isClosed)
-            return;
-
-        this.lobbyInstance.Close();
-        base.Close();
 
     }
 

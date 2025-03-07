@@ -5,7 +5,6 @@ using UnityEngine;
 public class AIMovement : BaseMovement
 {
 
-    [SerializeField] float SpeedReductionOnAndroid = 0.5f;
 #if UNITY_EDITOR
     [SerializeField] bool IsDebugging;
 #endif
@@ -18,6 +17,7 @@ public class AIMovement : BaseMovement
     private bool isStopped;
 
 #if UNITY_ANDROID
+    [SerializeField] float SpeedReductionOnAndroid = 0.5f;
     void Start()
     {
         this.speed = this.speed * 1-SpeedReductionOnAndroid;

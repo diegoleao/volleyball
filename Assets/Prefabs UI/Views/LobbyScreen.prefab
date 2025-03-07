@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 1435867691116427125}
   - component: {fileID: 219910844722965501}
   - component: {fileID: 9164979205101163339}
-  - component: {fileID: 881598283165641358}
   - component: {fileID: 5549939869330171336}
+  - component: {fileID: 881598283165641358}
   m_Layer: 5
   m_Name: CreateButton
   m_TagString: Untagged
@@ -78,6 +78,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5549939869330171336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101160021789726819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: 1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!114 &881598283165641358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,27 +141,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9164979205101163339}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5549939869330171336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101160021789726819}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: -1
-  m_MinHeight: -1
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 1
-  m_FlexibleHeight: -1
-  m_LayoutPriority: 1
+      m_Calls:
+      - m_Target: {fileID: -8092589119131161144}
+        m_TargetAssemblyTypeName: LobbyScreen, Assembly-CSharp
+        m_MethodName: HostGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &853744812893024126
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,9 +541,9 @@ GameObject:
   - component: {fileID: 6053051594324559946}
   - component: {fileID: 457258222200511910}
   - component: {fileID: 7107625732841037428}
-  - component: {fileID: -8092589119131161144}
-  - component: {fileID: 5518227364989462805}
   - component: {fileID: 7411205334538432857}
+  - component: {fileID: 5518227364989462805}
+  - component: {fileID: -8092589119131161144}
   m_Layer: 5
   m_Name: LobbyScreen
   m_TagString: Untagged
@@ -622,23 +634,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
---- !u!114 &-8092589119131161144
-MonoBehaviour:
+--- !u!225 &7411205334538432857
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5967781131025631697}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0c37ed1e36c7c545a3f1846c9f01853, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UpdateDelay: 0
-  MenuPrefab: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
-  SessionButtonPrefab: {fileID: 4249036566014150959, guid: 7a253a0842e8b0a4e82abbed37b7ea52, type: 3}
-  LobbyComponent: {fileID: 5518227364989462805}
-  SessionsParent: {fileID: 3446611790272508995}
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &5518227364989462805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,18 +661,39 @@ MonoBehaviour:
   SessionListUpdatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!225 &7411205334538432857
-CanvasGroup:
+--- !u!114 &-8092589119131161144
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5967781131025631697}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c37ed1e36c7c545a3f1846c9f01853, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FadeInTime: 0.25
+  FadeOutTime: 0.25
+  OnFadeInFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFadeOutFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ShowOnStartForDebug: 0
+  CanvasOrder: 0
+  BackEnabled: 0
+  OnCloseEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFirstShowEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  UpdateDelay: 0
+  SessionButtonPrefab: {fileID: 4249036566014150959, guid: 7a253a0842e8b0a4e82abbed37b7ea52, type: 3}
+  LobbyComponent: {fileID: 5518227364989462805}
+  SessionsParent: {fileID: 3446611790272508995}
 --- !u!1 &6034491493749607815
 GameObject:
   m_ObjectHideFlags: 0

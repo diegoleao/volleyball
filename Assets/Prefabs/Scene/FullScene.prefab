@@ -31,8 +31,83 @@ Transform:
   m_Children:
   - {fileID: 5245625787214001420}
   - {fileID: 716005465877503067}
+  - {fileID: 2729032108402286997}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &110857100463284054
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9112052132681924432}
+    m_Modifications:
+    - target: {fileID: 2117646199336620573, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_Name
+      value: CourtTriggers
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.3628564
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 19.974632
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -32.24433
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+--- !u!4 &2729032108402286997 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2618473525480373955, guid: 59a360bbffb7cb94c96c4c0185ee8000, type: 3}
+  m_PrefabInstance: {fileID: 110857100463284054}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3890330718072340716
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -236,6 +311,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fed0a63577e66f4d9eee6bcd27fe307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeInTime: 0.25
+  FadeOutTime: 0.25
+  OnFadeInFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFadeOutFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ShowOnStartForDebug: 0
+  CanvasOrder: 0
+  BackEnabled: 0
+  OnCloseEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFirstShowEvent:
+    m_PersistentCalls:
+      m_Calls: []
   ScoreTeamA: {fileID: 7220038795076931579}
   ScoreTeamB: {fileID: 8466750229434746519}
 --- !u!225 &8915847042741516464

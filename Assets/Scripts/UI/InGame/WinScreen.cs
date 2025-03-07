@@ -10,11 +10,16 @@ public class WinScreen : BaseView
 
     private PlayerScoreData winningScore;
 
-    public void SetData(PlayerScoreData winningScore)
+    protected override void OnFirstExibition()
+    {
+
+    }
+
+    public WinScreen SetData(PlayerScoreData winningScore)
     {
         this.winningScore = winningScore;
         this.textMeshProUGUI.text = $"Team \"{(winningScore.playerId == 0 ? "A" : "B")}\" Wins!";
-
+        return this;
     }
 
     public void ConfirmButtonPressed()

@@ -280,6 +280,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1134ad8c7760b5841bdc23d57d567573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FadeInTime: 0.25
+  FadeOutTime: 0.25
+  OnFadeInFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFadeOutFinishedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  ShowOnStartForDebug: 0
+  CanvasOrder: 0
+  BackEnabled: 0
+  OnCloseEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFirstShowEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1474828562503282338
 GameObject:
   m_ObjectHideFlags: 0

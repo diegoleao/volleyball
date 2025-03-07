@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using static GameState;
@@ -16,8 +17,10 @@ public class Provider : MonoBehaviour
     public bool SpeedUpForDebugging;
 #endif
 
-
     [Header("References")]
+
+    [SerializeField] AppCanvas appCanvasPrefab;
+
     [SerializeField] GameState gameState;
     public GameState GameState => this.gameState;
 
@@ -31,19 +34,18 @@ public class Provider : MonoBehaviour
 
     [Header("Scene Components")]
 
-    [SerializeField] VirtualJoystick volleyJoystick;
-    public VirtualJoystick VolleyJoystick => this.volleyJoystick;
+    private CourtTriggers _courtTriggers;
+    public CourtTriggers CourtTriggers => this._courtTriggers;
 
-    [SerializeField] CourtTriggers courtTriggers;
-    public CourtTriggers CourtTriggers => this.courtTriggers;
-
-    [Header("Position References")]
-
-    [SerializeField] Transform courtCenter;
-    public Transform CourtCenter => this.courtCenter;
+    private Transform _netCenter;
+    public Transform CourtCenter => this._netCenter;
 
     [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();
 
+    private AppCanvas _appCanvas;
+    public static AppCanvas AppCanvas => Instance._appCanvas;
+
+    public VirtualJoystick VolleyJoystick => AppCanvas.GetView<OptionsScreen>()?.VirtualJoystick;
 
     /// <summary>
     /// Lazy loaded instance.
@@ -62,7 +64,9 @@ public class Provider : MonoBehaviour
         if (_instance == null || _instance.gameObject == null)
         {
             _instance = FindObjectOfType<Provider>();
-            registeredObjects = new List<MonoBehaviour>();
+            _instance._appCanvas = Instantiate(Instance.appCanvasPrefab).Initialize();
+            _instance._courtTriggers = FindAnyObjectByType<CourtTriggers>();
+            _instance._netCenter = FindAnyObjectByType<NetCenter>().transform;
         }
 
         return _instance;
@@ -85,8 +89,9 @@ public class Provider : MonoBehaviour
 
     }
 
-    void Start()
+    async void Start()
     {
+        await Observable.NextFrame();
         this.gameState.Initialize();
 
     }

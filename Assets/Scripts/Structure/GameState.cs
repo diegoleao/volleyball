@@ -14,10 +14,6 @@ public class GameState : MonoBehaviour
 
     [SerializeField] bool ResetPlayerPositionOnScore;
 
-    [SerializeField] MainMenuScreen MainMenu;
-
-    [SerializeField] WinScreen WinScreen;
-
     public Team ServingTeam { get; private set; }
 
     public PlayerScoreData winningScore { get; internal set; }
@@ -33,9 +29,12 @@ public class GameState : MonoBehaviour
 
     private LocalMatchInfo localMatchInfo;
 
+    private AppCanvas AppCanvas;
 
     public void Initialize()
     {
+        AppCanvas = Provider.AppCanvas;
+        AppCanvas.GetOrCreatePopup<OptionsScreen>();
         SetState(State.Menu);
 
     }
@@ -75,32 +74,31 @@ public class GameState : MonoBehaviour
         switch (this.state)
         {
             case State.Menu:
-                FindAnyObjectByType<OptionsScreen>().Hide();
-                Instantiate(MainMenu);
-                winScreenInstance?.Close();
-                FindAnyObjectByType<HudView>().ResetScore();
+                AppCanvas.GetView<OptionsScreen>().Hide();
+                AppCanvas.GetOrCreate<MainMenuScreen>().Show();
+                AppCanvas.GetView<WinScreen>()?.Close();
+                AppCanvas.GetView<HudView>().ResetScore();
                 break;
 
             case State.WaitForPlayer2:
                 Debug.Log("Waiting for Player 2...");
-                FindAnyObjectByType<OptionsScreen>().Show();
+                AppCanvas.GetView<OptionsScreen>().Show();
                 //Show screen communicating the wait for another player
                 //Show button to cancel the Match
                 break;
 
             case State.StartMatch:
-                FindAnyObjectByType<OptionsScreen>().Show();
+                AppCanvas.GetView<OptionsScreen>().Show();
                 Debug.Log("Player 2 entered. Match Start! =========");
                 SetState(State.RallyStart);
                 winScreenInstance?.Close();
                 break;
 
             case State.RestartMatch:
-                FindAnyObjectByType<OptionsScreen>().Show();
+                AppCanvas.GetView<OptionsScreen>().Show();
                 Provider.Instance.API.ResetMatch();
                 winScreenInstance?.Close();
                 DelaySetRallyStartState();
-
                 break;
 
             case State.RallyStart:
@@ -114,8 +112,10 @@ public class GameState : MonoBehaviour
                 break;
 
             case State.AwardingPoints:
-                if(ResetPlayerPositionOnScore)
+                if (ResetPlayerPositionOnScore)
+                {
                     Provider.Instance.API.ResetPlayerPositions();
+                }   
                 // Lock players positions
                 // Show any "score!" animation
                 // await "MatchInfo.AddPointTo" data to be propagated and only then:
@@ -146,11 +146,10 @@ public class GameState : MonoBehaviour
 
             case State.WinState:
                 //Show end screen with results
-                winScreenInstance = Instantiate(WinScreen);
-                winScreenInstance.SetData(winningScore);
+                AppCanvas.GetOrCreate<WinScreen>().SetData(winningScore).Show();
                 //***Wait for a few seconds
                 SetCourtToWinState();
-                FindAnyObjectByType<OptionsScreen>().Hide();
+                AppCanvas.GetView<OptionsScreen>().Hide();
                 Provider.Instance.API.UnloadScene();
                 break;
 
@@ -158,7 +157,7 @@ public class GameState : MonoBehaviour
             case State.AbortMatch:
                 Provider.Instance.API.ShutdownNetworkMatch();
                 ReturnToMainScreen();
-                FindAnyObjectByType<OptionsScreen>().Hide();
+                AppCanvas.GetView<OptionsScreen>().Hide();
                 break;
 
             default:

@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &475340420118794584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4075137020301551865}
+  m_Layer: 0
+  m_Name: VolleyballStateMachine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4075137020301551865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475340420118794584}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -549.6438, y: -337.59308, z: 7.0735397}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5928356851790042352}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5599698857756274049
 GameObject:
   m_ObjectHideFlags: 0
@@ -80,6 +111,7 @@ Transform:
   m_Children:
   - {fileID: 1795278643732930066}
   - {fileID: 7439148254432436049}
+  - {fileID: 4075137020301551865}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8508203406640691445
@@ -95,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpeedUpForDebugging: 0
+  appCanvasPrefab: {fileID: 540528049763917268, guid: f96cb052ce1c51a43af98acfd9ffab16, type: 3}
   gameState: {fileID: 7029205177472448252}
   gameplayFacade: {fileID: 1314488750105559997}
   volleyJoystick: {fileID: 0}

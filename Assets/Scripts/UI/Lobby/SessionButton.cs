@@ -13,6 +13,11 @@ public class SessionButton : BaseView
 
     private UnityAction<SessionInfo> buttonClicked;
 
+    protected override void OnFirstExibition()
+    {
+
+    }
+
     public void SetData(SessionInfo sessionInfo, UnityAction<SessionInfo> clickedAction)
     {
         this.sessionInfo = sessionInfo;

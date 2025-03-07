@@ -15,7 +15,6 @@ public class NetworkPlayer : NetworkBehaviour
     private NetworkJumpComponent jumpComponent;
     private NetworkBallHitting networkBallImpulse;
     private NetworkMovement networkMovement;
-    private bool isInitialized;
 
 
     public override void Spawned()
@@ -35,8 +34,6 @@ public class NetworkPlayer : NetworkBehaviour
 
         networkMovement = GetComponent<NetworkMovement>();
         networkMovement.Initialize(Runner);
-
-        isInitialized = true;
 
     }
 

@@ -12,7 +12,6 @@ public class LobbyScreen : BaseView
     [SerializeField] int UpdateDelay = 2;
 
     [Header("Prefabs")]
-    [SerializeField] MainMenuScreen MenuPrefab;
     [SerializeField] SessionButton SessionButtonPrefab;
 
     [Header("References")]
@@ -20,14 +19,9 @@ public class LobbyScreen : BaseView
     [SerializeField] Transform SessionsParent;
 
     private bool isSessionListOutdated;
-    private MainMenuScreen menuInstance;
 
-    public void Initialize(MainMenuScreen menuInstance)
+    protected override void OnCreation()
     {
-        this.Hide();
-
-        this.menuInstance = menuInstance;
-
         CreateSessionButtons(LobbyComponent.SessionList);
 
         ListenToSessionChanges();
@@ -36,9 +30,28 @@ public class LobbyScreen : BaseView
 
     }
 
-    public void SubscribeToSessionChanges(UnityAction<List<SessionInfo>> SessionListUpdated)
+    protected override void OnFirstExibition()
     {
-        this.LobbyComponent.SessionListUpdatedEvent.AddListener(SessionListUpdated);
+
+    }
+
+    public BaseView SubscribeToChanges(UnityAction<List<SessionInfo>> sessionsListUpdated)
+    {
+        this.LobbyComponent.SessionListUpdatedEvent.AddListener(sessionsListUpdated);
+        return this;
+
+    }
+
+    public void HostGame()
+    {
+        this.GetView<MainMenuScreen>().StartMatch(isHost: true);
+
+    }
+
+    public void BackToMenu()
+    {
+        this.Hide();
+        this.GetView<MainMenuScreen>().Show();
 
     }
 
@@ -55,7 +68,8 @@ public class LobbyScreen : BaseView
     private void JoinSessionByName(string sessionName)
     {
         this.LobbyComponent.JoinSession(sessionName);
-        this.Close();
+        GetView<MainMenuScreen>().Close();
+
     }
 
     private void ListenToSessionChanges()
@@ -103,24 +117,6 @@ public class LobbyScreen : BaseView
             });
 
         });
-
-    }
-
-    public void BackToMenu()
-    {
-        this.Hide();
-        menuInstance.Show();
-
-
-    }
-
-    public override void Close()
-    {
-        if (isClosed)
-            return;
-
-        base.Close();
-        menuInstance.Close();
 
     }
 
