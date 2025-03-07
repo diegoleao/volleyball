@@ -21,7 +21,7 @@ public class MainMenuScreen : BaseView
 
     }
 
-    protected override void OnFirstExibition()
+    protected override void OnFirstShow()
     {
 
     }

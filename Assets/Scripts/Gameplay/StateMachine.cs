@@ -6,26 +6,61 @@ using UnityEngine;
 
 public class StateMachine : BaseStateMachine
 {
-
-    [SerializeField] List<BaseState> baseStates;
-
     public override List<BaseState> CreateAllStates()
     {
         return new List<BaseState>()
         {
-            new MainMenuState().AllowTransitionInto(typeof(StartMatchState)),
+            new MainMenuState()
+                .TransitionsInto(typeof(MatchStartState)),
 
-            new StartMatchState().AllowTransitionInto(typeof(DuringRallyState), 
-                                                      typeof(AwardingPointsState)),
+            new MatchStartState()
+                .TransitionsInto(typeof(SetStartState))
+                .AllowInterruptions(),
 
-            new RallyStartState().AllowTransitionInto(typeof(RallyStartState), 
-                                                      typeof(WinState)),
+                new SetStartState()
+                    .TransitionsInto(typeof(RallyStartState))
+                    .AllowInterruptions(),
 
-            new AwardingPointsState().AllowTransitionInto(typeof(RallyStartState)),
+                    new RallyStartState()
+                        .TransitionsInto(typeof(RallyOngoingState))
+                        .AllowInterruptions(),
 
-            new WinState().AllowTransitionInto(typeof(MainMenuState))
+                    new RallyOngoingState()
+                        .TransitionsInto(typeof(RallyEndState))
+                        .AllowInterruptions(),
+
+                    new AwardingPointsState()
+                        .TransitionsInto(typeof(RallyStartState), typeof(RallyEndState))
+                        .AllowInterruptions(),
+
+                    new RallyEndState()
+                        .TransitionsInto(typeof(SetFinishState))
+                        .AllowInterruptions(),
+
+                new SetFinishState()
+                    .TransitionsInto(typeof(SetStartState)).AllowInterruptions(),
+
+            new MatchEndState()
+                .TransitionsInto(typeof(WinState)),
+
+            new WinState()
+                .TransitionsInto(typeof(MainMenuState)),
+
+            new RestartMatchState()
+                .TransitionsInto(typeof(MatchStartState)),
+
+            new AbortMatchState()
+                .TransitionsInto(typeof(MainMenuState))
 
         };
+
+    }
+
+    public override Type[] GetInterruptionTypes()
+    {
+        return new Type[]{ typeof(AbortMatchState),
+                           typeof(RestartMatchState),
+                           typeof(MainMenuState) };
 
     }
 

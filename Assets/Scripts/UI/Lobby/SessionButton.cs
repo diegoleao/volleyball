@@ -13,7 +13,7 @@ public class SessionButton : BaseView
 
     private UnityAction<SessionInfo> buttonClicked;
 
-    protected override void OnFirstExibition()
+    protected override void OnFirstShow()
     {
 
     }

@@ -10,20 +10,13 @@ using UnityEngine;
 
 public class GameState : MonoBehaviour
 {
-    [SerializeField] float BallSpawnDelay = 1f;
+    public float BallSpawnDelay = 1f;
 
-    [SerializeField] bool ResetPlayerPositionOnScore;
+    public bool ResetPlayerPositionOnScore;
 
     public Team ServingTeam { get; private set; }
 
-    public PlayerScoreData winningScore { get; internal set; }
-
-
-    private WinScreen winScreenInstance;
-
-    private State state;
-
-    private State previousState;
+    public PlayerScoreData WinningScore { get; internal set; }
 
     private MatchInfo matchInfo;
 
@@ -31,11 +24,30 @@ public class GameState : MonoBehaviour
 
     private AppCanvas AppCanvas;
 
+    private StateMachine StateMachine;
+
+    public LocalMatchInfo LocalMatchInfo
+    {
+        get
+        {
+            if (Provider.NetworkMode == NetworkMode.Network)
+            {
+                return matchInfo.LocalInfo;
+            }
+
+            return localMatchInfo;
+
+        }
+
+    }
+
     public void Initialize()
     {
         AppCanvas = Provider.AppCanvas;
         AppCanvas.GetOrCreatePopup<OptionsScreen>();
-        SetState(State.Menu);
+
+        StateMachine = Provider.StateMachine;
+        StateMachine.QueueNext<MainMenuState>();
 
     }
 
@@ -43,7 +55,7 @@ public class GameState : MonoBehaviour
     {
         Provider.GameplayFacade.StartNetworkMatch(roomName, mode, () =>
         {
-            SetState(State.WaitForPlayer2);
+            StateMachine.QueueNext<WaitForOpponentState>();
         },
         () =>
         {
@@ -55,127 +67,20 @@ public class GameState : MonoBehaviour
 
     public void StartSingleplayerMatch()
     {
-        SetState(State.StartMatch);
+        StateMachine.QueueNext<MatchStartState>();
 
     }
 
     //Used by UI
     public void RestartMatch()
     {
-        SetState(State.RestartMatch);
+        StateMachine.QueueNext<RestartMatchState>();
 
-    }
-
-    public void SetState(State newState)
-    {
-        this.previousState = this.state;
-        this.state = newState;
-
-        switch (this.state)
-        {
-            case State.Menu:
-                
-                break;
-
-            case State.WaitForPlayer2:
-                break;
-
-            case State.StartMatch:
-                break;
-
-            case State.RestartMatch:
-                AppCanvas.GetView<OptionsScreen>().Show();
-                Provider.API.ResetMatch();
-                winScreenInstance?.Close();
-                DelaySetRallyStartState();
-                break;
-
-            case State.RallyStart:
-                if(this.previousState != State.RallyStart)
-                {
-                    Observable.Timer(TimeSpan.FromSeconds(BallSpawnDelay)).Subscribe(_ =>
-                    {
-                        Provider.API.SpawnVolleyball(ServingTeam);
-                    });
-                }
-                break;
-
-            case State.AwardingPoints:
-                if (ResetPlayerPositionOnScore)
-                {
-                    Provider.API.ResetPlayerPositions();
-                }   
-                // Lock players positions
-                // Show any "score!" animation
-                // await "MatchInfo.AddPointTo" data to be propagated and only then:
-                if (!this.GetLocalMatchInfo().IsMatchFinished) 
-                { 
-                    SetState(State.RallyStart);
-#if UNITY_EDITOR
-                    Debug.Log($"Match still ongoing at A: {GetLocalMatchInfo().Scores[0].score} vs B: {GetLocalMatchInfo().Scores[1].score}.");
-#endif
-                }
-                else
-                {
-#if UNITY_EDITOR
-                    Debug.Log($"Match finished, skipping Rally Start. Final Score A: {GetLocalMatchInfo().Scores[0].score} vs B: {GetLocalMatchInfo().Scores[1].score}.");
-#else
-                    Debug.Log("Match finished, Skipping Rally Start.");
-#endif
-                }
-                break;
-
-            case State.SetFinished:
-                //if 3 games already ended:
-                //  SetState(GameStates.MatchEnded);
-                //else
-                //   Show timed congratulatory message
-                //***4 seconds later
-                break;
-
-            case State.WinState:
-                //Show end screen with results
-                AppCanvas.GetOrCreate<WinScreen>().SetData(winningScore).Show();
-                //***Wait for a few seconds
-                SetCourtToWinState();
-                AppCanvas.GetView<OptionsScreen>().Hide();
-                Provider.API.UnloadScene();
-                break;
-
-            case State.FinishMatch:
-            case State.AbortMatch:
-                Provider.API.ShutdownNetworkMatch();
-                ReturnToMainScreen();
-                AppCanvas.GetView<OptionsScreen>().Hide();
-                break;
-
-            default:
-                break;
-
-        }
-
-    }
-
-    private void DelaySetRallyStartState()
-    {
-        Observable.NextFrame().Subscribe(_ => { SetState(State.RallyStart); });
-    }
-
-    public void ResetMatch()
-    {
-        
-
-    }
-
-    private void ShowWiningAnimations()
-    {
-        //Player winning and losing animations
-        //Focus camera on winning players field to show them animating
     }
 
     public void HandleTeamScoring(Team scoringTeam)
     {
-        if (GetLocalMatchInfo().IsMatchFinished)
+        if (this.LocalMatchInfo.IsMatchFinished)
             return;
 
         if (scoringTeam == Team.None)
@@ -187,8 +92,8 @@ public class GameState : MonoBehaviour
 
     public void HandlePlayerWinning(PlayerScoreData scoreData)
     {
-        this.winningScore = scoreData;
-        Provider.GameState.SetState(GameState.State.WinState);
+        this.WinningScore = scoreData;
+        StateMachine.QueueNext<WinState>();
 
     }
 
@@ -215,13 +120,6 @@ public class GameState : MonoBehaviour
 
     }
 
-    private void SetCourtToWinState()
-    {
-        //Provider.GameNetworking.ResetPlayerPositions();
-        ShowWiningAnimations();
-
-    }
-
     public void ExitMatch()
     {
         ReturnToMainScreen();
@@ -230,14 +128,14 @@ public class GameState : MonoBehaviour
 
     private void ReturnToMainScreen()
     {
-        SetState(State.Menu);
+        StateMachine.QueueNext<MainMenuState>();
     }
 
 
     //Used by UI
     public void AbortMatch()
     {
-        SetState(State.AbortMatch);
+        StateMachine.QueueNext<AbortMatchState>();
         
     }
 
@@ -257,36 +155,25 @@ public class GameState : MonoBehaviour
 
     }
 
-    private LocalMatchInfo GetLocalMatchInfo()
-    {
-        if(Provider.NetworkMode == NetworkMode.Network)
-        {
-            return matchInfo.LocalInfo;
-        }
-        else
-        {
-            return localMatchInfo;
-        }
-        
-    }
-
     private void HandleScoreChanged(List<PlayerScoreData> scores)
     {
-        if (GetLocalMatchInfo().IsMatchFinished)
+        if (LocalMatchInfo.IsMatchFinished)
             return;
 
         if (scores.All(t => t.score == 0))
         {
-            DelaySetRallyStartState();
+            Provider.StateMachine.QueueNext<RallyStartState>();
         }
-
-        SetState(State.AwardingPoints);
+        else
+        {
+            StateMachine.QueueNext<AwardingPointsState>();
+        }
 
     }
 
     public void StartGameplay()
     {
-        SetState(State.StartMatch);
+        StateMachine.QueueNext<MatchStartState>();
 
     }
 
@@ -294,23 +181,6 @@ public class GameState : MonoBehaviour
     {
         Provider.CourtTriggers.ToggleDebugVolumes();
 
-    }
-
-    [Serializable]
-    public enum State
-    {
-        Menu,
-        StartMatch,
-        RestartMatch,
-        SetStart,
-        RallyStart,
-        DuringRally,
-        AwardingPoints,
-        SetFinished,
-        WinState,
-        FinishMatch,
-        AbortMatch,
-        WaitForPlayer2
     }
 
 }

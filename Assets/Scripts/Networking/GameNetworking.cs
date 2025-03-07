@@ -102,7 +102,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     }
 
     [Button]
-    public async void ShutdownNetworkMatch()
+    public async void ShutdownMatch()
     {
         if (_runner != null && _runner.IsServer)
         {
@@ -316,7 +316,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     {
         if(_runner != null)
         {
-            ShutdownNetworkMatch();
+            ShutdownMatch();
         }
 
     }

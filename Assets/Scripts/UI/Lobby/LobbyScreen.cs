@@ -30,7 +30,7 @@ public class LobbyScreen : BaseView
 
     }
 
-    protected override void OnFirstExibition()
+    protected override void OnFirstShow()
     {
 
     }

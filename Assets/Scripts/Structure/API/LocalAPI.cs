@@ -70,7 +70,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     }
 
-    public void ShutdownNetworkMatch()
+    public void ShutdownMatch()
     {
         UnloadScene();
     }

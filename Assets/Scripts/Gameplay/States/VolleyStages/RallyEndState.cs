@@ -1,5 +1,8 @@
 
-public class RallyStartState : BaseState
+using System;
+using UniRx;
+
+public class RallyEndState : BaseState
 {
 
     public override void OnEnter()
@@ -17,7 +20,7 @@ public class RallyStartState : BaseState
 
     }
 
-    public override void Update()
+    public override void StateUpdate()
     {
 
     }

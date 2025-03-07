@@ -1,5 +1,5 @@
 
-public class WaitForOpponent : BaseState
+public class WaitForOpponentState : BaseState
 {
 
     public override void OnEnter()
@@ -21,7 +21,7 @@ public class WaitForOpponent : BaseState
 
     }
 
-    public override void Update()
+    public override void StateUpdate()
     {
 
     }

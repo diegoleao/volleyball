@@ -1,15 +1,13 @@
-﻿
-using UnityEngine;
 
-public class MainMenuState : BaseState
+public class RestartMatchState : BaseState
 {
 
     public override void OnEnter()
     {
-        AppCanvas.GetView<OptionsScreen>().Hide();
-        AppCanvas.GetOrCreate<MainMenuScreen>().Show();
+        AppCanvas.GetView<OptionsScreen>().Show();
+        Provider.API.ResetMatch();
         AppCanvas.GetView<WinScreen>()?.Close();
-        AppCanvas.GetView<HudView>().ResetScore();
+        //Provider.StateMachine.QueueNext<RallyStartState>();
 
     }
 

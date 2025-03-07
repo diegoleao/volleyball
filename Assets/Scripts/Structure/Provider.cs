@@ -14,7 +14,8 @@ public class Provider : MonoBehaviour
 
 #if UNITY_EDITOR
     [Header("Debug")]
-    public bool SpeedUpForDebugging;
+    public bool _speedUpForDebugging;
+    public static bool SpeedUpForDebugging => Instance._speedUpForDebugging;
 #endif
 
     [Header("Prefabs")]
@@ -51,6 +52,8 @@ public class Provider : MonoBehaviour
 
     public static StateMachine StateMachine => Instance._stateMachine;
 
+    public static bool HasStateAuthority => GameplayFacade.GameNetworking.HasStateAuthority;
+
     [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();
 
     /// <summary>
@@ -78,14 +81,6 @@ public class Provider : MonoBehaviour
 
         return _instance;
 
-    }
-
-    public bool HasStateAuthority
-    {
-        get
-        {
-            return GameplayFacade.GameNetworking.HasStateAuthority;
-        }
     }
 
     void Awake()

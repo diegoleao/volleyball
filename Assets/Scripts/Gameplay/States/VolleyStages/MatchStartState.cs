@@ -1,12 +1,12 @@
 
-public class StartMatchState : BaseState
+public class MatchStartState : BaseState
 {
 
     public override void OnEnter()
     {
         AppCanvas.GetView<OptionsScreen>().Show();
         DebugLog("Player 2 entered. Match Start! =========");
-        Provider.StateMachine.QueueNextState<RallyStartState>();
+        Provider.StateMachine.QueueNext<RallyStartState>();
         AppCanvas.GetView<WinScreen>()?.Close();
     }
 
@@ -20,7 +20,7 @@ public class StartMatchState : BaseState
 
     }
 
-    public override void Update()
+    public override void StateUpdate()
     {
 
     }

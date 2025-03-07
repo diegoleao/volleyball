@@ -1,16 +1,12 @@
-﻿
-using UnityEngine;
 
-public class MainMenuState : BaseState
+public class MatchEndState : BaseState
 {
 
     public override void OnEnter()
     {
+        Provider.API.ShutdownMatch();
         AppCanvas.GetView<OptionsScreen>().Hide();
-        AppCanvas.GetOrCreate<MainMenuScreen>().Show();
-        AppCanvas.GetView<WinScreen>()?.Close();
-        AppCanvas.GetView<HudView>().ResetScore();
-
+        StateMachine.QueueNext<MainMenuState>();
     }
 
     public override void OnCreate()

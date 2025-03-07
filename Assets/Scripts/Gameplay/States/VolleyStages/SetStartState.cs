@@ -1,11 +1,15 @@
 
-public class DuringRallyState : BaseState
+using System;
+using UniRx;
+
+public class SetStartState : BaseState
 {
 
     public override void OnEnter()
     {
 
     }
+
     public override void OnCreate()
     {
 
@@ -16,7 +20,7 @@ public class DuringRallyState : BaseState
 
     }
 
-    public override void Update()
+    public override void StateUpdate()
     {
 
     }

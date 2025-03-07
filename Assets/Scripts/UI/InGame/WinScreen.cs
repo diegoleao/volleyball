@@ -10,7 +10,7 @@ public class WinScreen : BaseView
 
     private PlayerScoreData winningScore;
 
-    protected override void OnFirstExibition()
+    protected override void OnFirstShow()
     {
 
     }
@@ -20,12 +20,13 @@ public class WinScreen : BaseView
         this.winningScore = winningScore;
         this.textMeshProUGUI.text = $"Team \"{(winningScore.playerId == 0 ? "A" : "B")}\" Wins!";
         return this;
+
     }
 
     public void ConfirmButtonPressed()
     {
         this.Close();
-        Provider.GameState.SetState(GameState.State.FinishMatch);
+        Provider.StateMachine.QueueNext<MatchEndState>();
 
     }
 }

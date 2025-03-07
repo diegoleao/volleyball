@@ -10,14 +10,13 @@ public class OptionsScreen : BaseView
 
     private MobileDebugBehaviour mobileDebugBehaviour;
 
-    protected override void OnFirstExibition()
-    {
-
-    }
-
-    void Awake()
+    protected override void OnCreation()
     {
         mobileDebugBehaviour = FindAnyObjectByType<MobileDebugBehaviour>();
+    }
+
+    protected override void OnFirstShow()
+    {
 
     }
 

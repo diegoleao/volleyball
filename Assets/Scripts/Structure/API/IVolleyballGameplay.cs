@@ -15,7 +15,7 @@ public interface IVolleyballGameplay
 
     public void ResetPlayerPositions();
 
-    public void ShutdownNetworkMatch();
+    public void ShutdownMatch();
 
     public void ResetMatch();
 

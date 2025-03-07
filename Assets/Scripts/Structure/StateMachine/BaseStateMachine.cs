@@ -5,26 +5,55 @@ using UnityEngine;
 
 public abstract class BaseStateMachine : MonoBehaviour
 {
+
     private BaseState currentState;
+
     private BaseState previousState; 
     
     private Queue<BaseState> stateQueue = new Queue<BaseState>();
 
     private Dictionary<Type,BaseState> states = new Dictionary<Type, BaseState>();
 
+    private AppCanvas appCanvas;
+    private GameState gameState;
+    private Type[] _interruptions = new Type[] { };
+    public Type[] InterruptionStates
+    {
+        get
+        {
+            if (_interruptions.Length == 0)
+            {
+                _interruptions = GetInterruptionTypes();
+            }
+            return _interruptions;
+        }
+
+    }
+
     void Awake()
     {
+        appCanvas = Provider.AppCanvas;
+        gameState = Provider.GameState;
         Initialize();
+
     }
 
     public void Initialize()
     {
-        FillDictionaryWith(CreateAllStates());
-        states.Values.ForEach(t => t.Inject(Provider.AppCanvas, Provider.volley));
+        FillStatesDictionaryWith(CreateAllStates());
+
+        foreach (var state in states.Values)
+        {
+            state.Inject(gameState, this, appCanvas);
+        }
 
     }
 
-    private void FillDictionaryWith(List<BaseState> statesList)
+    public abstract List<BaseState> CreateAllStates();
+
+    public abstract Type[] GetInterruptionTypes();
+
+    private void FillStatesDictionaryWith(List<BaseState> statesList)
     {
         foreach (BaseState state in statesList)
         {
@@ -32,9 +61,7 @@ public abstract class BaseStateMachine : MonoBehaviour
         }
     }
 
-    public abstract List<BaseState> CreateAllStates();
-
-    public void QueueNextState<T>() where T : BaseState
+    public void QueueNext<T>() where T : BaseState
     {
         stateQueue.Enqueue(states[typeof(T)]);
 
@@ -44,11 +71,14 @@ public abstract class BaseStateMachine : MonoBehaviour
     {
         if (currentState != null && !currentState.CanTransitionTo(newState))
         {
-            Debug.LogError($"[StateMachine] Invalid transition: {currentState.GetType()} → {newState.GetType()}");
+            Debug.LogError($"[StateMachine] Invalid transition:                                                                 {currentState.GetType()} → {newState.GetType()}");
             return;
         }
 
-        Debug.Log($"[StateMachine] Change State: {currentState.GetType()} → {newState.GetType()}");
+#if UNITY_EDITOR
+        Debug.Log($"[StateMachine]                                                                            {currentState?.GetType()} → {newState.GetType()}");
+#endif
+
         previousState = currentState;
         currentState?.OnExit();
         currentState = newState;
@@ -64,7 +94,7 @@ public abstract class BaseStateMachine : MonoBehaviour
         }
         else
         {
-            currentState?.Update();
+            currentState?.StateUpdate();
         }
 
     }

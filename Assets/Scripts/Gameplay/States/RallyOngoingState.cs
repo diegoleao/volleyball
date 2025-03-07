@@ -1,12 +1,11 @@
 
-public class WinState : BaseState
+public class RallyOngoingState : BaseState
 {
 
     public override void OnEnter()
     {
 
     }
-
     public override void OnCreate()
     {
 
@@ -17,7 +16,7 @@ public class WinState : BaseState
 
     }
 
-    public override void Update()
+    public override void StateUpdate()
     {
 
     }

@@ -555,7 +555,7 @@ public abstract class BaseView : BaseElement
             ShowOrUnhide(true);
             try
             {
-                OnFirstExibition();
+                OnFirstShow();
                 OnFirstShowEvent.Invoke();
                 IsInitialized = true;
             }
@@ -713,7 +713,7 @@ public abstract class BaseView : BaseElement
 
     protected virtual void OnCreation() { }
 
-    protected abstract void OnFirstExibition();
+    protected abstract void OnFirstShow();
 
     protected virtual void OnShow() { }
 

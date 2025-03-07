@@ -11,7 +11,7 @@ public class HudView : BaseView
 
     public TextMeshProUGUI ScoreTeamB;
 
-    protected override void OnFirstExibition()
+    protected override void OnFirstShow()
     {
 
     }
