@@ -18,7 +18,7 @@ public class MatchInfo : NetworkBehaviour
     { 
         get
         {
-            return (Provider.Instance.NetworkMode == NetworkMode.Network) ? HasGameStarted : localMatchInfo.HasLocalGameStarted;
+            return (Provider.NetworkMode == NetworkMode.Network) ? HasGameStarted : localMatchInfo.HasLocalGameStarted;
         }
         set
         {
@@ -36,7 +36,7 @@ public class MatchInfo : NetworkBehaviour
     {
         get
         {
-            return (Provider.Instance.NetworkMode == NetworkMode.Network) ? ScoringTeam : localMatchInfo.ScoringTeam;
+            return (Provider.NetworkMode == NetworkMode.Network) ? ScoringTeam : localMatchInfo.ScoringTeam;
         }
         set
         {
@@ -115,7 +115,7 @@ public class MatchInfo : NetworkBehaviour
 
                 case nameof(HasGameStarted):
                     Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {HasGameStarted} =============");
-                    Provider.Instance.GameState.StartGameplay();
+                    Provider.GameState.StartGameplay();
                     break;
 
                 case nameof(NetworkedPlayers):
@@ -203,8 +203,8 @@ public class MatchInfo : NetworkBehaviour
 
     private void MatchReset()
     {
-        Provider.Instance.GameplayFacade.GameNetworking.ResetPlayerPositions();
-        Provider.Instance.GameplayFacade.GameNetworking.DestroyAllBalls();
+        Provider.GameplayFacade.GameNetworking.ResetPlayerPositions();
+        Provider.GameplayFacade.GameNetworking.DestroyAllBalls();
         ResetScores();
 
     }

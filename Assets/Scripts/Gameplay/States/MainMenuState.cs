@@ -6,10 +6,16 @@ public class MainMenuState : BaseState
 
     public override void OnEnter()
     {
-        Provider.AppCanvas.GetView<OptionsScreen>().Hide();
-        Provider.AppCanvas.GetOrCreate<MainMenuScreen>().Show();
-        Provider.AppCanvas.GetView<WinScreen>()?.Close();
-        Provider.AppCanvas.GetView<HudView>().ResetScore();
+        AppCanvas.GetView<OptionsScreen>().Hide();
+        AppCanvas.GetOrCreate<MainMenuScreen>().Show();
+        AppCanvas.GetView<WinScreen>()?.Close();
+        AppCanvas.GetView<HudView>().ResetScore();
+
+    }
+
+    public override void OnCreate()
+    {
+
     }
 
     public override void OnExit()

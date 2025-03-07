@@ -49,7 +49,7 @@ public abstract class BaseVolleyball : MonoBehaviour
     void Awake()
     {
         ApplyDebugChanges();
-        courtCenter = Provider.Instance.CourtCenter.position;
+        courtCenter = Provider.CourtCenter.position;
         rb = GetComponent<Rigidbody>();
         SetDescriptiveName();
         Register(this);
@@ -63,7 +63,7 @@ public abstract class BaseVolleyball : MonoBehaviour
     private void ApplyDebugChanges()
     {
 #if UNITY_EDITOR
-        if (Provider.Instance.SpeedUpForDebugging)
+        if (Provider.SpeedUpForDebugging)
         {
             despawnDelay = 0;
         }

@@ -24,15 +24,15 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     void Awake()
     {
-        this.gameState = Provider.Instance.GameState;
-        this.volleyJoystick = Provider.Instance.VolleyJoystick;
+        this.gameState = Provider.GameState;
+        this.volleyJoystick = Provider.VolleyJoystick;
     }
 
     public void StartLocalMultiplayerMatch()
     {
         InstantiatePlayer(Team.A);
         InstantiatePlayer(Team.B);
-        Provider.Instance.GameState.StartGameplay();
+        Provider.GameState.StartGameplay();
         this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
         this.localMatchInfo.InitializeLocal();
         Provider.Register<LocalMatchInfo>(this.localMatchInfo);
@@ -42,7 +42,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         InstantiatePlayer(Team.A);
         InstantiateAI(Team.B);
-        Provider.Instance.GameState.StartGameplay();
+        Provider.GameState.StartGameplay();
         this.localMatchInfo = Instantiate(_localMatchInfoPrefab, this.transform);
         this.localMatchInfo.InitializeLocal();
         Provider.Register<LocalMatchInfo>(this.localMatchInfo);
@@ -85,7 +85,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void SpawnVolleyball(Team team)
     {
-        this.SpawnVolleyball(_volleyBallPrefab.gameObject, Provider.Instance.CourtTriggers, team);
+        this.SpawnVolleyball(_volleyBallPrefab.gameObject, Provider.CourtTriggers, team);
 
     }
 
@@ -97,7 +97,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
             return;
 
         Instantiate(volleyBallPrefab,
-            Provider.Instance.CourtTriggers.GetBallSpawnPosition(team, _volleyBallPrefab.SpawnHeight), 
+            Provider.CourtTriggers.GetBallSpawnPosition(team, _volleyBallPrefab.SpawnHeight), 
             Quaternion.identity);
 
     }
@@ -111,15 +111,14 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public static Vector3 GetTeamSpawnPosition(Team team, float spawnHeight = 1)
     {
-        return Provider.Instance
-                       .CourtTriggers
+        return Provider.CourtTriggers
                        .GetTeamSpawnPosition(team, spawnHeight);
 
     }
 
     public static Quaternion GetInitialRotation(Vector3 currentPosition)
     {
-        Vector3 targetPositionToLookAt = Provider.Instance.CourtCenter.position;
+        Vector3 targetPositionToLookAt = Provider.CourtCenter.position;
         targetPositionToLookAt.y = currentPosition.y; // Prevent character from bending up or down
 
         return Quaternion.LookRotation(targetPositionToLookAt - currentPosition, Vector3.up);

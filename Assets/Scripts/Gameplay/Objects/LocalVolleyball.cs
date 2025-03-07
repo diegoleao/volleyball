@@ -10,7 +10,7 @@ public class LocalVolleyball : BaseVolleyball
 
     public override void IncreaseScoreForTeam(Team scoringTeam)
     {
-        Provider.Instance.GameState.IncreaseLocalScoreFor(scoringTeam);
+        Provider.GameState.IncreaseLocalScoreFor(scoringTeam);
 
     }
 

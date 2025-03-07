@@ -31,21 +31,21 @@ public class OptionsScreen : BaseView
     [Button]
     public void ToggleDebug()
     {
-        Provider.Instance.GameState.ToggleDebug();
+        Provider.GameState.ToggleDebug();
 
     }
 
     [Button]
     public void RestartMatch()
     {
-        Provider.Instance.GameState.RestartMatch();
+        Provider.GameState.RestartMatch();
 
     }
 
     [Button]
     public void AbortMatch()
     {
-        Provider.Instance.GameState.AbortMatch();
+        Provider.GameState.AbortMatch();
 
     }
 

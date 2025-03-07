@@ -17,35 +17,41 @@ public class Provider : MonoBehaviour
     public bool SpeedUpForDebugging;
 #endif
 
-    [Header("References")]
+    [Header("Prefabs")]
 
     [SerializeField] AppCanvas appCanvasPrefab;
 
+    [Header("References")]
+    [SerializeField] StateMachine _stateMachine;
+
     [SerializeField] GameState gameState;
-    public GameState GameState => this.gameState;
+    public static GameState GameState => Instance.gameState;
 
 
     [SerializeField] GameplayFacade gameplayFacade;
-    public GameplayFacade GameplayFacade => this.gameplayFacade;
+    public static GameplayFacade GameplayFacade => Instance.gameplayFacade;
 
-    public NetworkMode NetworkMode => GameplayFacade.PlayMode;
+    public static NetworkMode NetworkMode => GameplayFacade.PlayMode;
 
-    public IVolleyballGameplay API => GameplayFacade.CurrentAPI;
+    public static IVolleyballGameplay API => GameplayFacade.CurrentAPI;
 
     [Header("Scene Components")]
 
     private CourtTriggers _courtTriggers;
-    public CourtTriggers CourtTriggers => this._courtTriggers;
+    public static CourtTriggers CourtTriggers => Instance._courtTriggers;
 
     private Transform _netCenter;
-    public Transform CourtCenter => this._netCenter;
-
-    [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();
+    public static Transform CourtCenter => Instance._netCenter;
 
     private AppCanvas _appCanvas;
     public static AppCanvas AppCanvas => Instance._appCanvas;
 
-    public VirtualJoystick VolleyJoystick => AppCanvas.GetView<OptionsScreen>()?.VirtualJoystick;
+    private VirtualJoystick _volleyJoystick;
+    public static VirtualJoystick VolleyJoystick => Instance._volleyJoystick;
+
+    public static StateMachine StateMachine => Instance._stateMachine;
+
+    [ShowInInspector] private static List<MonoBehaviour> registeredObjects = new List<MonoBehaviour>();
 
     /// <summary>
     /// Lazy loaded instance.
@@ -67,6 +73,7 @@ public class Provider : MonoBehaviour
             _instance._appCanvas = Instantiate(Instance.appCanvasPrefab).Initialize();
             _instance._courtTriggers = FindAnyObjectByType<CourtTriggers>();
             _instance._netCenter = FindAnyObjectByType<NetCenter>().transform;
+            _instance._volleyJoystick = AppCanvas.GetView<OptionsScreen>()?.VirtualJoystick;
         }
 
         return _instance;
@@ -138,21 +145,21 @@ public class Provider : MonoBehaviour
     {
         if (objectToRegister is MatchInfo)
         {
-            Instance.GameState.SetMatchInfo(objectToRegister as MatchInfo);
+            GameState.SetMatchInfo(objectToRegister as MatchInfo);
 
             FindAnyObjectByType<HudView>().Initialize((objectToRegister as MatchInfo).LocalInfo);
 
-            Instance.API.InjectMatchInfo(objectToRegister as MatchInfo);
+            API.InjectMatchInfo(objectToRegister as MatchInfo);
 
         }
 
         if (objectToRegister is LocalMatchInfo)
         {
-            Instance.GameState.SetLocalMatchInfo(objectToRegister as LocalMatchInfo);
+            GameState.SetLocalMatchInfo(objectToRegister as LocalMatchInfo);
 
             FindAnyObjectByType<HudView>().Initialize(objectToRegister as LocalMatchInfo);
 
-            Instance.API.InjectMatchInfo(objectToRegister as LocalMatchInfo);
+            API.InjectMatchInfo(objectToRegister as LocalMatchInfo);
 
         }
 

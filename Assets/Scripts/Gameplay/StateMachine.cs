@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class VolleyballStateMachine : BaseStateMachine
+public class StateMachine : BaseStateMachine
 {
 
     [SerializeField] List<BaseState> baseStates;
@@ -13,13 +13,18 @@ public class VolleyballStateMachine : BaseStateMachine
     {
         return new List<BaseState>()
         {
-            new MainMenuState().AllowTransitionInto<StartMatchState>(),
+            new MainMenuState().AllowTransitionInto(typeof(StartMatchState)),
+
             new StartMatchState().AllowTransitionInto(typeof(DuringRallyState), 
                                                       typeof(AwardingPointsState)),
+
             new RallyStartState().AllowTransitionInto(typeof(RallyStartState), 
                                                       typeof(WinState)),
-            new AwardingPointsState().AllowTransitionInto<RallyStartState>(),
-            new WinState().AllowTransitionInto<MainMenuState>()
+
+            new AwardingPointsState().AllowTransitionInto(typeof(RallyStartState)),
+
+            new WinState().AllowTransitionInto(typeof(MainMenuState))
+
         };
 
     }

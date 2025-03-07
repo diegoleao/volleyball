@@ -6,6 +6,10 @@ public class AwardingPointsState : BaseState
     {
 
     }
+    public override void OnCreate()
+    {
+
+    }
 
     public override void OnExit()
     {

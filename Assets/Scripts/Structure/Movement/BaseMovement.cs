@@ -24,8 +24,8 @@ public abstract class BaseMovement : MonoBehaviour
     public virtual void Initialize(Team team)
     {
         this.rb = GetComponent<Rigidbody>();
-        netCenter = Provider.Instance.CourtCenter.position;
-        spawnCenter = Provider.Instance.CourtTriggers.GetSpawnCenter(team);
+        netCenter = Provider.CourtCenter.position;
+        spawnCenter = Provider.CourtTriggers.GetSpawnCenter(team);
         isInitialized = true;
 
     }

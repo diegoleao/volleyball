@@ -6,6 +6,10 @@ public class DuringRallyState : BaseState
     {
 
     }
+    public override void OnCreate()
+    {
+
+    }
 
     public override void OnExit()
     {

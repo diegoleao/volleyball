@@ -7,6 +7,11 @@ public class WinState : BaseState
 
     }
 
+    public override void OnCreate()
+    {
+
+    }
+
     public override void OnExit()
     {
 

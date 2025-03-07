@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4075137020301551865}
+  - component: {fileID: 4577976169155207741}
   m_Layer: 0
   m_Name: VolleyballStateMachine
   m_TagString: Untagged
@@ -31,6 +32,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5928356851790042352}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4577976169155207741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475340420118794584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe6f6f391f648b54f94f163499559c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseStates: []
 --- !u!1 &5599698857756274049
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,9 +144,6 @@ MonoBehaviour:
   appCanvasPrefab: {fileID: 540528049763917268, guid: f96cb052ce1c51a43af98acfd9ffab16, type: 3}
   gameState: {fileID: 7029205177472448252}
   gameplayFacade: {fileID: 1314488750105559997}
-  volleyJoystick: {fileID: 0}
-  courtTriggers: {fileID: 0}
-  courtCenter: {fileID: 0}
 --- !u!1 &9054079183415268123
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,8 +190,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BallSpawnDelay: 1
   ResetPlayerPositionOnScore: 0
-  MainMenu: {fileID: 947122929107061733, guid: 538433b480e35dd4da2a2fedc117cb34, type: 3}
-  WinScreen: {fileID: 6763790122878942547, guid: 6eca5d07069efc645ae6277265bc3ad0, type: 3}
 --- !u!1 &9103894986256493635
 GameObject:
   m_ObjectHideFlags: 0

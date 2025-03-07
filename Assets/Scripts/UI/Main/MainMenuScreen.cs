@@ -36,7 +36,7 @@ public class MainMenuScreen : BaseView
     {
         if (isHost)
         {
-            Provider.Instance.GameState.StartMultiplayerMatch($"Match {Guid.NewGuid()}", GameMode.Host);
+            Provider.GameState.StartMultiplayerMatch($"Match {Guid.NewGuid()}", GameMode.Host);
             Close();
         }
         else
@@ -50,14 +50,14 @@ public class MainMenuScreen : BaseView
 
     public void StartSinglePlayer()
     {
-        Provider.Instance.GameplayFacade.StartSingleplayerMatch();
+        Provider.GameplayFacade.StartSingleplayerMatch();
         Close();
 
     }
 
     public void StartLocalMultiplayer()
     {
-        Provider.Instance.GameplayFacade.StartLocalMatch();
+        Provider.GameplayFacade.StartLocalMatch();
         Close();
 
     }

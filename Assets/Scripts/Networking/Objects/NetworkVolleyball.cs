@@ -10,7 +10,7 @@ public class NetworkVolleyball : BaseVolleyball
 
     public override void IncreaseScoreForTeam(Team scoringTeam)
     {
-        Provider.Instance.GameState.IncreaseNetworkedScoreFor(scoringTeam);
+        Provider.GameState.IncreaseNetworkedScoreFor(scoringTeam);
 
     }
 

@@ -25,7 +25,7 @@ public class NetworkPlayer : NetworkBehaviour
 
     public void Initialize()
     {
-        this.Team = Provider.Instance.GameplayFacade.MyNetworkTeam;
+        this.Team = Provider.GameplayFacade.MyNetworkTeam;
 
         jumpComponent = GetComponent<NetworkJumpComponent>();
 

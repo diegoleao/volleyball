@@ -25,7 +25,7 @@ public class WinScreen : BaseView
     public void ConfirmButtonPressed()
     {
         this.Close();
-        Provider.Instance.GameState.SetState(GameState.State.FinishMatch);
+        Provider.GameState.SetState(GameState.State.FinishMatch);
 
     }
 }

@@ -1,13 +1,14 @@
 
-public class StartMatchState : BaseState
+public class WaitForOpponent : BaseState
 {
 
     public override void OnEnter()
     {
+        DebugLog("Waiting for Player 2...");
         AppCanvas.GetView<OptionsScreen>().Show();
-        DebugLog("Player 2 entered. Match Start! =========");
-        Provider.StateMachine.QueueNextState<RallyStartState>();
-        AppCanvas.GetView<WinScreen>()?.Close();
+        //Show screen communicating the wait for another player
+        //Show button to cancel the Match
+
     }
 
     public override void OnCreate()

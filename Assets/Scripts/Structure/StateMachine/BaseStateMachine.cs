@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sirenix.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ public abstract class BaseStateMachine : MonoBehaviour
     public void Initialize()
     {
         FillDictionaryWith(CreateAllStates());
+        states.Values.ForEach(t => t.Inject(Provider.AppCanvas, Provider.volley));
 
     }
 

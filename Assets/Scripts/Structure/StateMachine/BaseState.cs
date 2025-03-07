@@ -6,13 +6,11 @@ using UnityEngine;
 [Serializable]
 public abstract class BaseState : MonoBehaviour
 {
-    protected HashSet<Type> AllowedTransitions = new HashSet<Type>();
 
-    public BaseState AllowTransitionInto<T>() where T : BaseState
-    {
-        AllowedTransitions.Add(typeof(T));
-        return this;
-    }
+    protected AppCanvas AppCanvas { get; private set; }
+    protected StateMachine StateMachine { get; private set; }
+
+    private HashSet<Type> AllowedTransitions = new HashSet<Type>();
 
     public BaseState AllowTransitionInto(params Type[] states)
     {
@@ -32,11 +30,25 @@ public abstract class BaseState : MonoBehaviour
 
     }
 
+    public void Inject(AppCanvas appCanvas, StateMachine stateMachine)
+    {
+        this.AppCanvas = appCanvas;
+        this.StateMachine = stateMachine;
+
+    }
+
+    public abstract void OnCreate();
+
     public abstract void OnEnter();
 
     public abstract void OnExit();
 
     public abstract void Update();
+
+    protected void DebugLog(string message)
+    {
+        Debug.Log($"[State] {message}");
+    }
 
 }
 

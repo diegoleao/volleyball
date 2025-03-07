@@ -41,7 +41,7 @@ public class LobbyComponent : MonoBehaviour, INetworkRunnerCallbacks
 
     public void JoinSession(string sessionName)
     {
-        Provider.Instance.GameState.StartMultiplayerMatch(sessionName, GameMode.Client);
+        Provider.GameState.StartMultiplayerMatch(sessionName, GameMode.Client);
 
     }
 

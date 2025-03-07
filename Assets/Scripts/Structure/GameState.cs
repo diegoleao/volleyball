@@ -41,7 +41,7 @@ public class GameState : MonoBehaviour
 
     public void StartMultiplayerMatch(string roomName, GameMode mode)
     {
-        Provider.Instance.GameplayFacade.StartNetworkMatch(roomName, mode, () =>
+        Provider.GameplayFacade.StartNetworkMatch(roomName, mode, () =>
         {
             SetState(State.WaitForPlayer2);
         },
@@ -74,29 +74,18 @@ public class GameState : MonoBehaviour
         switch (this.state)
         {
             case State.Menu:
-                AppCanvas.GetView<OptionsScreen>().Hide();
-                AppCanvas.GetOrCreate<MainMenuScreen>().Show();
-                AppCanvas.GetView<WinScreen>()?.Close();
-                AppCanvas.GetView<HudView>().ResetScore();
+                
                 break;
 
             case State.WaitForPlayer2:
-                Debug.Log("Waiting for Player 2...");
-                AppCanvas.GetView<OptionsScreen>().Show();
-                //Show screen communicating the wait for another player
-                //Show button to cancel the Match
                 break;
 
             case State.StartMatch:
-                AppCanvas.GetView<OptionsScreen>().Show();
-                Debug.Log("Player 2 entered. Match Start! =========");
-                SetState(State.RallyStart);
-                winScreenInstance?.Close();
                 break;
 
             case State.RestartMatch:
                 AppCanvas.GetView<OptionsScreen>().Show();
-                Provider.Instance.API.ResetMatch();
+                Provider.API.ResetMatch();
                 winScreenInstance?.Close();
                 DelaySetRallyStartState();
                 break;
@@ -106,7 +95,7 @@ public class GameState : MonoBehaviour
                 {
                     Observable.Timer(TimeSpan.FromSeconds(BallSpawnDelay)).Subscribe(_ =>
                     {
-                        Provider.Instance.API.SpawnVolleyball(ServingTeam);
+                        Provider.API.SpawnVolleyball(ServingTeam);
                     });
                 }
                 break;
@@ -114,7 +103,7 @@ public class GameState : MonoBehaviour
             case State.AwardingPoints:
                 if (ResetPlayerPositionOnScore)
                 {
-                    Provider.Instance.API.ResetPlayerPositions();
+                    Provider.API.ResetPlayerPositions();
                 }   
                 // Lock players positions
                 // Show any "score!" animation
@@ -150,12 +139,12 @@ public class GameState : MonoBehaviour
                 //***Wait for a few seconds
                 SetCourtToWinState();
                 AppCanvas.GetView<OptionsScreen>().Hide();
-                Provider.Instance.API.UnloadScene();
+                Provider.API.UnloadScene();
                 break;
 
             case State.FinishMatch:
             case State.AbortMatch:
-                Provider.Instance.API.ShutdownNetworkMatch();
+                Provider.API.ShutdownNetworkMatch();
                 ReturnToMainScreen();
                 AppCanvas.GetView<OptionsScreen>().Hide();
                 break;
@@ -199,13 +188,13 @@ public class GameState : MonoBehaviour
     public void HandlePlayerWinning(PlayerScoreData scoreData)
     {
         this.winningScore = scoreData;
-        Provider.Instance.GameState.SetState(GameState.State.WinState);
+        Provider.GameState.SetState(GameState.State.WinState);
 
     }
 
     public void IncreaseNetworkedScoreFor(Team team)
     {
-        if (Provider.Instance.HasStateAuthority)
+        if (Provider.HasStateAuthority)
         {
             Debug.Log($"[GameState][Networked] Increase Score for Team {team}");
             this.matchInfo.AddNetworkedScore(team);
@@ -222,13 +211,13 @@ public class GameState : MonoBehaviour
 
     private void ResetCourtState()
     {
-        Provider.Instance.API.ResetPlayerPositions();
+        Provider.API.ResetPlayerPositions();
 
     }
 
     private void SetCourtToWinState()
     {
-        //Provider.Instance.GameNetworking.ResetPlayerPositions();
+        //Provider.GameNetworking.ResetPlayerPositions();
         ShowWiningAnimations();
 
     }
@@ -270,7 +259,7 @@ public class GameState : MonoBehaviour
 
     private LocalMatchInfo GetLocalMatchInfo()
     {
-        if(Provider.Instance.NetworkMode == NetworkMode.Network)
+        if(Provider.NetworkMode == NetworkMode.Network)
         {
             return matchInfo.LocalInfo;
         }
@@ -303,7 +292,7 @@ public class GameState : MonoBehaviour
 
     public void ToggleDebug()
     {
-        Provider.Instance.CourtTriggers.ToggleDebugVolumes();
+        Provider.CourtTriggers.ToggleDebugVolumes();
 
     }
 

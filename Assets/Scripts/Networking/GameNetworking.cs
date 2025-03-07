@@ -55,8 +55,8 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     void Awake()
     {
-        this.gameState = Provider.Instance.GameState;
-        this.volleyJoystick = Provider.Instance.VolleyJoystick;
+        this.gameState = Provider.GameState;
+        this.volleyJoystick = Provider.VolleyJoystick;
 
     }
 
@@ -218,7 +218,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     public void SpawnVolleyball(Team team)
     {
-        SpawnVolleyball(this._volleybalPrefab, Provider.Instance.CourtTriggers, team);
+        SpawnVolleyball(this._volleybalPrefab, Provider.CourtTriggers, team);
     }
 
     public void SpawnVolleyball(GameObject volleyBallPrefab, CourtTriggers courtTriggers, Team team)

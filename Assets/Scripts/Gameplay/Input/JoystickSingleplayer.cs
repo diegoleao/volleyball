@@ -12,7 +12,7 @@ public class JoystickSingleplayer : MonoBehaviour
     public void Initialize(Team team)
     {
         this.team = team;
-        joystick = Provider.Instance.VolleyJoystick;
+        joystick = Provider.VolleyJoystick;
 
     }
 
