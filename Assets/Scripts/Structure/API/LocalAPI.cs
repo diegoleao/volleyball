@@ -53,8 +53,13 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
     {
         ResetPlayerPositions();
         DestroyAllBalls();
-        this.localMatchInfo.ResetScore();
+        this.localMatchInfo.LocalResetMatch();
 
+    }
+
+    public void ResetSet()
+    {
+        this.localMatchInfo.LocalResetSet();
     }
 
     public void ResetPlayerPositions()

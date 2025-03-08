@@ -130,6 +130,9 @@ public abstract class BaseVolleyball : MonoBehaviour
 
         await Observable.Timer(TimeSpan.FromSeconds(this.groundTouchDelay));
 
+        if (this == null)
+            return;
+
         if (bufferedGrounded)
         {
             Debug.Log($"[Ball-Floor] ({this.name}) Still grounded. CONFIRM SCORE!");    

@@ -17,6 +17,8 @@ public interface IVolleyballGameplay
 
     public void ShutdownMatch();
 
+    public void ResetSet();
+
     public void ResetMatch();
 
     public void UnloadScene();

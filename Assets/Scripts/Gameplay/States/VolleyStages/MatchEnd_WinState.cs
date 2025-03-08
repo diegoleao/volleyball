@@ -4,10 +4,12 @@ public class MatchEnd_WinState : BaseState
 
     public override void OnEnter()
     {
-        AppCanvas.GetOrCreate<WinScreen>().SetData(this.GameState.WinningScore).Show();
         AppCanvas.GetView<OptionsScreen>().Hide();
+        //   Show Match congratulatory message
         //Set players to winning positions
-        ShowWiningAnimations();
+        //***4 seconds later
+        ShowWiningAnimations();//await it
+        AppCanvas.GetOrCreate<WinScreen>().SetData(this.GameState.WinningScore).Show();
         Provider.API.UnloadScene();
 
     }

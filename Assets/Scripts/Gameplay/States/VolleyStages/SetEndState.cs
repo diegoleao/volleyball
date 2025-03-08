@@ -11,11 +11,12 @@ public class SetEndState : BaseState
         }
         else
         {
+            //   Show set congratulatory message
+            //***4 seconds later
+            Provider.API.ResetSet();
             ShowMatchOngoingLogMessage();
+
         }
-        //else
-        //   Show timed congratulatory message
-        //***4 seconds later
     }
 
     public override void OnCreate()

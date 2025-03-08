@@ -161,9 +161,10 @@ public class GameState : MonoBehaviour
         if (LocalMatchInfo.IsSetFinished)
             return;
 
-        if (scores.All(t => t.score != 0))
+        if (scores.Any(t => t.score != 0))
         {
             StateMachine.QueueNext<AwardingPointsState>();
+            return;
         }
 
     }

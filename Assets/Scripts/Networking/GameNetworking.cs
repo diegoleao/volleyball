@@ -126,6 +126,12 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     }
 
+    public void ResetSet()
+    {
+        matchInfo?.RequestSetReset();
+
+    }
+
     public void DestroyAllBalls()
     {
         if (HasStateAuthority)
@@ -342,5 +348,4 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data) { }
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
-
 }

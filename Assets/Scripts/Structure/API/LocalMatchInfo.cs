@@ -8,11 +8,7 @@ using UnityEngine.Events;
 
 public class LocalMatchInfo : MonoBehaviour
 {
-#if UNITY_EDITOR
-    [SerializeField] int MaxSetScore = 1;
-#else
-    const int MaxSetScore = 7;
-#endif
+    private int MaxSetScore = 3;
 
     private const int TeamA_ID = 0;
     private const int TeamB_ID = 1;
@@ -38,9 +34,7 @@ public class LocalMatchInfo : MonoBehaviour
     {
         get
         {
-            //if 3 games already ended:
-            //  SetState(GameStates.MatchEnded);
-            return true;//TODO: Implement match concept
+            return IsSetFinished && (setResults.Count == 3);
         }
 
     }
@@ -131,7 +125,7 @@ public class LocalMatchInfo : MonoBehaviour
 
         if (IsSetFinished)
         {
-            Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId} (Team {(Team)playerId})");
+            Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId} (Team {team})");
             return;
         }
 
@@ -173,6 +167,7 @@ public class LocalMatchInfo : MonoBehaviour
         }
 
         ScoreChangedEvent?.Invoke(this.Scores);
+
     }
 
     public List<PlayerScoreData> GetScoresAsList(int player1, int scorePlayer1, int player2, int scorePlayer2)
@@ -199,11 +194,23 @@ public class LocalMatchInfo : MonoBehaviour
 
     }
 
-    public void ResetScore()
+    public void LocalResetMatch()
+    {
+        ResetScore();
+
+    }
+
+    public void LocalResetSet()
+    {
+        ResetScore();
+        Provider.StateMachine.QueueNext<SetStartState>();
+
+    }
+
+    private void ResetScore()
     {
         Scores.ForEach(t => { t.score = 0; });
-        HandleScoreUpdates(Scores);
-
+        ScoreChangedEvent?.Invoke(this.Scores);
     }
 
 }

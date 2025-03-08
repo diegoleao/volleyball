@@ -55,6 +55,9 @@ public class MatchInfo : NetworkBehaviour
         }
     }
 
+    [Networked]
+    private bool IsResetSet { get; set; }
+
     //Networked
     [ShowInInspector]
     [Networked, Capacity(2)]
@@ -100,7 +103,16 @@ public class MatchInfo : NetworkBehaviour
         {
             switch (change)
             {
-                case nameof(NetworkedScore):
+                case nameof(IsResetSet):
+                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {IsResetSet} =============");
+                    if (IsResetSet)
+                    {
+                        IsResetSet = false;
+                        Provider.StateMachine.QueueNext<SetStartState>();
+                    }
+                break;
+
+            case nameof(NetworkedScore):
                     Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {NetworkedScore} =============");
                     this.localMatchInfo.HandleScoreUpdates(GetNetworkedScoresAsList());
                     break;
@@ -201,16 +213,43 @@ public class MatchInfo : NetworkBehaviour
         }
     }
 
+    [Button]
+    public void RequestSetReset()
+    {
+        if (Runner.IsClient)
+        {
+            RPC_RequestSetReset();
+        }
+        else
+        {
+            SetReset();
+        }
+
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPC_RequestSetReset(RpcInfo info = default)
+    {
+        if (Runner.IsServer)
+        {
+            SetReset();
+        }
+    }
+
+    private void SetReset()
+    {
+        Provider.GameplayFacade.GameNetworking.ResetPlayerPositions();
+        Provider.GameplayFacade.GameNetworking.DestroyAllBalls();
+        NetworkedScore.Set(0, 0);
+        NetworkedScore.Set(1, 0);
+        IsResetSet = true;
+
+    }
+
     private void MatchReset()
     {
         Provider.GameplayFacade.GameNetworking.ResetPlayerPositions();
         Provider.GameplayFacade.GameNetworking.DestroyAllBalls();
-        ResetScores();
-
-    }
-
-    private void ResetScores()
-    {
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
 
