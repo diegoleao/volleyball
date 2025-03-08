@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public abstract class BaseState : MonoBehaviour
+public abstract class BaseState
 {
 
     protected AppCanvas AppCanvas { get; private set; }

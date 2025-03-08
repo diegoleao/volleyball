@@ -12,7 +12,7 @@ public abstract class BaseStateMachine : MonoBehaviour
     
     private Queue<BaseState> stateQueue = new Queue<BaseState>();
 
-    private Dictionary<Type,BaseState> states = new Dictionary<Type, BaseState>();
+    private Dictionary<Type, BaseState> states = new Dictionary<Type, BaseState>();
 
     private AppCanvas appCanvas;
     private GameState gameState;
@@ -63,7 +63,15 @@ public abstract class BaseStateMachine : MonoBehaviour
 
     public void QueueNext<T>() where T : BaseState
     {
-        stateQueue.Enqueue(states[typeof(T)]);
+        states.TryGetValue(typeof(T), out var state);
+        if(state == null)
+        {
+            Debug.LogError($"Failed to Queue the State '{typeof(T).Name}', because it was not created by CreateAllStates().");
+        }
+        else
+        {
+            stateQueue.Enqueue(state);
+        }
 
     }
 

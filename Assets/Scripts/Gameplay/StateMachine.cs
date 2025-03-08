@@ -50,7 +50,11 @@ public class StateMachine : BaseStateMachine
                 .TransitionsInto(typeof(MatchStartState)),
 
             new AbortMatchState()
+                .TransitionsInto(typeof(MainMenuState)),
+
+            new WaitForOpponentState()
                 .TransitionsInto(typeof(MainMenuState))
+                .AllowInterruptions()
 
         };
 

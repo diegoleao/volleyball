@@ -75,10 +75,6 @@ public class AppCanvas : MonoBehaviour
             {
                 GetOrCreate(startupScreen.GetType()).Show();
             }
-            else
-            {
-                Debug.LogWarning("Attention: There is no Startup Screen defined on AppCanvas.");
-            }
 
             foreach (BaseView view in instancedViewTypes)
             {
