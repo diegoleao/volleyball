@@ -10,6 +10,7 @@ public class RallyStartState : BaseState
         Observable.Timer(TimeSpan.FromSeconds(this.GameState.BallSpawnDelay)).Subscribe(_ =>
         {
             Provider.API.SpawnVolleyball(this.GameState.ServingTeam);
+            StateMachine.QueueNext<RallyOngoingState>();
         });
 
     }

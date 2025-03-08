@@ -48,7 +48,10 @@ public abstract class BaseState
         this.GameState = gameState;
         this.StateMachine = stateMachine;
         this.AppCanvas = appCanvas;
-        this.TransitionsInto(StateMachine.InterruptionStates);
+        if (this.allowsInterruptions)
+        {
+            this.TransitionsInto(StateMachine.InterruptionStates);
+        }
 
     }
 
@@ -64,6 +67,32 @@ public abstract class BaseState
     {
         Debug.Log($"[State] {message}");
     }
+
+    protected void ShowSetFinishedLogMessage()
+    {
+#if UNITY_EDITOR
+        Debug.Log($"Set finished. Final Score [ {GetScoresText()} ].");
+#else
+        Debug.Log("Set finished.");
+#endif
+    }
+
+    protected void ShowMatchOngoingLogMessage()
+    {
+#if UNITY_EDITOR
+        Debug.Log($"Set still ongoing. Current Score [ {GetScoresText()} ].");
+#else
+        Debug.Log("Set still ongoing.");
+#endif
+    }
+
+#if UNITY_EDITOR
+    protected string GetScoresText()
+    {
+        return $"A: {this.GameState.LocalMatchInfo.Scores[0].score} vs " +
+               $"B: {this.GameState.LocalMatchInfo.Scores[1].score}";
+    }
+#endif
 
 }
 

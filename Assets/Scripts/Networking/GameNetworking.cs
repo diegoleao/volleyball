@@ -151,6 +151,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
             if ((playersInGame >= requiredPlayers) && !matchInfo.HasMatchStarted)
             {
+                Debug.Log("========= Player 2 connected. Match Start! =========");
                 matchInfo.HasMatchStarted = true;
 
             }

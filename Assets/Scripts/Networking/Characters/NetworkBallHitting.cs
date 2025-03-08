@@ -5,7 +5,6 @@ using UnityEngine;
 public class NetworkBallHitting : BaseBallImpulse
 {
     [Header("Player Attributes")]
-    [SerializeField] float maxImpulseDistance = 3;
     [SerializeField] float timeBetweenBufferAttempts = 0.3f;
 
     private float previousAttemptTime;

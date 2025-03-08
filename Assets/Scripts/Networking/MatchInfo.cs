@@ -51,7 +51,7 @@ public class MatchInfo : NetworkBehaviour
     {
         get
         {
-            return localMatchInfo.IsMatchFinished;
+            return localMatchInfo.IsSetFinished;
         }
     }
 
@@ -138,7 +138,7 @@ public class MatchInfo : NetworkBehaviour
 
         if (HasStateAuthority) // Only update on the authoritative side
         {
-            if (localMatchInfo.IsMatchFinished)
+            if (localMatchInfo.IsSetFinished)
             {
                 Debug.Log($"[MatchInfo] MATCH FINISHED - IGNORING Score for Player Id {playerId}");
                 return;

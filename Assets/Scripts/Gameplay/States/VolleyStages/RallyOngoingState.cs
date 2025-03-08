@@ -6,6 +6,7 @@ public class RallyOngoingState : BaseState
     {
 
     }
+
     public override void OnCreate()
     {
 

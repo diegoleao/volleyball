@@ -1,5 +1,5 @@
 
-public class AbortMatchState : MatchEndState
+public class AbortMatchState : ShutdownState
 {
 
 }

@@ -53,9 +53,10 @@ public class GameState : MonoBehaviour
 
     public void StartMultiplayerMatch(string roomName, GameMode mode)
     {
+        StateMachine.QueueNext<WaitForOpponentState>();
         Provider.GameplayFacade.StartNetworkMatch(roomName, mode, () =>
         {
-            StateMachine.QueueNext<WaitForOpponentState>();
+
         },
         () =>
         {
@@ -80,7 +81,7 @@ public class GameState : MonoBehaviour
 
     public void HandleTeamScoring(Team scoringTeam)
     {
-        if (this.LocalMatchInfo.IsMatchFinished)
+        if (this.LocalMatchInfo.IsSetFinished)
             return;
 
         if (scoringTeam == Team.None)
@@ -90,10 +91,10 @@ public class GameState : MonoBehaviour
 
     }
 
-    public void HandlePlayerWinning(PlayerScoreData scoreData)
+    public void HandleSetFinished(PlayerScoreData scoreData)
     {
         this.WinningScore = scoreData;
-        StateMachine.QueueNext<WinState>();
+        StateMachine.QueueNext<RallyEndState>();
 
     }
 
@@ -151,20 +152,16 @@ public class GameState : MonoBehaviour
         this.localMatchInfo = localMatchInfo;
         localMatchInfo.TeamScoreEvent.AddListener(HandleTeamScoring);
         localMatchInfo.ScoreChangedEvent.AddListener(HandleScoreChanged);
-        localMatchInfo.PlayerWonEvent.AddListener(HandlePlayerWinning);
+        localMatchInfo.SetWonEvent.AddListener(HandleSetFinished);
 
     }
 
     private void HandleScoreChanged(List<PlayerScoreData> scores)
     {
-        if (LocalMatchInfo.IsMatchFinished)
+        if (LocalMatchInfo.IsSetFinished)
             return;
 
-        if (scores.All(t => t.score == 0))
-        {
-            Provider.StateMachine.QueueNext<RallyStartState>();
-        }
-        else
+        if (scores.All(t => t.score != 0))
         {
             StateMachine.QueueNext<AwardingPointsState>();
         }

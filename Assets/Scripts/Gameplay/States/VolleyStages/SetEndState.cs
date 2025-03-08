@@ -1,11 +1,18 @@
 
-public class SetFinishState : BaseState
+public class SetEndState : BaseState
 {
 
     public override void OnEnter()
     {
-        //if 3 games already ended:
-        //  SetState(GameStates.MatchEnded);
+        if (this.GameState.LocalMatchInfo.IsMatchFinished)
+        {
+            ShowSetFinishedLogMessage();
+            StateMachine.QueueNext<MatchEnd_WinState>();
+        }
+        else
+        {
+            ShowMatchOngoingLogMessage();
+        }
         //else
         //   Show timed congratulatory message
         //***4 seconds later

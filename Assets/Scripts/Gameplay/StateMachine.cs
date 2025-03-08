@@ -11,7 +11,7 @@ public class StateMachine : BaseStateMachine
         return new List<BaseState>()
         {
             new MainMenuState()
-                .TransitionsInto(typeof(MatchStartState)),
+                .TransitionsInto(typeof(MatchStartState), typeof(WaitForOpponentState)),
 
             new MatchStartState()
                 .TransitionsInto(typeof(SetStartState))
@@ -26,25 +26,22 @@ public class StateMachine : BaseStateMachine
                         .AllowInterruptions(),
 
                     new RallyOngoingState()
-                        .TransitionsInto(typeof(RallyEndState))
+                        .TransitionsInto(typeof(AwardingPointsState), typeof(RallyEndState))
                         .AllowInterruptions(),
 
                     new AwardingPointsState()
-                        .TransitionsInto(typeof(RallyStartState), typeof(RallyEndState))
+                        .TransitionsInto(typeof(RallyEndState))
                         .AllowInterruptions(),
 
                     new RallyEndState()
-                        .TransitionsInto(typeof(SetFinishState))
+                        .TransitionsInto(typeof(RallyStartState), typeof(SetEndState))
                         .AllowInterruptions(),
 
-                new SetFinishState()
-                    .TransitionsInto(typeof(SetStartState)).AllowInterruptions(),
+                new SetEndState()
+                    .TransitionsInto(typeof(SetStartState), typeof(MatchEnd_WinState)).AllowInterruptions(),
 
-            new MatchEndState()
-                .TransitionsInto(typeof(WinState)),
-
-            new WinState()
-                .TransitionsInto(typeof(MainMenuState)),
+            new MatchEnd_WinState()
+                .TransitionsInto(typeof(ShutdownState)),
 
             new RestartMatchState()
                 .TransitionsInto(typeof(MatchStartState)),
@@ -53,8 +50,11 @@ public class StateMachine : BaseStateMachine
                 .TransitionsInto(typeof(MainMenuState)),
 
             new WaitForOpponentState()
+                .TransitionsInto(typeof(MainMenuState), typeof(MatchStartState))
+                .AllowInterruptions(),
+
+            new ShutdownState()
                 .TransitionsInto(typeof(MainMenuState))
-                .AllowInterruptions()
 
         };
 
@@ -63,6 +63,7 @@ public class StateMachine : BaseStateMachine
     public override Type[] GetInterruptionTypes()
     {
         return new Type[]{ typeof(AbortMatchState),
+                           typeof(AwardingPointsState),     
                            typeof(RestartMatchState),
                            typeof(MainMenuState) };
 

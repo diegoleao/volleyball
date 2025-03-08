@@ -6,6 +6,8 @@ using UnityEngine;
 public abstract class BaseStateMachine : MonoBehaviour
 {
 
+    private const string LogPrefix = "[StateMachine]";
+
     private BaseState currentState;
 
     private BaseState previousState; 
@@ -66,10 +68,11 @@ public abstract class BaseStateMachine : MonoBehaviour
         states.TryGetValue(typeof(T), out var state);
         if(state == null)
         {
-            Debug.LogError($"Failed to Queue the State '{typeof(T).Name}', because it was not created by CreateAllStates().");
+            DebugLogError($"Failed to Queue the State '{typeof(T).Name}', because it was not created by CreateAllStates().");
         }
         else
         {
+            DebugLog($"Queueing State '{typeof(T).Name}'...");
             stateQueue.Enqueue(state);
         }
 
@@ -79,18 +82,34 @@ public abstract class BaseStateMachine : MonoBehaviour
     {
         if (currentState != null && !currentState.CanTransitionTo(newState))
         {
-            Debug.LogError($"[StateMachine] Invalid transition:                                                                 {currentState.GetType()} → {newState.GetType()}");
+            DebugLogError($"Invalid transition:" +
+                $"                                                                           " +
+                $"                                                                           " +
+                $"                                                                    XXXX   " +
+                $"{GetReadable(currentState)} → {GetReadable(newState)}   XXXX");
             return;
         }
 
 #if UNITY_EDITOR
-        Debug.Log($"[StateMachine]                                                                            {currentState?.GetType()} → {newState.GetType()}");
+        DebugLog($"                         " +
+                $"                                                                           " +
+                $"                                                                           " +
+                $"                                                                           " +
+                $"{GetReadable(currentState)} → {GetReadable(newState)}");
 #endif
 
         previousState = currentState;
         currentState?.OnExit();
         currentState = newState;
         currentState.OnEnter();
+
+    }
+
+    private static string GetReadable(BaseState newState)
+    {
+        if (newState == null) return "";
+
+        return newState.GetType().Name.Replace("State", "");
 
     }
 
@@ -104,6 +123,17 @@ public abstract class BaseStateMachine : MonoBehaviour
         {
             currentState?.StateUpdate();
         }
+
+    }
+
+    protected void DebugLogError(string message)
+    {
+        Debug.Log($"{LogPrefix} {message}");
+    }
+
+    protected void DebugLog(string message)
+    {
+        Debug.Log($"{LogPrefix} {message}");
 
     }
 

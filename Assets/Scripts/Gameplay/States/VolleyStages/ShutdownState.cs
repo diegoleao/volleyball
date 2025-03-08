@@ -1,5 +1,5 @@
 
-public class MatchEndState : BaseState
+public class ShutdownState : BaseState
 {
 
     public override void OnEnter()

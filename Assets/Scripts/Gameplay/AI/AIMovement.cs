@@ -14,7 +14,7 @@ public class AIMovement : BaseMovement
     private Vector3 auxPosition;
     private Vector3 auxDistance;
 
-    private bool isStopped;
+    //private bool isStopped;
 
 #if UNITY_ANDROID
     [SerializeField] float SpeedReductionOnAndroid = 0.5f;
@@ -55,7 +55,7 @@ public class AIMovement : BaseMovement
         }
         else
         {
-            isStopped = false;
+            //isStopped = false;
         }
 
     }
@@ -86,7 +86,7 @@ public class AIMovement : BaseMovement
     {
         FaceOtherCourtImmediately();
         moveDirection = Vector3.zero;
-        isStopped = true;
+        //isStopped = true;
 
     }
 

@@ -8,6 +8,11 @@ using UnityEngine.Events;
 
 public class LocalMatchInfo : MonoBehaviour
 {
+#if UNITY_EDITOR
+    [SerializeField] int MaxSetScore = 1;
+#else
+    const int MaxSetScore = 7;
+#endif
 
     private const int TeamA_ID = 0;
     private const int TeamB_ID = 1;
@@ -18,11 +23,24 @@ public class LocalMatchInfo : MonoBehaviour
 
     [ShowInInspector]
     [Sirenix.OdinInspector.ReadOnly]
+    public bool IsSetFinished
+    {
+        get
+        {
+            return this.Scores.Any(scoreInfo => scoreInfo.score >= MaxSetScore);
+        }
+
+    }
+
+    [ShowInInspector]
+    [Sirenix.OdinInspector.ReadOnly]
     public bool IsMatchFinished
     {
         get
         {
-            return this.Scores.Any(scoreInfo => scoreInfo.score >= 7);
+            //if 3 games already ended:
+            //  SetState(GameStates.MatchEnded);
+            return true;//TODO: Implement match concept
         }
 
     }
@@ -34,7 +52,9 @@ public class LocalMatchInfo : MonoBehaviour
 
     public UnityEvent<Team> TeamScoreEvent;
 
-    public UnityEvent<PlayerScoreData> PlayerWonEvent;
+    public UnityEvent<PlayerScoreData> SetWonEvent;
+
+    private List<SetResult> setResults = new List<SetResult>();
 
     private Team tempScoringTeam { get; set; }
 
@@ -59,22 +79,57 @@ public class LocalMatchInfo : MonoBehaviour
 
     }
 
-    private void CheckWinningPlayer(List<PlayerScoreData> newScores)
+    private void SetWinningPlayer(List<PlayerScoreData> newScores)
     {
-        var winningPlayer = newScores.Find(t => t.score >= 7);
-        if (winningPlayer != null)
+        var setResult = new SetResult(newScores, MaxSetScore);
+
+        if (setResult.HasWinningPlayer)
         {
-            Debug.Log($"WINNER! Player: {winningPlayer.playerId} (Team {(Team)winningPlayer.playerId})");
-            PlayerWonEvent?.Invoke(winningPlayer);
+            Debug.Log($"WINNER! Player: {setResult.WinningPlayerId} (Team {(Team)setResult.WinningPlayerId})");
+            setResults.Add(setResult);
+            SetWonEvent?.Invoke(setResult.WinningPlayerScore);
         }
 
+    }
+
+    public class SetResult
+    {
+        public bool HasWinningPlayer
+        {
+            get
+            {
+                return WinningPlayerScore != null;
+            }
+        }
+
+        public int WinningPlayerId { get; private set; }
+
+        public int WinningScore { get; private set; }
+
+        public PlayerScoreData WinningPlayerScore { get; private set; }
+
+        public List<PlayerScoreData> Scores { get; private set; }
+
+        public SetResult(List<PlayerScoreData> scores, int maxScore)
+        {
+            this.Scores = scores;
+
+            WinningPlayerScore = this.Scores.Find(t => t.score >= maxScore);
+
+            if (HasWinningPlayer)
+            {
+                WinningPlayerId = WinningPlayerScore.playerId;
+                WinningScore = WinningPlayerScore.score;
+            }
+
+        }
     }
 
     public void AddLocalScore(Team team)
     {
         int playerId = GetPlayerId(team);
 
-        if (IsMatchFinished)
+        if (IsSetFinished)
         {
             Debug.Log($"MATCH FINISHED - IGNORING Score for Player Id {playerId} (Team {(Team)playerId})");
             return;
@@ -112,13 +167,12 @@ public class LocalMatchInfo : MonoBehaviour
     {
         this.Scores = newScores;
 
-        if (IsMatchFinished)
+        if (IsSetFinished)
         {
-            CheckWinningPlayer(this.Scores);
+            SetWinningPlayer(this.Scores);
         }
 
         ScoreChangedEvent?.Invoke(this.Scores);
-
     }
 
     public List<PlayerScoreData> GetScoresAsList(int player1, int scorePlayer1, int player2, int scorePlayer2)

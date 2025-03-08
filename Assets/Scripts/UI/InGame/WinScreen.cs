@@ -26,7 +26,7 @@ public class WinScreen : BaseView
     public void ConfirmButtonPressed()
     {
         this.Close();
-        Provider.StateMachine.QueueNext<MatchEndState>();
+        Provider.StateMachine.QueueNext<ShutdownState>();
 
     }
 }

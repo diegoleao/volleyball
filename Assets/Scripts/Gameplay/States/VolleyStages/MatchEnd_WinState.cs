@@ -1,20 +1,14 @@
 
-public class WinState : BaseState
+public class MatchEnd_WinState : BaseState
 {
 
     public override void OnEnter()
-    {
-        SetCourtToWinState();
-        Provider.API.UnloadScene();
-
-    }
-
-    private void SetCourtToWinState()
     {
         AppCanvas.GetOrCreate<WinScreen>().SetData(this.GameState.WinningScore).Show();
         AppCanvas.GetView<OptionsScreen>().Hide();
         //Set players to winning positions
         ShowWiningAnimations();
+        Provider.API.UnloadScene();
 
     }
 
