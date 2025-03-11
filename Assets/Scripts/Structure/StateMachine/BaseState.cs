@@ -80,9 +80,9 @@ public abstract class BaseState
     protected void ShowMatchOngoingLogMessage()
     {
 #if UNITY_EDITOR
-        Debug.Log($"Set still ongoing. Current Score [ {GetScoresText()} ].");
+        Debug.Log($"Match still ongoing. Current Score [ {GetScoresText()} ].");
 #else
-        Debug.Log("Set still ongoing.");
+        Debug.Log("Match still ongoing.");
 #endif
     }
 

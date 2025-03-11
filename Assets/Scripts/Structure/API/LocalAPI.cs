@@ -59,6 +59,7 @@ public class LocalAPI : MonoBehaviour, IVolleyballGameplay
 
     public void ResetSet()
     {
+        Debug.Log("Reset SET LOCALLY...");
         this.localMatchInfo.LocalResetSet();
     }
 

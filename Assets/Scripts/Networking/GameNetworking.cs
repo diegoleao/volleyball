@@ -128,6 +128,7 @@ public class GameNetworking : MonoBehaviour, IVolleyballGameplay, INetworkRunner
 
     public void ResetSet()
     {
+        Debug.Log("Reset SET through the Network...");
         matchInfo?.RequestSetReset();
 
     }

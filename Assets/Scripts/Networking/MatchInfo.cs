@@ -51,7 +51,7 @@ public class MatchInfo : NetworkBehaviour
     {
         get
         {
-            return localMatchInfo.IsSetFinished;
+            return localMatchInfo.IsMatchFinished;
         }
     }
 
@@ -104,13 +104,17 @@ public class MatchInfo : NetworkBehaviour
             switch (change)
             {
                 case nameof(IsResetSet):
-                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {IsResetSet} =============");
-                    if (IsResetSet)
+                    Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {IsResetSet} IsMatchFinished: {IsMatchFinished}=============");
+                    if (!IsMatchFinished)
                     {
-                        IsResetSet = false;
+                        Debug.Log("RESET SET IsMatchFinished TRUE");
                         Provider.StateMachine.QueueNext<SetStartState>();
                     }
-                break;
+                    else
+                    {
+                        Debug.Log("RESET SET IsMatchFinished FALSE");
+                    }
+                    break;
 
             case nameof(NetworkedScore):
                     Debug.Log($"[CHANGE DETECTOR] {change} VALUE: {NetworkedScore} =============");
@@ -218,10 +222,12 @@ public class MatchInfo : NetworkBehaviour
     {
         if (Runner.IsClient)
         {
+            Debug.Log("[MatchInfo][CLIENT] RPC_RequestSetReset...");
             RPC_RequestSetReset();
         }
         else
         {
+            Debug.Log("[MatchInfo][HOST] SetReset...");
             SetReset();
         }
 
@@ -242,7 +248,7 @@ public class MatchInfo : NetworkBehaviour
         Provider.GameplayFacade.GameNetworking.DestroyAllBalls();
         NetworkedScore.Set(0, 0);
         NetworkedScore.Set(1, 0);
-        IsResetSet = true;
+        IsResetSet = !IsResetSet;
 
     }
 

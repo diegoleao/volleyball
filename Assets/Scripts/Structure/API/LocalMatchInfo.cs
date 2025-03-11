@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 public class LocalMatchInfo : MonoBehaviour
 {
-    private int MaxSetScore = 3;
+    private int MaxSetScore = 7;
 
     private const int TeamA_ID = 0;
     private const int TeamB_ID = 1;
