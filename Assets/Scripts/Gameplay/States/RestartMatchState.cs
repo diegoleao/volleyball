@@ -7,7 +7,7 @@ public class RestartMatchState : BaseState
         AppCanvas.GetView<OptionsScreen>().Show();
         Provider.API.ResetMatch();
         AppCanvas.GetView<WinScreen>()?.Close();
-        //Provider.StateMachine.QueueNext<RallyStartState>();
+        Provider.StateMachine.QueueNext<MatchStartState>();
 
     }
 
