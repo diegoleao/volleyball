@@ -9,13 +9,6 @@ public class JoystickSingleplayer : MonoBehaviour
 
     private VirtualJoystick joystick;
 
-    public void Initialize(Team team)
-    {
-        this.team = team;
-        joystick = Provider.VolleyJoystick;
-
-    }
-
     public float Horizontal
     {
         get
@@ -54,6 +47,14 @@ public class JoystickSingleplayer : MonoBehaviour
                 return Input.GetAxisRaw("Vertical_P2");
             }
         }
+
+    }
+
+
+    public void Initialize(Team team)
+    {
+        this.team = team;
+        joystick = Provider.VolleyJoystick;
 
     }
 
